@@ -1,0 +1,201 @@
+{
+  "Brands": [
+    {
+      "brand_id": 1,
+      "brand_name": "LEGO",
+      "description": "LEGO là nhà sản xuất đồ chơi nổi tiếng với các bộ xếp hình giúp trẻ em phát triển tư duy sáng tạo và khả năng giải quyết vấn đề.",
+      "logo_url": "https://example.com/lego-logo.png"
+    },
+    {
+      "brand_id": 2,
+      "brand_name": "Playmobil",
+      "description": "Playmobil tạo ra những bộ đồ chơi xếp hình với chủ đề thế giới tưởng tượng và phiêu lưu cho trẻ em.",
+      "logo_url": "https://example.com/playmobil-logo.png"
+    }
+  ],
+  "Branches": [
+    {
+      "branch_id": 1,
+      "branch_name": "Cửa Hàng HCM",
+      "address": "123 Đường Lê Lợi, Quận 1, TP.HCM",
+      "phone": "02812345678",
+      "manager_name": "Nguyễn Thị Lan",
+      "working_hours": "9:00 AM - 9:00 PM",
+      "city": "Ho Chi Minh City",
+      "state": "Ho Chi Minh",
+      "country": "Vietnam"
+    },
+    {
+      "branch_id": 2,
+      "branch_name": "Cửa Hàng Hà Nội",
+      "address": "456 Đường Phố Huế, Quận Hai Bà Trưng, Hà Nội",
+      "phone": "02412345678",
+      "manager_name": "Trần Minh Hoàng",
+      "working_hours": "9:00 AM - 9:00 PM",
+      "city": "Hà Nội",
+      "state": "Hà Nội",
+      "country": "Vietnam"
+    }
+  ],
+  "Users": [
+    {
+      "user_id": 1,
+      "name": "Nguyễn Thị Lan",
+      "email": "lan.nguyen@example.com",
+      "password": "hashed_password",
+      "phone": "0987654321",
+      "address": "123 Đường Lê Lợi, Quận 1, TP.HCM",
+      "role": "admin"
+    },
+    {
+      "user_id": 2,
+      "name": "Trần Văn An",
+      "email": "tran.an@example.com",
+      "password": "hashed_password",
+      "phone": "0987456123",
+      "address": "456 Đường Nguyễn Thị Minh Khai, Quận 3, TP.HCM",
+      "role": "customer"
+    },
+    {
+      "user_id": 3,
+      "name": "Phạm Thị Bích",
+      "email": "pham.bich@example.com",
+      "password": "hashed_password",
+      "phone": "0905123456",
+      "address": "789 Đường Phan Đăng Lưu, Quận Bình Thạnh, TP.HCM",
+      "role": "customer"
+    }
+  ],
+  "Categories": [
+    {
+      "category_id": 1,
+      "category_name": "Đồ chơi lắp ráp"
+    },
+    {
+      "category_id": 2,
+      "category_name": "Đồ chơi xe hơi"
+    }
+  ],
+  "Products": [
+    {
+      "product_id": 1,
+      "name": "Đồ Chơi Lắp Ráp Nhà Tù Cảnh Sát Trên Đảo LEGO CITY",
+      "description": "<p><strong>Đồ Chơi Lắp Ráp Nhà Tù Cảnh Sát Trên Đảo LEGO CITY 60419 (980 chi tiết)</strong></p><p>Nhà tù của thành phố đang phát báo động đỏ, những tên tội phạm bị truy nã đang lên kế hoạch cho một trong những cuộc vượt ngục lớn nhất trong lịch sử! Hãy để mắt đến tháp điều khiển và theo dõi chặt chẽ trực thăng của cảnh sát - nhà tù này nguy hiểm hơn bạn tưởng tượng đó!</p><ul><li><strong>Đồ chơi lắp ráp Nhà tù cảnh sát trên đảo</strong> – Thành phố LEGO® đang trong tính trạng báo động đỏ. Bé hãy nhanh tay đưa cảnh sát vào cuộc và chiến đấu chống lại lũ tội phạm đang bỏ trốn.</li><li><strong>Trong bộ LEGO® này có gì nào?</strong> – Một nhà tù với mặt vách đá, nhà tù, thuyền cảnh sát, xuồng, máy bay trực thăng, 3 sĩ quan và 4 nhân vật tù nhân, cùng với hình chó cảnh sát và cá mập.</li><li><strong>Bộ LEGO® với nhiều tính năng thú vị</strong> – Bao gồm một phòng giam có đường hầm thoát hiểm dẫn đến một khu mỏ bỏ hoang, cùng với một sân bên trong có cửa thoát hiểm bí mật dẫn đến một đường ống thoát nước.</li><li><strong>Món quà tuyệt vời cho bé yêu</strong> – Bộ trò chơi này chắc chắn sẽ là một món quà thú vị dành cho những bé yêu thích công việc thú vị trong thành phố, hoặc yêu thích tàu thuyền, máy bay và các phương tiện khác.</li><li><strong>Biến mọi thứ trở nên thú vị</strong> – Bộ trò chơi xây dựng LEGO® City giúp trẻ phát triển sự tự tin và các kỹ năng sống quan trọng thông qua trò chơi và thể hiện sự sáng tạo không giới hạn.</li><li><strong>Kích thước</strong> – Bộ lắp ráp này có 980 mảnh ghép, sau khi hoàn thiện có chiều cao trên 14,5 inch (37 cm), rộng 15,5 inch (40 cm) và sâu 6 inch (16 cm).</li></ul>",
+      "price": 1299.99,
+      "stock_quantity": 50,
+      "category_id": 1,
+      "brand_id": 1,
+      "branch_id": 1,
+      "image_url": "https://example.com/lego-police-island-prison.jpg",
+      "recommended_age": 8,
+      "material": "Nhựa ABS"
+    },
+    {
+      "product_id": 2,
+      "name": "Đồ Chơi Xe Hơi Lắp Ráp Speed Racer",
+      "description": "<p><strong>Đồ Chơi Xe Hơi Lắp Ráp Speed Racer</strong></p><p>Bộ đồ chơi xe hơi Speed Racer mang đến cho bé yêu những giờ phút vui chơi đầy thú vị. Bé có thể tự lắp ráp các bộ phận của xe và trải nghiệm cảm giác lái xe tốc độ cao trong một môi trường an toàn.</p><ul><li><strong>Bộ đồ chơi xe hơi Speed Racer</strong> – Xe đua tốc độ cao với động cơ mô phỏng, có thể di chuyển được.</li><li><strong>Chất liệu cao cấp</strong> – Bộ đồ chơi được làm từ nhựa ABS chất lượng cao, bền bỉ với thời gian.</li><li><strong>Khả năng sáng tạo</strong> – Bé có thể thay đổi thiết kế và màu sắc xe, phát huy khả năng sáng tạo và tư duy logic.</li><li><strong>Phát triển kỹ năng</strong> – Trò chơi giúp bé rèn luyện kỹ năng tư duy, sự khéo léo và khả năng làm việc nhóm.</li></ul>",
+      "price": 899.99,
+      "stock_quantity": 30,
+      "category_id": 2,
+      "brand_id": 2,
+      "branch_id": 2,
+      "image_url": "https://example.com/speed-racer-car.jpg",
+      "recommended_age": 6,
+      "material": "Nhựa ABS"
+    }
+  ],
+  "Orders": [
+    {
+      "order_id": 1,
+      "user_id": 2,
+      "order_date": "2025-02-17T12:30:00",
+      "total_amount": 1299.99,
+      "status": "pending"
+    },
+    {
+      "order_id": 2,
+      "user_id": 3,
+      "order_date": "2025-02-18T14:45:00",
+      "total_amount": 899.99,
+      "status": "completed"
+    }
+  ],
+  "Order_Items": [
+    {
+      "order_item_id": 1,
+      "order_id": 1,
+      "product_id": 1,
+      "quantity": 1,
+      "price": 1299.99
+    },
+    {
+      "order_item_id": 2,
+      "order_id": 2,
+      "product_id": 2,
+      "quantity": 1,
+      "price": 899.99
+    }
+  ],
+  "Payments": [
+    {
+      "payment_id": 1,
+      "order_id": 1,
+      "payment_date": "2025-02-17T12:45:00",
+      "payment_method": "credit_card",
+      "amount": 1299.99
+    },
+    {
+      "payment_id": 2,
+      "order_id": 2,
+      "payment_date": "2025-02-18T15:00:00",
+      "payment_method": "paypal",
+      "amount": 899.99
+    }
+  ],
+  "Cart": [
+    {
+      "cart_id": 1,
+      "user_id": 2,
+      "product_id": 1,
+      "quantity": 1
+    },
+    {
+      "cart_id": 2,
+      "user_id": 3,
+      "product_id": 2,
+      "quantity": 1
+    }
+  ],
+  "Reviews": [
+    {
+      "review_id": 1,
+      "user_id": 2,
+      "product_id": 1,
+      "rating": 5,
+      "review_text": "Sản phẩm tuyệt vời, dễ lắp ráp và rất thú vị cho trẻ em.",
+      "created_at": "2025-02-17T13:00:00",
+      "status": "approved"
+    },
+    {
+      "review_id": 2,
+      "user_id": 3,
+      "product_id": 2,
+      "rating": 4,
+      "review_text": "Đồ chơi đẹp, nhưng việc lắp ráp có chút khó khăn với bé dưới 6 tuổi.",
+      "created_at": "2025-02-18T16:00:00",
+      "status": "approved"
+    }
+  ],
+  "Product_Branch_Stock": [
+    {
+      "product_id": 1,
+      "branch_id": 1,
+      "quantity": 50
+    },
+    {
+      "product_id": 2,
+      "branch_id": 2,
+      "quantity": 30
+    }
+  ]
+}

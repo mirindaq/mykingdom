@@ -7,8 +7,8 @@ export default function Header() {
   return (
     <>
       <header className="flex justify-center bg-red-600">
-        <div className="container flex items-center gap-5 py-6">
-          <div>
+        <div className="container flex items-center gap-6 py-6">
+          <div className="pr-5">
             <img
               src="https://www.mykingdom.com.vn/cdn/shop/files/logo-254x76_1.png?v=1697473116&width=200"
               alt="logo"
@@ -16,7 +16,7 @@ export default function Header() {
           </div>
           <div>
             {" "}
-            <SearchInput type="text" placeholder="Nhập từ khóa để tìm kiếm" />
+            <SearchInput type="text" placeholder="Nhập từ khóa để tìm kiếm (ví dụ: lắp ráp, mô hình, ...)" />
           </div>
           <div>
             <ul>

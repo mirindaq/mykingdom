@@ -3,6 +3,7 @@ import { path } from "../constants/path";
 import { Navigate, useRoutes } from "react-router-dom";
 import MainLayout from "@/layouts/MainLayout";
 import Login from "@/pages/Login/Login";
+import Register from "@/pages/Register/Register";
 
 const useRouteElements = () => {
   const routes = [
@@ -17,6 +18,10 @@ const useRouteElements = () => {
         {
           path: path.login,
           element: <Login />,
+        },
+        {
+          path: path.register,
+          element: <Register />,
         },
       ],
     },
