@@ -1,6 +1,17 @@
 export const path = {
   homepage: '/',
-  login: '/login', //localhost:5173/login
+  login: '/login',
   register: '/register',
-  loginV2: "/login-v2" //localhost:5173/login/login-v2
+  collections: '/collections',
+  product: '/collections/:id',
+  brands: '/brands',
+  exclusive: '/exclusive-online',
+  membership: '/membership',
+  blogs: '/blogs',
+  account: '/account',
+  orderHistory: "/account/order-history",
+  wishlist: "/account/wishlist",
+  address: "/account/address",
+
+
 }

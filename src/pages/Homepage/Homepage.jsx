@@ -5,7 +5,7 @@ import React from "react";
 export default function Homepage() {
   return (
     <div>
-      <div className="w-full flex items-center justify-center">
+      <div className="flex w-full items-center justify-center rounded-3xl">
         <CarouselBox data={data.thumbnail} />
       </div>
     </div>

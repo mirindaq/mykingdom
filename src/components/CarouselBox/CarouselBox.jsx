@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Card, CardContent } from "@/components/ui/card";
+import Autoplay from "embla-carousel-autoplay"
 import {
   Carousel,
   CarouselContent,
@@ -35,11 +36,19 @@ export function CarouselBox(props) {
   }, [api]);
 
   return (
-    <Carousel setApi={setApi} className="relative mb-10 w-full max-w-screen-xl">
+    <Carousel
+      setApi={setApi}
+      plugins={[
+        Autoplay({
+          delay: 2000,
+        }),
+      ]}
+      className="relative mb-10 w-full max-w-screen-xl rounded-3xl"
+    >
       <CarouselContent>
         {data.map((item, index) => (
           <CarouselItem key={index} className="relative">
-            <div className="h-full w-full p-5">
+            <div className="h-full w-full p-5 ">
               <img
                 src={item.image}
                 alt={item.title}
