@@ -8,6 +8,7 @@ import Error404 from "@/pages/Error404/Error404";
 import Brand from "@/pages/Brand/Brand";
 import Blog from "@/pages/Blog/Blog";
 import Collection from "@/pages/Collection/Collection";
+import Product from "@/pages/Product/Product";
 import Account from "@/pages/Account/Account";
 import AccountOverview from "@/pages/Account/AccountOverview/AccountOverview";
 import OrderHistory from "@/pages/Account/OrderHistory/OrderHistory";
@@ -44,6 +45,10 @@ const useRouteElements = () => {
         {
           path: path.collections,
           element: <Collection />,
+        },
+        {
+          path: path.product,
+          element: <Product />,
         },
         {
           path: path.membership,
