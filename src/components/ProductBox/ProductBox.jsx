@@ -1,10 +1,14 @@
 import { Heart } from "lucide-react";
 import { Button } from "../ui/button";
+import { Link } from "react-router-dom";
 
 export default function ProductBox(props) {
   const { product } = props;
   return (
-    <div className="relative my-5 flex w-full flex-col justify-between rounded-3xl border border-gray-200 p-4 transition-all duration-200 hover:cursor-pointer hover:border-0 hover:shadow-2xl">
+    <Link
+      to={`/collections/${product.slug}`}
+      className="relative my-5 flex w-full flex-col justify-between rounded-3xl border border-gray-200 p-4 transition-all duration-200 hover:cursor-pointer hover:border-0 hover:shadow-2xl"
+    >
       {product.discount > 0 && (
         <div className="absolute top-5 right-5 rounded-lg bg-red-600 px-4 py-1 text-white">
           {product.discount} %
@@ -56,6 +60,6 @@ export default function ProductBox(props) {
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

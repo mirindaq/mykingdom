@@ -8,13 +8,13 @@ import Error404 from "@/pages/Error404/Error404";
 import Brand from "@/pages/Brand/Brand";
 import Blog from "@/pages/Blog/Blog";
 import Collection from "@/pages/Collection/Collection";
-import Product from "@/pages/Product/Product";
 import Account from "@/pages/Account/Account";
 import AccountOverview from "@/pages/Account/AccountOverview/AccountOverview";
 import OrderHistory from "@/pages/Account/OrderHistory/OrderHistory";
 import Wishlist from "@/pages/Account/Wishlist/Wishlist";
 import Address from "@/pages/Account/Address/Address";
 import Membership from "@/pages/Membership/Membership";
+import Product from "@/pages/Product/Product";
 
 const useRouteElements = () => {
   const routes = [
@@ -26,6 +26,11 @@ const useRouteElements = () => {
           path: path.homepage,
           element: <Homepage />,
         },
+        {
+          path: path.product,
+          element: <Product />,
+        },
+
         {
           path: path.login,
           element: <Login />,
@@ -47,10 +52,6 @@ const useRouteElements = () => {
           element: <Collection />,
         },
         {
-          path: path.product,
-          element: <Product />,
-        },
-        {
           path: path.membership,
           element: <Membership />,
         },
@@ -60,7 +61,7 @@ const useRouteElements = () => {
           children: [
             {
               path: "",
-              element: <AccountOverview />, 
+              element: <AccountOverview />,
             },
             {
               path: path.orderHistory,
@@ -68,18 +69,17 @@ const useRouteElements = () => {
             },
             {
               path: path.wishlist,
-              element: <Wishlist />, 
+              element: <Wishlist />,
             },
             {
               path: path.address,
               element: <Address />,
             },
-          ]
+          ],
         },
-        
       ],
     },
-    { path: "*", element: <Error404/> },
+    { path: "*", element: <Error404 /> },
   ];
   return useRoutes(routes);
 };
