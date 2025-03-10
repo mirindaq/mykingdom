@@ -1,16 +1,15 @@
 import { createContext, useState, useContext, useEffect } from "react";
+import { toast } from "sonner";
 
-//1 
+//1
 const CartContext = createContext();
 
 //2
 export const CartProvider = ({ children }) => {
-  
   const [cart, setCart] = useState(() => {
     const savedCart = localStorage.getItem("cart");
     return savedCart ? JSON.parse(savedCart) : [];
   });
-
 
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
@@ -21,12 +20,14 @@ export const CartProvider = ({ children }) => {
       const existingItem = prevCart.find((item) => item.id === product.id);
 
       if (existingItem) {
+        toast.success("Đã thêm vào giỏ hàng");
         return prevCart.map((item) =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + 1 }
-            : item
+            : item,
         );
       } else {
+        toast.success("Đã thêm vào giỏ hàng");
         return [...prevCart, { ...product, quantity: 1 }];
       }
     });
@@ -42,9 +43,9 @@ export const CartProvider = ({ children }) => {
         .map((item) =>
           item.id === productId
             ? { ...item, quantity: item.quantity - 1 }
-            : item
+            : item,
         )
-        .filter((item) => item.quantity > 0)
+        .filter((item) => item.quantity > 0),
     );
   };
 
@@ -58,7 +59,6 @@ export const CartProvider = ({ children }) => {
     </CartContext.Provider>
   );
 };
-
 
 //3
 export const useCart = () => useContext(CartContext);
