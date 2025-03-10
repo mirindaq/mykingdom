@@ -10,9 +10,11 @@ import DescriptionProcuct from "@/components/DescriptionProcuct/DescriptionProcu
 import CarouselProduct from "@/components/CarouselProduct/CarouselProduct";
 import { Heart } from "lucide-react";
 import { data } from "@/database/data";
+import { useCart } from "@/hooks/CartContext";
 
 export default function Product() {
   const { slug } = useParams();
+  const { addToCart } = useCart();
   const [product, setProduct] = useState({});
   const [products, setProducts] = useState([]);
   const [mainImage, setMainImage] = useState(null);
@@ -140,7 +142,11 @@ export default function Product() {
             <p className="mb-4 text-2xl font-bold">Số lượng</p>
             <div className="flex items-center justify-between">
               <QuantityInput />
-              <Button variant="addToCart" className="px-15 py-6 text-lg">
+              <Button
+                variant="addToCart"
+                className="px-15 py-6 text-lg"
+                onClick={() => addToCart(product)}
+              >
                 Thêm vào giỏ hàng
               </Button>
             </div>
