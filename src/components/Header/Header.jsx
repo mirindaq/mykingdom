@@ -35,7 +35,11 @@ export default function Header() {
                     icon={<Truck />}
                     title={"Theo dõi đơn hàng"}
                   />
-                  <ButtonWithIcon icon={<SquareUser />} title={"Tài khoản"} />
+
+                  <Link to={path.account}>
+                    <ButtonWithIcon icon={<SquareUser />} title={"Tài khoản"} />
+                  </Link>
+
                   <CardHoverHeader />
                 </li>
               </ul>
