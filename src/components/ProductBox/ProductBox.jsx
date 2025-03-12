@@ -2,10 +2,17 @@ import { Heart } from "lucide-react";
 import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
 import { useCart } from "@/hooks/CartContext";
+import { toast } from "sonner";
 
 export default function ProductBox(props) {
   const { product } = props;
   const { addToCart } = useCart();
+
+  const handleAddToCart = () => {
+    addToCart(product);
+    toast.success("Đã thêm vào giỏ hàng");
+  };
+
   return (
     <div className="relative my-5 flex w-full flex-col justify-between rounded-3xl border border-gray-200 p-4 transition-all duration-200 hover:cursor-pointer hover:border-0 hover:shadow-2xl">
       <Link to={`/collections/${product.slug}`}>
@@ -56,7 +63,7 @@ export default function ProductBox(props) {
           <Button
             variant="addToCart"
             className="col-span-5 w-full py-6"
-            onClick={() => addToCart(product)}
+            onClick={handleAddToCart}
           >
             Thêm Vào Giỏ Hàng
           </Button>

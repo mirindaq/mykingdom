@@ -1,5 +1,4 @@
 import { createContext, useState, useContext, useEffect } from "react";
-import { toast } from "sonner";
 
 //1
 const CartContext = createContext();
@@ -20,17 +19,36 @@ export const CartProvider = ({ children }) => {
       const existingItem = prevCart.find((item) => item.id === product.id);
 
       if (existingItem) {
-        toast.success("Đã thêm vào giỏ hàng");
         return prevCart.map((item) =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + 1 }
             : item,
         );
       } else {
-        toast.success("Đã thêm vào giỏ hàng");
         return [...prevCart, { ...product, quantity: 1 }];
       }
     });
+  };
+
+  const addToCartWithQuantity = (product, quantity) => {
+    setCart((prevCart) => {
+      const existingItem = prevCart.find((item) => item.id === product.id);
+
+      if (existingItem) {
+        return prevCart.map((item) =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + quantity }
+            : item,
+        );
+      } else {
+        return [...prevCart, { ...product, quantity: quantity }];
+      }
+    });
+  };
+
+  const quantityProductFromCart = (productId) => {
+    const existingItem = cart.find((item) => item.id === productId);
+    return existingItem ? existingItem.quantity : 0;
   };
 
   const removeFromCart = (productId) => {
@@ -53,7 +71,15 @@ export const CartProvider = ({ children }) => {
 
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, reduceFromCart, totalItems }}
+      value={{
+        cart,
+        addToCart,
+        removeFromCart,
+        reduceFromCart,
+        totalItems,
+        addToCartWithQuantity,
+        quantityProductFromCart
+      }}
     >
       {children}
     </CartContext.Provider>
