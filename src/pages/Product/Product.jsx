@@ -11,6 +11,7 @@ import CarouselProduct from "@/components/CarouselProduct/CarouselProduct";
 import { Heart } from "lucide-react";
 import { data } from "@/database/data";
 import { useCart } from "@/hooks/CartContext";
+import Breadcrumbs from "@/components/Breadcrumbs/Breadcrumbs";
 
 export default function Product() {
   const { slug } = useParams();
@@ -67,20 +68,16 @@ export default function Product() {
     },
   ];
 
+
+  const breadcrumbsData = [
+    { path: "/", label: "Trang chủ" },
+    { path: "/collections/:id", label: "Con quay B-160 Booster King Helios.Zn 1B BEYBLADE 5 157199" },
+  ];
+
   return (
     <div>
       <div className="grid grid-flow-col items-center">
-        <div className="bg-gray-200 px-50 py-4">
-          <Link to="/" className="pr-4 text-sm text-gray-500">
-            Trang chủ
-          </Link>
-          <Link to="/" className="text-sm text-gray-500">
-            &#62;
-          </Link>
-          <Link to="/collections/:id" className="pl-4 text-sm">
-            Con quay B-160 Booster King Helios.Zn 1B BEYBLADE 5 157199
-          </Link>
-        </div>
+        <Breadcrumbs links={breadcrumbsData}/>
       </div>
 
       <div className="mx-50 mb-5 grid grid-cols-3 border-b-1">

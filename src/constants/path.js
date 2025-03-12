@@ -12,4 +12,5 @@ export const path = {
   orderHistory: "/account/order-history",
   wishlist: "/account/wishlist",
   address: "/account/address",
+  cart: "/cart",
 }
