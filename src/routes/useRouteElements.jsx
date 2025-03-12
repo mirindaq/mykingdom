@@ -15,6 +15,7 @@ import Wishlist from "@/pages/Account/Wishlist/Wishlist";
 import Address from "@/pages/Account/Address/Address";
 import Membership from "@/pages/Membership/Membership";
 import Product from "@/pages/Product/Product";
+import Cart from "@/pages/Cart/Cart";
 
 const useRouteElements = () => {
   const routes = [
@@ -54,6 +55,10 @@ const useRouteElements = () => {
         {
           path: path.membership,
           element: <Membership />,
+        },
+        {
+          path: path.cart,
+          element: <Cart />,
         },
         {
           path: path.account,

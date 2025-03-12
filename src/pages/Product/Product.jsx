@@ -11,14 +11,24 @@ import CarouselProduct from "@/components/CarouselProduct/CarouselProduct";
 import { Heart } from "lucide-react";
 import { data } from "@/database/data";
 import { useCart } from "@/hooks/CartContext";
+import Breadcrumbs from "@/components/Breadcrumbs/Breadcrumbs";
+import { toast } from "sonner";
 
 export default function Product() {
   const { slug } = useParams();
-  const { addToCart } = useCart();
+  const { addToCartWithQuantity, quantityProductFromCart } = useCart();
   const [product, setProduct] = useState({});
   const [products, setProducts] = useState([]);
   const [mainImage, setMainImage] = useState(null);
   const [images, setImages] = useState([]);
+  const [quantity, setQuantity] = useState(1);
+  const [quantityFromCart, setQuantityFromCart] = useState(0);
+
+  const handleAddToCartWithQuantity = (product, quantity) => {
+    addToCartWithQuantity(product, quantity);
+    setQuantity(1);
+    toast.success("Đã thêm vào giỏ hàng");
+  };
 
   useEffect(() => {
     const foundProduct = data.products.find((p) => p.slug === slug);
@@ -29,6 +39,11 @@ export default function Product() {
       setMainImage(foundProduct.image_url[0]);
     }
   }, [slug]);
+
+  useEffect(() => {
+    const quantity = quantityProductFromCart(product.id);
+    setQuantityFromCart(quantity);
+  }, [product.id, quantityProductFromCart]);
 
   const stores = [
     {
@@ -67,20 +82,18 @@ export default function Product() {
     },
   ];
 
+  const breadcrumbsData = [
+    { path: "/", label: "Trang chủ" },
+    {
+      path: "/collections/:id",
+      label: "Con quay B-160 Booster King Helios.Zn 1B BEYBLADE 5 157199",
+    },
+  ];
+
   return (
     <div>
       <div className="grid grid-flow-col items-center">
-        <div className="bg-gray-200 px-50 py-4">
-          <Link to="/" className="pr-4 text-sm text-gray-500">
-            Trang chủ
-          </Link>
-          <Link to="/" className="text-sm text-gray-500">
-            &#62;
-          </Link>
-          <Link to="/collections/:id" className="pl-4 text-sm">
-            Con quay B-160 Booster King Helios.Zn 1B BEYBLADE 5 157199
-          </Link>
-        </div>
+        <Breadcrumbs links={breadcrumbsData} />
       </div>
 
       <div className="mx-50 mb-5 grid grid-cols-3 border-b-1">
@@ -139,13 +152,15 @@ export default function Product() {
           </div>
 
           <div className="mt-7">
-            <p className="mb-4 text-2xl font-bold">Số lượng</p>
+            <p className="mb-4 text-xl font-bold">
+              Số lượng {quantityFromCart === 0 ? "" : "(" + quantityFromCart + " trong giỏ hàng)"}
+            </p>
             <div className="flex items-center justify-between">
-              <QuantityInput />
+              <QuantityInput quantity={quantity} setQuantity={setQuantity} />
               <Button
                 variant="addToCart"
                 className="px-15 py-6 text-lg"
-                onClick={() => addToCart(product)}
+                onClick={() => handleAddToCartWithQuantity(product, quantity)}
               >
                 Thêm vào giỏ hàng
               </Button>
