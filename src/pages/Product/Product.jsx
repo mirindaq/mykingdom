@@ -5,24 +5,31 @@ import PriceProduct from "@/components/PriceProduct/PriceProduct";
 import { Button } from "@/components/ui/button";
 import QuantityInput from "@/components/QuantityInput/QuantityInput";
 import StoreInformation from "@/components/StoreInformation/StoreInformation";
-import TableInforProduct from "@/components/TableInforProduct/TableInforProduct";
-import DescriptionProcuct from "@/components/DescriptionProcuct/DescriptionProcuct";
+import TableInformationProduct from "@/components/TableInformationProduct/TableInformationProduct";
+import DescriptionProduct from "@/components/DescriptionProduct/DescriptionProduct";
 import CarouselProduct from "@/components/CarouselProduct/CarouselProduct";
 import { Heart } from "lucide-react";
 import { data } from "@/database/data";
 import { useCart } from "@/hooks/CartContext";
 import Breadcrumbs from "@/components/Breadcrumbs/Breadcrumbs";
 import { toast } from "sonner";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 export default function Product() {
   const { slug } = useParams();
   const { addToCartWithQuantity, quantityProductFromCart } = useCart();
   const [product, setProduct] = useState({});
   const [products, setProducts] = useState([]);
-  const [mainImage, setMainImage] = useState(null);
   const [images, setImages] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const [quantityFromCart, setQuantityFromCart] = useState(0);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   const handleAddToCartWithQuantity = (product, quantity) => {
     addToCartWithQuantity(product, quantity);
@@ -36,7 +43,7 @@ export default function Product() {
     if (foundProduct) {
       setProduct(foundProduct);
       setImages(foundProduct.image_url);
-      setMainImage(foundProduct.image_url[0]);
+      setSelectedImageIndex(0);
     }
   }, [slug]);
 
@@ -85,8 +92,8 @@ export default function Product() {
   const breadcrumbsData = [
     { path: "/", label: "Trang chủ" },
     {
-      path: "/collections/:id",
-      label: "Con quay B-160 Booster King Helios.Zn 1B BEYBLADE 5 157199",
+      path: `/collections/${product.slug}`,
+      label: product.name,
     },
   ];
 
@@ -99,19 +106,26 @@ export default function Product() {
       <div className="mx-50 mb-5 grid grid-cols-3 border-b-1">
         <div className="col-span-2 items-center">
           <div className="flex items-center justify-around">
-            <img src={mainImage} className="w-180" />
+            <img src={images[selectedImageIndex]} className="w-180" />
           </div>
 
-          <div className="flex items-center justify-center">
-            {images.map((img, index) => (
-              <img
-                key={index}
-                src={img}
-                className={`m-3 h-auto w-50 ${mainImage === img ? "shadow-2xl" : "opacity-50"}`}
-                onClick={() => setMainImage(img)}
-              />
-            ))}
-          </div>
+          <Carousel className="mx-auto w-200">
+            <CarouselContent className="px-1 py-1">
+              {images.map((img, index) => (
+                <CarouselItem key={index} className="basis-1/5">
+                  <img
+                    src={img}
+                    className={`w-30 hover:cursor-pointer ${
+                      selectedImageIndex === index
+                        ? "shadow-[0_0_30px_5px_rgba(255,0,0,0.1)]"
+                        : "opacity-50"
+                    }`}
+                    onClick={() => setSelectedImageIndex(index)}
+                  />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
         </div>
 
         <div className="mt-8">
@@ -130,15 +144,13 @@ export default function Product() {
           </div>
           <PriceProduct
             priceType="Giá thành viên"
-            currentPrice="175000"
-            oldPrice="349000"
-            discount="50"
+            price={product.price}
+            discount={product.discount}
           />
           <PriceProduct
             priceType="Giá bán"
-            currentPrice="175000"
-            oldPrice="349000"
-            discount="50"
+            price={product.price}
+            discount={product.discount}
           />
 
           <div className="mt-12">
@@ -153,7 +165,10 @@ export default function Product() {
 
           <div className="mt-7">
             <p className="mb-4 text-xl font-bold">
-              Số lượng {quantityFromCart === 0 ? "" : "(" + quantityFromCart + " trong giỏ hàng)"}
+              Số lượng{" "}
+              {quantityFromCart === 0
+                ? ""
+                : "(" + quantityFromCart + " trong giỏ hàng)"}
             </p>
             <div className="flex items-center justify-between">
               <QuantityInput quantity={quantity} setQuantity={setQuantity} />
@@ -181,13 +196,13 @@ export default function Product() {
 
           <div className="mt-5 w-full pb-10">
             <p className="mb-4 text-2xl font-bold">Thông tin sản phẩm</p>
-            <TableInforProduct />
+            <TableInformationProduct />
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 items-center px-50">
-        <DescriptionProcuct description={product.description} />
+        <DescriptionProduct description={product.description} />
       </div>
 
       <div className="mt-20 mb-40 grid grid-cols-1 items-center px-50">
