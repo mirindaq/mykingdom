@@ -323,5 +323,90 @@ export const data = {
       "material": "Nhựa ABS",
       "origin": "Việt Nam"
     }
+  ],
+  "orders": [
+    {
+      id: "HD0321931271312",
+      customer_id: 101,
+      products: [
+        {
+          product_id: 1,
+          name: "Đồ Chơi Lắp Ráp Nhà Tù Cảnh Sát",
+          quantity: 2,
+          price: 2000000,
+          image_url: "https://cdn.shopify.com/s/files/1/0731/6514/4343/files/thu-thach-phau-thuat-classic-operation-hasbro-gaming-g0951_9.jpg?v=1741102666&width=400",
+          discount: 10
+        },
+        {
+          product_id: 7,
+          name: "Đồ Chơi Thú Nhồi Bông Mèo Kitty",
+          image_url: "https://cdn.shopify.com/s/files/1/0731/6514/4343/files/barbie-va-bua-tiec-sinh-nhat-vui-ve-hong-diu-dang-barbie-jfg71-jfg68_5.jpg?v=1739241512&width=400",
+          quantity: 1,
+          price: 500000,
+          discount: 5
+        }
+      ],
+      total_price: 4300000,
+      status: "Đang xử lý",
+      order_date: "2025-03-12T10:30:00Z",
+      payment_method: "Thanh toán khi nhận hàng",
+      shipping_address: {
+        full_name: "Nguyễn Văn A",
+        phone: "0987654321",
+        address: "123 Đường Lê Lợi, Quận 1, TP.HCM"
+      }
+    },
+    {
+      id: "HD03219312321222",
+      customer_id: 102,
+      products: [
+        {
+          product_id: 3,
+          name: "Đồ Chơi Lắp Ghép Xe Đua",
+          quantity: 1,
+          price: 1500000,
+          image_url: "https://cdn.shopify.com/s/files/1/0731/6514/4343/files/thap-banh-cupcake-ngot-ngao-playdoh-g0529_1.jpg?v=1741104026&width=400",
+          discount: 0
+        }
+      ],
+      total_price: 1500000,
+      status: "Hoàn thành",
+      order_date: "2025-03-10T15:45:00Z",
+      payment_method: "Thẻ tín dụng",
+      shipping_address: {
+        full_name: "Trần Thị B",
+        phone: "0901234567",
+        address: "456 Đường Nguyễn Trãi, Quận 5, TP.HCM"
+      }
+    }
+  ],
+  "customers": [
+    {
+      id: 101,
+      name: "Nguyễn Văn A",
+      email: "nguyenvana@example.com",
+      phone: "0987654321",
+      address: "123 Đường Lê Lợi, Quận 1, TP.HCM",
+      registered_date: "2024-12-15T14:00:00Z",
+      status: "Active"
+    },
+    {
+      id: 102,
+      name: "Trần Thị B",
+      email: "tranthib@example.com",
+      phone: "0901234567",
+      address: "456 Đường Nguyễn Trãi, Quận 5, TP.HCM",
+      registered_date: "2025-01-10T09:30:00Z",
+      status: "Active"
+    },
+    {
+      id: 103,
+      name: "Lê Văn C",
+      email: "levanc@example.com",
+      phone: "0912345678",
+      address: "789 Đường Cách Mạng Tháng 8, Quận 10, TP.HCM",
+      registered_date: "2025-02-20T16:45:00Z",
+      status: "Inactive"
+    }
   ]
 }

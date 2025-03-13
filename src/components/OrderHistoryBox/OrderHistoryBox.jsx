@@ -1,42 +1,90 @@
 import React from "react";
 import { Button } from "../ui/button";
+import { Link } from "react-router-dom";
 
-export default function OrderHistoryBox() {
+export default function OrderHistoryBox(props) {
+  const { order } = props;
+  const dataProduct = order.products;
   return (
     <div>
       {" "}
       <div className="mx-auto w-full rounded-md border bg-white px-4 pt-4 pb-5">
         <div className="flex justify-between border-b pb-2">
           <p className="text-base">
-            <span className="font-semibold">Đơn hàng:</span> #123456789
+            <span className="font-semibold">Đơn hàng:</span> {order.id}
           </p>
           <p className="text-base">
-            <span className="font-semibold text-green-500">Đã giao hàng</span>
+            {order.status === "Đã hủy" ? (
+              <span className="font-semibold text-red-600">{order.status}</span>
+            ) : order.status === "Đã giao" ? (
+              <span className="font-semibold text-blue-600">
+                {order.status}
+              </span>
+            ) : order.status === "Đang xử lý" ? (
+              <span className="font-semibold text-yellow-600">
+                {order.status}
+              </span>
+            ) : (
+              <span className="font-semibold text-green-600">
+                {order.status}
+              </span>
+            )}
           </p>
         </div>
-        <div className="grid grid-cols-12 pt-4">
-          <div className="col-span-2 flex justify-center">
-            <img
-              src="https://cdn.shopify.com/s/files/1/0731/6514/4343/files/thu-thach-phau-thuat-classic-operation-hasbro-gaming-g0951_9.jpg?v=1741102666&width=400"
-              alt="Product"
-              className="h-20 w-20"
-            />
+        {dataProduct.slice(0, 3).map((product, index) => (
+          <div key={index}>
+            <div className="grid grid-cols-12 pt-4">
+              <div className="col-span-2 flex justify-center">
+                <img
+                  src={product.image_url}
+                  alt="Product"
+                  className="h-20 w-20"
+                />
+              </div>
+              <div className="col-span-6">
+                <p className="text-lg">{product.name}</p>
+                <p className="font-semibold">x3</p>
+              </div>
+              <div className="col-span-4">
+                <p className="text-end text-base">
+                  {product.discount > 0 ? (
+                    <>
+                      <span className="mr-2 text-gray-400 line-through">
+                        {product.price.toLocaleString("vi-VN", {
+                          style: "currency",
+                          currency: "VND",
+                        })}
+                      </span>
+                      <span className="text-red-500">
+                        {(
+                          product.price *
+                          (1 - product.discount / 100)
+                        ).toLocaleString("vi-VN", {
+                          style: "currency",
+                          currency: "VND",
+                        })}
+                      </span>
+                    </>
+                  ) : (
+                    <span>
+                      {product.price.toLocaleString("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
+                    </span>
+                  )}
+                </p>
+              </div>
+            </div>
           </div>
-          <div className="col-span-6">
-            <p className="text-base">Bộ đồ chơi Lego lắp ráp</p>
-            <p>Số lượng: 3</p>
-          </div>
-          <div className="col-span-4">
-            <p className="text-end text-base">
-              <span className="font-semibold">Tổng tiền:</span> $100.00
-            </p>
-          </div>
-        </div>
+        ))}
         <div className="grid grid-cols-12">
           <div className="col-span-2 col-start-11">
-            <Button variant="more" className="w-full">
-              Xem chi tiết
-            </Button>
+            <Link to={`/account/order-history/${order.id}`}>
+              <Button variant="more" className="w-full">
+                Xem chi tiết
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
