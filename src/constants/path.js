@@ -10,6 +10,7 @@ export const path = {
   blogs: '/blogs',
   account: '/account',
   orderHistory: "/account/order-history",
+  orderHistoryDetail: "/account/order-history/:id",
   wishlist: "/account/wishlist",
   address: "/account/address",
   cart: "/cart",

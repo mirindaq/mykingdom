@@ -14,13 +14,9 @@ import { useCart } from "@/hooks/CartContext";
 import CartItemBox from "../CartItemBox/CartItemBox";
 
 export default function CartHoverHeader() {
-
   const [isOpen, setIsOpen] = useState(false);
 
-  const { cart, totalItems } =
-    useCart();
-
-
+  const { cart, totalItems } = useCart();
 
   const totalPrice = cart.reduce(
     (sum, item) =>
@@ -28,25 +24,27 @@ export default function CartHoverHeader() {
       (item.discount
         ? item.price - (item.discount * item.price) / 100
         : item.price) *
-      item.quantity,
+        item.quantity,
     0,
   );
 
   return (
     <HoverCard
-      openDelay={0}
+      openDelay={100}
       closeDelay={100}
       open={isOpen}
-      onOpenChange={setIsOpen} // Cập nhật trạng thái mở
+      onOpenChange={setIsOpen}
     >
       <HoverCardTrigger asChild>
-        <Button
-          size="headerOption"
-          className={`flex items-center gap-2 text-base font-semibold ${isOpen ? "bg-white text-red-500" : "bg-red-600 hover:bg-white hover:text-red-500"}`}
-        >
-          <ShoppingBasket />
-          <div className="hidden xl:block">Giỏ hàng ({totalItems})</div>
-        </Button>
+        <Link to={path.cart}>
+          <Button
+            size="headerOption"
+            className={`flex items-center gap-2 text-base font-semibold ${isOpen ? "bg-white text-red-500" : "bg-red-600 hover:bg-white hover:text-red-500"}`}
+          >
+            <ShoppingBasket />
+            <div className="hidden xl:block">Giỏ hàng ({totalItems})</div>
+          </Button>
+        </Link>
       </HoverCardTrigger>
 
       <HoverCardContent
@@ -58,7 +56,7 @@ export default function CartHoverHeader() {
             <>
               <ul className="max-h-72 space-y-4 overflow-y-auto">
                 {cart.map((item) => (
-                  <CartItemBox item={item} key={item.id}/>
+                  <CartItemBox item={item} key={item.id} />
                 ))}
               </ul>
               <div className="mt-4 flex items-center text-sm">
@@ -102,9 +100,6 @@ export default function CartHoverHeader() {
               </Link>
             </>
           )}
-
-
-
         </div>
       </HoverCardContent>
     </HoverCard>

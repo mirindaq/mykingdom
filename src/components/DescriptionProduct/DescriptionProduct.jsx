@@ -1,7 +1,7 @@
 import React from "react";
-import "./DescriptionProcuct.css";
+import "./DescriptionProduct.css";
 
-export default function DescriptionProcuct(props) {
+export default function DescriptionProduct(props) {
   const { description } = props;
   return <div className="text-xl" dangerouslySetInnerHTML={{ __html: description }}></div>;
 }

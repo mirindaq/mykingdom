@@ -133,7 +133,7 @@ export const data = {
       "slug": "do-choi-lap-rap-nha-tu-canh-sat",
       "description": "<p><strong>Đồ Chơi Lắp Ráp Nhà Tù Cảnh Sát Trên Đảo LEGO CITY 60419 (980 chi tiết)</strong></p><p>Nhà tù của thành phố đang phát báo động đỏ, những tên tội phạm bị truy nã đang lên kế hoạch cho một trong những cuộc vượt ngục lớn nhất trong lịch sử! Hãy để mắt đến tháp điều khiển và theo dõi chặt chẽ trực thăng của cảnh sát - nhà tù này nguy hiểm hơn bạn tưởng tượng đó!</p><ul><li><strong>Đồ chơi lắp ráp Nhà tù cảnh sát trên đảo</strong> – Thành phố LEGO® đang trong tính trạng báo động đỏ. Bé hãy nhanh tay đưa cảnh sát vào cuộc và chiến đấu chống lại lũ tội phạm đang bỏ trốn.</li><li><strong>Trong bộ LEGO® này có gì nào?</strong> – Một nhà tù với mặt vách đá, nhà tù, thuyền cảnh sát, xuồng, máy bay trực thăng, 3 sĩ quan và 4 nhân vật tù nhân, cùng với hình chó cảnh sát và cá mập.</li><li><strong>Bộ LEGO® với nhiều tính năng thú vị</strong> – Bao gồm một phòng giam có đường hầm thoát hiểm dẫn đến một khu mỏ bỏ hoang, cùng với một sân bên trong có cửa thoát hiểm bí mật dẫn đến một đường ống thoát nước.</li><li><strong>Món quà tuyệt vời cho bé yêu</strong> – Bộ trò chơi này chắc chắn sẽ là một món quà thú vị dành cho những bé yêu thích công việc thú vị trong thành phố, hoặc yêu thích tàu thuyền, máy bay và các phương tiện khác.</li><li><strong>Biến mọi thứ trở nên thú vị</strong> – Bộ trò chơi xây dựng LEGO® City giúp trẻ phát triển sự tự tin và các kỹ năng sống quan trọng thông qua trò chơi và thể hiện sự sáng tạo không giới hạn.</li><li><strong>Kích thước</strong> – Bộ lắp ráp này có 980 mảnh ghép, sau khi hoàn thiện có chiều cao trên 14,5 inch (37 cm), rộng 15,5 inch (40 cm) và sâu 6 inch (16 cm).</li></ul>",
       "price": 2000000,
-      "discount": 10,
+      "discount": 0,
       "stock_quantity": 50,
       "category_id": 1,
       "brand": "LEGO TECHNIC",
@@ -322,6 +322,91 @@ export const data = {
       "recommended_age": 6,
       "material": "Nhựa ABS",
       "origin": "Việt Nam"
+    }
+  ],
+  "orders": [
+    {
+      id: "HD0321931271312",
+      customer_id: 101,
+      products: [
+        {
+          product_id: 1,
+          name: "Đồ Chơi Lắp Ráp Nhà Tù Cảnh Sát",
+          quantity: 2,
+          price: 2000000,
+          image_url: "https://cdn.shopify.com/s/files/1/0731/6514/4343/files/thu-thach-phau-thuat-classic-operation-hasbro-gaming-g0951_9.jpg?v=1741102666&width=400",
+          discount: 10
+        },
+        {
+          product_id: 7,
+          name: "Đồ Chơi Thú Nhồi Bông Mèo Kitty",
+          image_url: "https://cdn.shopify.com/s/files/1/0731/6514/4343/files/barbie-va-bua-tiec-sinh-nhat-vui-ve-hong-diu-dang-barbie-jfg71-jfg68_5.jpg?v=1739241512&width=400",
+          quantity: 1,
+          price: 500000,
+          discount: 5
+        }
+      ],
+      total_price: 4300000,
+      status: "Đang xử lý",
+      order_date: "2025-03-12T10:30:00Z",
+      payment_method: "Thanh toán khi nhận hàng",
+      shipping_address: {
+        full_name: "Nguyễn Văn A",
+        phone: "0987654321",
+        address: "123 Đường Lê Lợi, Quận 1, TP.HCM"
+      }
+    },
+    {
+      id: "HD03219312321222",
+      customer_id: 102,
+      products: [
+        {
+          product_id: 3,
+          name: "Đồ Chơi Lắp Ghép Xe Đua",
+          quantity: 1,
+          price: 1500000,
+          image_url: "https://cdn.shopify.com/s/files/1/0731/6514/4343/files/thap-banh-cupcake-ngot-ngao-playdoh-g0529_1.jpg?v=1741104026&width=400",
+          discount: 0
+        }
+      ],
+      total_price: 1500000,
+      status: "Hoàn thành",
+      order_date: "2025-03-10T15:45:00Z",
+      payment_method: "Thẻ tín dụng",
+      shipping_address: {
+        full_name: "Trần Thị B",
+        phone: "0901234567",
+        address: "456 Đường Nguyễn Trãi, Quận 5, TP.HCM"
+      }
+    }
+  ],
+  "customers": [
+    {
+      id: 101,
+      name: "Nguyễn Văn A",
+      email: "nguyenvana@example.com",
+      phone: "0987654321",
+      address: "123 Đường Lê Lợi, Quận 1, TP.HCM",
+      registered_date: "2024-12-15T14:00:00Z",
+      status: "Active"
+    },
+    {
+      id: 102,
+      name: "Trần Thị B",
+      email: "tranthib@example.com",
+      phone: "0901234567",
+      address: "456 Đường Nguyễn Trãi, Quận 5, TP.HCM",
+      registered_date: "2025-01-10T09:30:00Z",
+      status: "Active"
+    },
+    {
+      id: 103,
+      name: "Lê Văn C",
+      email: "levanc@example.com",
+      phone: "0912345678",
+      address: "789 Đường Cách Mạng Tháng 8, Quận 10, TP.HCM",
+      registered_date: "2025-02-20T16:45:00Z",
+      status: "Inactive"
     }
   ]
 }

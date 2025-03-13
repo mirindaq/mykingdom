@@ -1,8 +1,12 @@
 import OrderHistoryBox from "@/components/OrderHistoryBox/OrderHistoryBox";
-import { useState } from "react";
+import { data } from "@/database/data";
+import { useEffect, useState } from "react";
 export default function OrderHistory() {
-  const [selectedStatus, setSelectedStatus] = useState("all");
+  const [orders, setOrders] = useState([]);
 
+  useEffect(() => {
+    setOrders(data.orders);
+  }, []);
   return (
     <>
       <p className="mb-4 text-2xl">Lịch sử mua hàng</p>
@@ -59,8 +63,9 @@ export default function OrderHistory() {
           </ul> */}
       </div>
       <div className="flex flex-col gap-3">
-        <OrderHistoryBox />
-        <OrderHistoryBox />
+        {orders.map((order) => (
+          <OrderHistoryBox key={order.id} order={order} />
+        ))}
       </div>
     </>
   );

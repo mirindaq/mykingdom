@@ -1,9 +1,9 @@
 import React from 'react'
-import "./TableInforProduct.css"
+import "./TableInformationProduct.css"
 
-export default function TableInforProduct() {
+export default function TableInformationProduct() {
     return (
-        <div className='tableInforProduct_Le'>
+        <div className='tableInformationProduct_Le'>
             <table className="w-full border">
                 <tbody>
                     <tr>
