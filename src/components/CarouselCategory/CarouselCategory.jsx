@@ -14,7 +14,7 @@ export default function CarouselCategory(props) {
       <Carousel>
         <CarouselContent>
           {categories.slice(5).map((category) => (
-            <CarouselItem key={category.id} className="md:basis-1/2 lg:basis-1/4">
+            <CarouselItem key={category.slug} className="md:basis-1/2 lg:basis-1/4">
               <BoxCategoryHomepage
                 categoryName={category.category_name}
                 imageUrl={category.image_url}

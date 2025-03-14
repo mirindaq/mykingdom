@@ -7,7 +7,6 @@ import {
   CarouselPrevious,
 } from "../ui/carousel";
 import ProductBox from "../ProductBox/ProductBox";
-import { Slider } from "@radix-ui/react-slider";
 
 export default function CarouselProduct(props) {
   const { products } = props;
@@ -16,9 +15,9 @@ export default function CarouselProduct(props) {
     <div>
       <Carousel>
         <CarouselContent>
-          {products.map((product) => (
+          {products.map((product,index) => (
             <CarouselItem
-              key={product.id}
+              key={index}
               className="md:basis-1/2 lg:basis-1/4"
             >
               <ProductBox product={product} />

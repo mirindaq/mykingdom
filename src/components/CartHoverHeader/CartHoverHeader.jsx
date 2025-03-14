@@ -55,8 +55,8 @@ export default function CartHoverHeader() {
           {cart.length > 0 ? (
             <>
               <ul className="max-h-72 space-y-4 overflow-y-auto">
-                {cart.map((item) => (
-                  <CartItemBox item={item} key={item.id} />
+                {cart.map((item,index) => (
+                  <CartItemBox item={item} key={index} />
                 ))}
               </ul>
               <div className="mt-4 flex items-center text-sm">

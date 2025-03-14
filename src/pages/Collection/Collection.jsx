@@ -1,28 +1,95 @@
 import FilterSidebar from "@/components/FilterSidebar/FilterSidebar";
 import ListProductSearch from "@/components/ListProductSearch/ListProductSearch";
-import { data } from "@/database/data";
-import { Grid2X2, Grid3x3, LayoutGrid } from "lucide-react";
-import React, { use, useEffect, useState } from "react";
+import { Grid2X2, Grid3x3 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 export default function Collection() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [viewType, setViewType] = useState("grid3x3");
   const [sortOption, setSortOption] = useState("Mặc định");
+  const [totalProducts, setTotalProducts] = useState(0);
   const [products, setProducts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => setProducts(data.products), []);
+  const onProductsUpdate = (data) => {
+    setProducts(data.products);
+    setTotalProducts(data.pagination.total);
+  };
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        const params = new URLSearchParams(searchParams);
+
+        if (sortOption !== "Mặc định") {
+          let sortParam = "createdAt";
+          switch (sortOption) {
+            case "Giá thấp đến cao":
+              sortParam = "price_asc";
+              break;
+            case "Giá cao đến thấp":
+              sortParam = "price_desc";
+              break;
+            case "Tên A-Z":
+              sortParam = "name_asc";
+              break;
+            case "Tên Z-A":
+              sortParam = "name_asc";
+              break;
+            case "Khuyến mãi cao":
+              sortParam = "discount";
+              break;
+          }
+          params.set("sort", sortParam);
+        }
+
+        params.set("page", currentPage);
+        params.set("limit", "12");
+
+        // Update URL without triggering a new fetch
+        setSearchParams(params, { replace: true });
+
+        const response = await fetch(
+          `http://localhost:5001/api/products?${params}`,
+        );
+        if (!response.ok) {
+          throw new Error("Server responded with an error");
+        }
+
+        const data = await response.json();
+        setProducts(data.products);
+        setTotalProducts(data.pagination.total);
+      } catch (error) {
+        console.error("Failed to fetch products:", error);
+        setProducts([]);
+        setTotalProducts(0);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [currentPage, sortOption, searchParams]);
 
   const handleViewChange = (type) => {
-    console.log(type);
     setViewType(type);
   };
 
   const handleSortChange = (event) => {
     setSortOption(event.target.value);
   };
+
   return (
     <div className="container mx-auto my-10 grid grid-cols-10 gap-6">
       <div className="col-span-2">
-        <FilterSidebar />
+        <FilterSidebar
+          onProductsUpdate={onProductsUpdate}
+          searchParams={searchParams}
+          setSearchParams={setSearchParams}
+        />
       </div>
       <div className="col-span-8">
         <div className="mb-4 flex items-center justify-between border-b pb-4">
@@ -41,7 +108,9 @@ export default function Collection() {
               <Grid3x3 />
             </button>
           </div>
-          <div className="text-sm text-gray-700">10 products</div>
+          <div className="text-sm text-gray-700">
+            {loading ? "Đang tải..." : `${totalProducts} sản phẩm`}
+          </div>
           <div className="flex items-center space-x-2">
             <span className="text-sm text-gray-700">Sắp xếp theo:</span>
             <select
@@ -50,14 +119,20 @@ export default function Collection() {
               className="rounded-md border px-2 py-1 text-sm"
             >
               <option value="Mặc định">Mặc định</option>
+              <option value="Khuyến mãi cao">Khuyến mãi cao</option>
               <option value="Giá thấp đến cao">Giá thấp đến cao</option>
               <option value="Giá cao đến thấp">Giá cao đến thấp</option>
               <option value="Tên A-Z">Tên A-Z</option>
+              <option value="Tên Z-A">Tên Z-A</option>
             </select>
           </div>
         </div>
         <div>
-          <ListProductSearch viewType={viewType} products={products} />
+          {loading ? (
+            <div className="py-8 text-center">Đang tải sản phẩm...</div>
+          ) : (
+            <ListProductSearch viewType={viewType} products={products} />
+          )}
         </div>
       </div>
     </div>

@@ -31,8 +31,8 @@ export default function ProductBox(props) {
 
         <div>
           <div className="flex items-center justify-between pt-2 text-gray-400">
-            <p>{product.brand}</p>
-            <p>SKU: {product.id}</p>
+            <p>{product.brand.name}</p>
+            <p>{product.origin}</p>
           </div>
           <p className="text-blue-800">{product.name}</p>
         </div>

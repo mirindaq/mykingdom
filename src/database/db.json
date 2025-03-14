@@ -1,17 +1,90 @@
 {
   "Brands": [
     {
-      "brand_id": 1,
-      "brand_name": "LEGO",
-      "description": "LEGO là nhà sản xuất đồ chơi nổi tiếng với các bộ xếp hình giúp trẻ em phát triển tư duy sáng tạo và khả năng giải quyết vấn đề.",
-      "logo_url": "https://example.com/lego-logo.png"
+      "name": "ZD Toys",
+      "logo": "https://www.mykingdom.com.vn/cdn/shop/files/108x54-ZD-toys.png?v=1726117029",
+      "slug": "zd-toys",
+      "products": [],
+      "createdAt": "2023-01-01T00:00:00Z"
     },
     {
-      "brand_id": 2,
-      "brand_name": "Playmobil",
-      "description": "Playmobil tạo ra những bộ đồ chơi xếp hình với chủ đề thế giới tưởng tượng và phiêu lưu cho trẻ em.",
-      "logo_url": "https://example.com/playmobil-logo.png"
+      "name": "ZOIDS 3",
+      "logo": "https://www.mykingdom.com.vn/cdn/shop/files/ZOIDS.png?v=1688957340",
+      "slug": "zoids-3",
+      "products": [],
+      "createdAt": "2023-01-01T00:00:00Z"
+    },
+    {
+      "name": "Barbie",
+      "slug": "barbie",
+      "logo": "https://www.mykingdom.com.vn/cdn/shop/files/BARBIE.png?v=1701332489",
+      "products": [],
+      "createdAt": "2024-01-01"
+    },
+    {
+      "name": "Baby Alive",
+      "slug": "baby-alive",
+      "logo": "https://www.mykingdom.com.vn/cdn/shop/files/BABY_ALIVE.png?v=1701332488",
+      "products": [],
+      "createdAt": "2024-01-01"
+    },
+    {
+      "name": "Bakugan",
+      "slug": "bakugan",
+      "logo": "https://www.mykingdom.com.vn/cdn/shop/files/BAKUGAN.png?v=1701332489",
+      "products": [],
+      "createdAt": "2024-01-01"
+    },
+    {
+      "name": "Batman",
+      "slug": "batman",
+      "logo": "https://www.mykingdom.com.vn/cdn/shop/files/BATMAN.png?v=1701332489",
+      "products": [],
+      "createdAt": "2024-01-01"
+    },
+    {
+      "name": "Beyblade",
+      "slug": "beyblade",
+      "logo": "https://www.mykingdom.com.vn/cdn/shop/files/bbgt4.png?v=1701332489",
+      "products": [],
+      "createdAt": "2024-01-01"
+    },
+    {
+      "name": "Bruder",
+      "slug": "bruder",
+      "logo": "https://www.mykingdom.com.vn/cdn/shop/files/bruder.png?v=1701332488",
+      "products": [],
+      "createdAt": "2024-01-01"
+    },
+    {
+      "name": "Bandai",
+      "slug": "bandai",
+      "logo": "https://www.mykingdom.com.vn/cdn/shop/files/Bandai_Candy.png?v=1701332488",
+      "products": [],
+      "createdAt": "2024-01-01"
+    },
+    {
+      "name": "Bitzee",
+      "slug": "bitzee",
+      "logo": "https://www.mykingdom.com.vn/cdn/shop/files/Bitzee.png?v=1701332489",
+      "products": [],
+      "createdAt": "2024-01-01"
+    },
+    {
+      "name": "Breezy Rollers",
+      "slug": "breezy-rollers",
+      "logo": "https://www.mykingdom.com.vn/cdn/shop/files/108x54-brezzy-roller.png?v=1724233886",
+      "products": [],
+      "createdAt": "2024-01-01"
+    },
+    {
+      "name": "Beyblade X",
+      "slug": "beyblade-x",
+      "logo": "https://www.mykingdom.com.vn/cdn/shop/files/BeybladeX.png?v=1726744450",
+      "products": [],
+      "createdAt": "2024-01-01"
     }
+   
   ],
   "Branches": [
     {

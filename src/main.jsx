@@ -7,7 +7,7 @@ import { CartProvider } from "./hooks/CartContext";
 import { AuthProvider } from "./hooks/AuthContext";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
+  <>
     <BrowserRouter>
       <AuthProvider>
         <CartProvider>
@@ -15,5 +15,5 @@ createRoot(document.getElementById("root")).render(
         </CartProvider>
       </AuthProvider>
     </BrowserRouter>
-  </StrictMode>,
+  </>,
 );

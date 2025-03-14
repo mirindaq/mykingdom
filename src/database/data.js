@@ -70,7 +70,7 @@ export const data = {
     },
     {
       "id": 2,
-      "name": "Đồ thời trang",
+      "name": "Đồ thói trang",
       "slug": "do-thoi-trang",
       "image_url": "https://www.mykingdom.com.vn/cdn/shop/files/Danh_muc_web_-_628x288_433c3678-a93b-45ae-b704-bcc459a5bda1.jpg?v=1723630749"
     },
@@ -125,6 +125,78 @@ export const data = {
       "slug": "ba-lo-vali",
       "image_url": "https://www.mykingdom.com.vn/cdn/shop/files/4._Banner_balo_vali_-_296x368px_296x.jpg?v=1721184582"
     },
+  ],
+  "brands": [
+    {
+      "name": "Barbie",
+      "slug": "barbie",
+      "logo": "/images/brands/barbie.png",
+      "products": [],
+      "createdAt": new Date("2024-01-01")
+    },
+    {
+      "name": "Baby Alive",
+      "slug": "baby-alive",
+      "logo": "/images/brands/baby-alive.png",
+      "products": [],
+      "createdAt": new Date("2024-01-01")
+    },
+    {
+      "name": "Bakugan",
+      "slug": "bakugan",
+      "logo": "/images/brands/bakugan.png",
+      "products": [],
+      "createdAt": new Date("2024-01-01")
+    },
+    {
+      "name": "Batman",
+      "slug": "batman",
+      "logo": "/images/brands/batman.png",
+      "products": [],
+      "createdAt": new Date("2024-01-01")
+    },
+    {
+      "name": "Beyblade",
+      "slug": "beyblade",
+      "logo": "/images/brands/beyblade.png",
+      "products": [],
+      "createdAt": new Date("2024-01-01")
+    },
+    {
+      "name": "Bruder",
+      "slug": "bruder",
+      "logo": "/images/brands/bruder.png",
+      "products": [],
+      "createdAt": new Date("2024-01-01")
+    },
+    {
+      "name": "Bandai",
+      "slug": "bandai",
+      "logo": "/images/brands/bandai.png",
+      "products": [],
+      "createdAt": new Date("2024-01-01")
+    },
+    {
+      "name": "Bitzee",
+      "slug": "bitzee",
+      "logo": "/images/brands/bitzee.png",
+      "products": [],
+      "createdAt": new Date("2024-01-01")
+    },
+    {
+      "name": "Breezy Rollers",
+      "slug": "breezy-rollers",
+      "logo": "/images/brands/breezy-rollers.png",
+      "products": [],
+      "createdAt": new Date("2024-01-01")
+    },
+    {
+      "name": "Beyblade X",
+      "slug": "beyblade-x",
+      "logo": "/images/brands/beyblade-x.png",
+      "products": [],
+      "createdAt": new Date("2024-01-01")
+    }
   ],
   "products": [
     {
