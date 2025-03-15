@@ -114,7 +114,7 @@ export default function Product() {
           <Carousel className="mx-auto w-200">
             <CarouselContent className="px-1 py-1">
               {images.map((img, index) => (
-                <CarouselItem key={index} className="basis-1/5">
+                <CarouselItem key={index} className="basis-1/3">
                   <img
                     src={img}
                     className={`w-30 hover:cursor-pointer ${

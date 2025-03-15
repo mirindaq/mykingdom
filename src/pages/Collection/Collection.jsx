@@ -1,5 +1,6 @@
 import FilterSidebar from "@/components/FilterSidebar/FilterSidebar";
 import ListProductSearch from "@/components/ListProductSearch/ListProductSearch";
+import { PaginationBox } from "@/components/PaginationBox/PaginationBox";
 import { ProductBoxSkeleton } from "@/components/ProductBox/ProductBox";
 import { Grid2X2, Grid3x3 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -13,12 +14,15 @@ export default function Collection() {
   const [sortOption, setSortOption] = useState("Mặc định");
   const [totalProducts, setTotalProducts] = useState(0);
   const [products, setProducts] = useState([]);
+  const [totalPage, setTotalPage] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
 
   const onProductsUpdate = (data) => {
     setProducts(data.products);
     setTotalProducts(data.pagination.total);
+    setTotalPage(data.pagination.totalPages);
+    setCurrentPage(data.pagination.page);
   };
   const handleViewChange = (type) => {
     setViewType(type);
@@ -57,9 +61,8 @@ export default function Collection() {
         }
 
         params.set("page", currentPage);
-        params.set("limit", "12");
+        params.set("limit", "6");
 
-        // Update URL without triggering a new fetch
         setSearchParams(params, { replace: true });
 
         const response = await fetch(
@@ -149,6 +152,13 @@ export default function Collection() {
           ) : (
             <ListProductSearch viewType={viewType} products={products} />
           )}
+        </div>
+        <div className="mt-4">
+          <PaginationBox
+            totalPage={totalPage}
+            currentPage={currentPage}
+            onPageChange={(page) => setCurrentPage(page)}
+          />
         </div>
       </div>
     </div>
