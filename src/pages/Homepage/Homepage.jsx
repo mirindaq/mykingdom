@@ -8,6 +8,7 @@ import React, { useEffect, useState } from "react";
 export default function Homepage() {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchCategoriesAndProducts = async () => {
@@ -21,6 +22,7 @@ export default function Homepage() {
 
       setCategories(categoriesData);
       setProducts(productsData.products);
+      setIsLoading(false);
     };
 
     fetchCategoriesAndProducts();
@@ -31,7 +33,7 @@ export default function Homepage() {
       <div className="flex w-full flex-col items-center justify-center rounded-3xl">
         <CarouselBox data={data.thumbnail} />
 
-        <SectionHomepage products={products} />
+        <SectionHomepage products={products} isLoading={isLoading} />
 
         <div className="container mt-5 mb-16">
           <div className="mb-9 text-center text-4xl font-bold text-blue-950">

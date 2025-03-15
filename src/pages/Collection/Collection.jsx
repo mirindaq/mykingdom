@@ -1,12 +1,15 @@
 import FilterSidebar from "@/components/FilterSidebar/FilterSidebar";
 import ListProductSearch from "@/components/ListProductSearch/ListProductSearch";
+import { ProductBoxSkeleton } from "@/components/ProductBox/ProductBox";
 import { Grid2X2, Grid3x3 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 export default function Collection() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [viewType, setViewType] = useState("grid3x3");
+  const [viewType, setViewType] = useState(
+    localStorage.getItem("viewType") || "grid3x3",
+  );
   const [sortOption, setSortOption] = useState("Mặc định");
   const [totalProducts, setTotalProducts] = useState(0);
   const [products, setProducts] = useState([]);
@@ -16,6 +19,13 @@ export default function Collection() {
   const onProductsUpdate = (data) => {
     setProducts(data.products);
     setTotalProducts(data.pagination.total);
+  };
+  const handleViewChange = (type) => {
+    setViewType(type);
+  };
+
+  const handleSortChange = (event) => {
+    setSortOption(event.target.value);
   };
 
   useEffect(() => {
@@ -74,13 +84,9 @@ export default function Collection() {
     fetchProducts();
   }, [currentPage, sortOption, searchParams]);
 
-  const handleViewChange = (type) => {
-    setViewType(type);
-  };
-
-  const handleSortChange = (event) => {
-    setSortOption(event.target.value);
-  };
+  useEffect(() => {
+    localStorage.setItem("viewType", viewType);
+  }, [viewType]);
 
   return (
     <div className="container mx-auto my-10 grid grid-cols-10 gap-6">
@@ -128,8 +134,18 @@ export default function Collection() {
           </div>
         </div>
         <div>
-          {loading ? (
-            <div className="py-8 text-center">Đang tải sản phẩm...</div>
+          {loading && viewType === "grid3x3" ? (
+            <div className="mt-5 grid w-full grid-cols-3 gap-4">
+              {Array.from({ length: 8 }).map((_, index) => (
+                <ProductBoxSkeleton key={index} />
+              ))}
+            </div>
+          ) : loading && viewType === "grid2x2" ? (
+            <div className="mt-5 grid w-full grid-cols-2 gap-4">
+              {Array.from({ length: 8 }).map((_, index) => (
+                <ProductBoxSkeleton key={index} />
+              ))}
+            </div>
           ) : (
             <ListProductSearch viewType={viewType} products={products} />
           )}
