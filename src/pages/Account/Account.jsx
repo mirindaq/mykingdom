@@ -1,3 +1,4 @@
+import BirthRegister from "@/components/BirthRegister/BirthRegister";
 import { path } from "@/constants/path";
 import { NavLink, Outlet } from "react-router-dom";
 
