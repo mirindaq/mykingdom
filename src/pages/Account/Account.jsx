@@ -34,7 +34,7 @@ export default function Account() {
                 </NavLink>
               ))}
               <NavLink
-                to="/logout"
+                to="/Login"
                 className="rounded-lg px-4 py-2 text-red-600 hover:bg-gray-200"
               >
                 Đăng xuất
