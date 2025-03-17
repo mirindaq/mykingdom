@@ -17,6 +17,7 @@ import Membership from "@/pages/Membership/Membership";
 import Product from "@/pages/Product/Product";
 import Cart from "@/pages/Cart/Cart";
 import OrderHistoryDetail from "@/pages/Account/OrderHistory/OrderHistoryDetail/OrderHistoryDetail";
+import Pay from "@/pages/Pay/Pay";
 
 const useRouteElements = () => {
   const routes = [
@@ -60,6 +61,10 @@ const useRouteElements = () => {
         {
           path: path.cart,
           element: <Cart />,
+        },
+        {
+          path: path.pay,
+          element: <Pay/>,
         },
         {
           path: path.account,

@@ -93,9 +93,11 @@ export default function Cart() {
               </div>
 
               <div className="mt-8 flex items-center justify-center">
-                <button className="w-full rounded-xl bg-red-600 py-3 text-base font-bold text-white hover:cursor-pointer">
-                  Thanh toán ngay
-                </button>
+                <Link to={path.pay} className="w-full">
+                  <button className="w-full rounded-xl bg-red-600 py-3 text-base font-bold text-white hover:cursor-pointer">
+                    Thanh toán ngay
+                  </button>
+                </Link>
               </div>
 
               <div className="mt-5 flex items-center text-sm">

@@ -14,4 +14,5 @@ export const path = {
   wishlist: "/account/wishlist",
   address: "/account/address",
   cart: "/cart",
+  pay: "/pay",
 }
