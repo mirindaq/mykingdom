@@ -3,15 +3,15 @@ export const path = {
   login: '/login',
   register: '/register',
   collections: '/collections',
-  product: '/collections/:id',
+  product: '/collections/:slug',
   brands: '/brands',
   exclusive: '/exclusive-online',
   membership: '/membership',
   blogs: '/blogs',
   account: '/account',
   orderHistory: "/account/order-history",
+  orderHistoryDetail: "/account/order-history/:id",
   wishlist: "/account/wishlist",
   address: "/account/address",
-
-
+  cart: "/cart",
 }

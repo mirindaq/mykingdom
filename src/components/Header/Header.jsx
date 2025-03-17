@@ -5,6 +5,7 @@ import { ShoppingBasket, SquareUser, Truck } from "lucide-react";
 import Menu from "../Menu/Menu";
 import { Link } from "react-router-dom";
 import { path } from "@/constants/path";
+import CardHoverHeader from "../CartHoverHeader/CartHoverHeader";
 
 export default function Header() {
   return (
@@ -34,11 +35,12 @@ export default function Header() {
                     icon={<Truck />}
                     title={"Theo dõi đơn hàng"}
                   />
-                  <ButtonWithIcon icon={<SquareUser />} title={"Tài khoản"} />
-                  <ButtonWithIcon
-                    icon={<ShoppingBasket />}
-                    title={"Giỏ hàng"}
-                  />
+
+                  <Link to={path.account}>
+                    <ButtonWithIcon icon={<SquareUser />} title={"Tài khoản"} />
+                  </Link>
+
+                  <CardHoverHeader />
                 </li>
               </ul>
             </div>

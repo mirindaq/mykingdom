@@ -69,11 +69,13 @@
   "Categories": [
     {
       "category_id": 1,
-      "category_name": "Đồ chơi lắp ráp"
+      "category_name": "Đồ chơi lắp ráp",
+      "image_url": "https://example.com/lego-building-toys.jpg"
     },
     {
       "category_id": 2,
-      "category_name": "Đồ chơi xe hơi"
+      "category_name": "Đồ chơi xe hơi",
+      "image_url": "https://example.com/lego-building-toys.jpg"
     }
   ],
   "Products": [

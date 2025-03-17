@@ -11,8 +11,8 @@ export default function Account() {
 
   return (
     <div className="container py-20">
-      <div className="grid grid-cols-10">
-        <div className="col-span-2 col-start-2 w-full overflow-hidden rounded-lg">
+      <div className="grid grid-cols-10 gap-20">
+        <div className="col-span-3 col-start-2 w-full overflow-hidden rounded-lg">
           <div className="bg-red-600 py-3 text-center font-semibold text-white">
             Tài Khoản Của Bạn
           </div>
@@ -33,7 +33,7 @@ export default function Account() {
                 </NavLink>
               ))}
               <NavLink
-                to="/logout"
+                to="/Login"
                 className="rounded-lg px-4 py-2 text-red-600 hover:bg-gray-200"
               >
                 Đăng xuất
@@ -41,7 +41,7 @@ export default function Account() {
             </nav>
           </div>
         </div>
-        <div className="col-span-7 col-start-5">
+        <div className="col-span-6 col-start-5">
           <Outlet />
         </div>
       </div>

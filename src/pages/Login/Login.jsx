@@ -2,26 +2,41 @@ import React from "react";
 
 export default function Login() {
   return (
-    <div>
-      <div class="flex justify-center items-center h-screen">
-        <div class="bg-white p-8 rounded-lg shadow-lg w-96">
-            <h2 class="text-2xl font-bold text-center mb-6">Đăng Nhập</h2>
-            <form>
-                <div class="mb-4">
-                    <label class="block text-gray-700">E-mail</label>
-                    <Input type="email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-red-500"/>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700">Mật khẩu</label>
-                    <Input type="password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-red-500"/>
-                </div>
-                <button class="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700">Đăng Nhập</button>
-                <p class="text-center text-sm text-gray-600 mt-4">
-                    <a href="#" class="text-red-500">Quên mật khẩu?</a> | <a href="#" class="text-red-500">Tạo tài khoản</a>
-                </p>
-            </form>
-        </div>
-    </div>
+    <div className="flex justify-center items-center h-screen bg-gray-100">
+      {/* Điều chỉnh chiều rộng form */}
+      <div className="bg-white p-10 rounded-lg shadow-xl w-[480px]">
+        <h2 className="text-3xl font-bold text-center mb-6">Đăng Nhập</h2>
+        <form>
+          {/* Ô nhập email */}
+          <div className="mb-5">
+            <label className="block text-gray-700 text-lg font-semibold mb-2">E-mail</label>
+            <input 
+              type="email" 
+              className="w-full px-5 py-3 text-lg border rounded-lg focus:outline-none focus:border-red-500"
+              placeholder="Nhập email của bạn"
+            />
+          </div>
+          {/* Ô nhập mật khẩu */}
+          <div className="mb-5">
+            <label className="block text-gray-700 text-lg font-semibold mb-2">Mật khẩu</label>
+            <input 
+              type="password" 
+              className="w-full px-5 py-3 text-lg border rounded-lg focus:outline-none focus:border-red-500"
+              placeholder="Nhập mật khẩu"
+            />
+          </div>
+          {/* Nút đăng nhập */}
+          <button 
+            type="submit" 
+            className="w-full bg-red-600 text-white py-3 text-lg font-semibold rounded-lg hover:bg-red-700 transition">
+            Đăng Nhập
+          </button>
+          {/* Liên kết quên mật khẩu / tạo tài khoản */}
+          <p className="text-center text-base text-gray-600 mt-5">
+            <a href="#" className="text-red-500 font-medium">Quên mật khẩu?</a> | <a href="#" className="text-red-500 font-medium">Tạo tài khoản</a>
+          </p>
+        </form>
+      </div>
     </div>
   );
 }

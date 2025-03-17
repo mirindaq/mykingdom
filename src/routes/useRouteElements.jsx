@@ -14,6 +14,9 @@ import OrderHistory from "@/pages/Account/OrderHistory/OrderHistory";
 import Wishlist from "@/pages/Account/Wishlist/Wishlist";
 import Address from "@/pages/Account/Address/Address";
 import Membership from "@/pages/Membership/Membership";
+import Product from "@/pages/Product/Product";
+import Cart from "@/pages/Cart/Cart";
+import OrderHistoryDetail from "@/pages/Account/OrderHistory/OrderHistoryDetail/OrderHistoryDetail";
 
 const useRouteElements = () => {
   const routes = [
@@ -25,6 +28,11 @@ const useRouteElements = () => {
           path: path.homepage,
           element: <Homepage />,
         },
+        {
+          path: path.product,
+          element: <Product />,
+        },
+
         {
           path: path.login,
           element: <Login />,
@@ -50,31 +58,35 @@ const useRouteElements = () => {
           element: <Membership />,
         },
         {
+          path: path.cart,
+          element: <Cart />,
+        },
+        {
           path: path.account,
           element: <Account />,
           children: [
             {
               path: "",
-              element: <AccountOverview />, 
+              element: <AccountOverview />,
             },
             {
               path: path.orderHistory,
               element: <OrderHistory />,
             },
+            { path: path.orderHistoryDetail, element: <OrderHistoryDetail /> },
             {
               path: path.wishlist,
-              element: <Wishlist />, 
+              element: <Wishlist />,
             },
             {
               path: path.address,
               element: <Address />,
             },
-          ]
+          ],
         },
-        
       ],
     },
-    { path: "*", element: <Error404/> },
+    { path: "*", element: <Error404 /> },
   ];
   return useRoutes(routes);
 };

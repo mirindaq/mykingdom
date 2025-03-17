@@ -18,6 +18,8 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        addToCart: "bg-red-600 text-base text-white font-bold rounded-xl",
+        more: "flex items-center justify-center rounded-3xl border-2 border-red-600 bg-white text-red-600"
       },
       size: {
         default: "h-9 px-4 py-2",
