@@ -42,7 +42,7 @@ function PaginationLink({ className, isActive, size = "icon", ...props }) {
       data-active={isActive}
       className={cn(
         buttonVariants({
-          variant: isActive ? "outline" : "ghost",
+          variant: isActive ? "paginationActive" : "paginationNormal",
           size,
         }),
         className,

@@ -43,7 +43,6 @@ export const allBrand = [
         id: 8,
         name: 'E',
         logos:['/public/images/E1.png','/public/images/E2.webp','/public/images/E3.avif','/public/images/E4.webp']
-  
       }
 ]
 

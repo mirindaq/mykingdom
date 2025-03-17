@@ -64,7 +64,7 @@ export default function Cart() {
             <div className="col-span-7 grid grid-cols-1 items-center pr-30">
               <ul className="space-y-4">
                 {cart.map((item) => (
-                  <CartItemPage item={item} key={item.id} />
+                  <CartItemPage item={item} key={item._id} />
                 ))}
               </ul>
 

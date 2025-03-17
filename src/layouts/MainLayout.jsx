@@ -5,10 +5,10 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 
 export default function MainLayout() {
-
   return (
     <>
       <Header />
+      {/* <main style={{ backgroundImage: "url('/images/background.webp')" }}> */}
       <main>
         <Outlet />
       </main>

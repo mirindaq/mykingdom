@@ -12,7 +12,7 @@ export default function Collection() {
   const [viewType, setViewType] = useState(
     localStorage.getItem("viewType") || "grid3x3",
   );
-  
+
   const [sortOption, setSortOption] = useState("Mặc định");
   const [totalProducts, setTotalProducts] = useState(0);
   const [products, setProducts] = useState([]);
@@ -61,7 +61,9 @@ export default function Collection() {
           }
           params.set("sort", sortParam);
         }
-
+        if (currentPage > totalPage) {
+          setCurrentPage(1);
+        }
         params.set("page", currentPage);
         params.set("limit", "6");
 
@@ -77,6 +79,8 @@ export default function Collection() {
         const data = await response.json();
         setProducts(data.products);
         setTotalProducts(data.pagination.total);
+        setTotalPage(data.pagination.totalPages);
+        setCurrentPage(data.pagination.page);
       } catch (error) {
         console.error("Failed to fetch products:", error);
         setProducts([]);

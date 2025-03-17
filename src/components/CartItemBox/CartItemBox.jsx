@@ -1,18 +1,16 @@
-import React from 'react'
+import React from "react";
 import { useCart } from "@/hooks/CartContext";
-import { Trash } from 'lucide-react';
+import { Trash } from "lucide-react";
 
 export default function CartItemBox(props) {
-  const { addToCart, reduceFromCart, removeFromCart } =
-    useCart();
-
+  const { addToCart, reduceFromCart, removeFromCart } = useCart();
 
   const { item } = props;
 
   return (
     <div>
       <li
-        key={item.id}
+        key={item._id}
         className="flex items-center justify-between border-b pb-3"
       >
         <img
@@ -24,7 +22,7 @@ export default function CartItemBox(props) {
           <span className="text-sm font-medium">{item.name}</span>
           <div className="mt-2 flex items-center gap-3">
             <button
-              onClick={() => reduceFromCart(item.id)}
+              onClick={() => reduceFromCart(item._id)}
               className="flex h-8 w-8 items-center justify-center rounded-full border border-red-500 text-red-500"
             >
               -
@@ -45,7 +43,7 @@ export default function CartItemBox(props) {
               : `${(item.price * item.quantity).toLocaleString()}đ`}
           </span>
           <button
-            onClick={() => removeFromCart(item.id)}
+            onClick={() => removeFromCart(item._id)}
             className="text-red-500 hover:text-red-700"
           >
             <Trash size={18} />
@@ -53,5 +51,5 @@ export default function CartItemBox(props) {
         </div>
       </li>
     </div>
-  )
+  );
 }
