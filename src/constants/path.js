@@ -14,5 +14,6 @@ export const path = {
     wishlist: "/account/wishlist",
     address: "/account/address",
     cart: "/cart",
-    termsAndConditions: "/terms-and-conditions"
+    termsAndConditions: "/terms-and-conditions",
+    pay: "/pay",
 }

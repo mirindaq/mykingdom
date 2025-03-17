@@ -8,7 +8,6 @@ const getWishlist = async (req, res) => {
     );
 
     if (!wishlist) {
-      // Create new wishlist if not exists
       const newWishlist = new Wishlist({ user: req.user.id, products: [] });
       await newWishlist.save();
       return res.json(newWishlist);

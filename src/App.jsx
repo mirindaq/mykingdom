@@ -6,9 +6,9 @@ function App() {
     <>
       {element}
       <Toaster
+        richColors={true}
         toastOptions={{
           style: {
-            color: "green",
             padding: "22px",
             fontSize: "16px",
           },

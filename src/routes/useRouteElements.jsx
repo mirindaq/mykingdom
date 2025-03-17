@@ -18,6 +18,7 @@ import Product from "@/pages/Product/Product";
 import Cart from "@/pages/Cart/Cart";
 import OrderHistoryDetail from "@/pages/Account/OrderHistory/OrderHistoryDetail/OrderHistoryDetail";
 import TermsAndConditions from "@/pages/TermsAndConditions/TermsAndConditions";
+import Pay from "@/pages/Pay/Pay";
 
 const useRouteElements = () => {
   const routes = [
@@ -63,8 +64,12 @@ const useRouteElements = () => {
           element: <Cart />,
         },
         {
-          path: "/terms-and-conditions",
+          path: path.termsAndConditions,
           element: <TermsAndConditions />,
+        },
+        {
+          path: path.pay,
+          element: <Pay />,
         },
         {
           path: path.account,
