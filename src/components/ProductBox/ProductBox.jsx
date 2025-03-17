@@ -78,7 +78,6 @@ export default function ProductBox(props) {
 }
 
 export function ProductBoxSkeleton() {
-  console.log("ProductBoxSkeleton");
   return (
     <div className="relative my-5 flex w-full flex-col justify-between rounded-3xl border border-gray-200 p-4">
       <div className="w-full">

@@ -1,3 +1,4 @@
+import { productApi } from "@/api/product.api";
 import FilterSidebar from "@/components/FilterSidebar/FilterSidebar";
 import ListProductSearch from "@/components/ListProductSearch/ListProductSearch";
 import { PaginationBox } from "@/components/PaginationBox/PaginationBox";
@@ -11,6 +12,7 @@ export default function Collection() {
   const [viewType, setViewType] = useState(
     localStorage.getItem("viewType") || "grid3x3",
   );
+  
   const [sortOption, setSortOption] = useState("Mặc định");
   const [totalProducts, setTotalProducts] = useState(0);
   const [products, setProducts] = useState([]);
@@ -153,13 +155,19 @@ export default function Collection() {
             <ListProductSearch viewType={viewType} products={products} />
           )}
         </div>
-        <div className="mt-4">
-          <PaginationBox
-            totalPage={totalPage}
-            currentPage={currentPage}
-            onPageChange={(page) => setCurrentPage(page)}
-          />
-        </div>
+        {totalProducts > 0 ? (
+          <div className="mt-4">
+            <PaginationBox
+              totalPage={totalPage}
+              currentPage={currentPage}
+              onPageChange={(page) => setCurrentPage(page)}
+            />
+          </div>
+        ) : (
+          <div className="mt-4 flex items-center justify-center">
+            <img src="/images/emptyCart.png" alt="" />
+          </div>
+        )}
       </div>
     </div>
   );
