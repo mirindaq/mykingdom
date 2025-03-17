@@ -7,12 +7,25 @@ import React, { useEffect, useState } from "react";
 
 export default function Homepage() {
   const [categories, setCategories] = useState([]);
-
   const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setCategories(data.categories);
-    setProducts(data.products);
+    const fetchCategoriesAndProducts = async () => {
+      const [categoriesRes, productsRes] = await Promise.all([
+        fetch("http://localhost:5001/api/categories"),
+        fetch("http://localhost:5001/api/products"),
+      ]);
+
+      const categoriesData = await categoriesRes.json();
+      const productsData = await productsRes.json();
+
+      setCategories(categoriesData);
+      setProducts(productsData.products);
+      setIsLoading(false);
+    };
+
+    fetchCategoriesAndProducts();
   }, []);
 
   return (
@@ -20,18 +33,15 @@ export default function Homepage() {
       <div className="flex w-full flex-col items-center justify-center rounded-3xl">
         <CarouselBox data={data.thumbnail} />
 
-        <SectionHomepage products={products} />
+        <SectionHomepage products={products} isLoading={isLoading} />
 
         <div className="container mt-5 mb-16">
           <div className="mb-9 text-center text-4xl font-bold text-blue-950">
             Danh Mục Nổi Bật
           </div>
           <div className="grid grid-cols-2 gap-7">
-            {categories.slice(0, 5).map((category, index) => (
-              <div
-                key={category.id}
-                className={index == 2 ? "col-span-2" : ""}
-              >
+            {categories?.slice(0, 5).map((category, index) => (
+              <div key={index} className={index == 2 ? "col-span-2" : ""}>
                 <BoxCategoryHomepage
                   categoryName={category.category_name}
                   imageUrl={category.image_url}

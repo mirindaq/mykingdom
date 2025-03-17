@@ -1,11 +1,9 @@
-import React from 'react'
+import React from "react";
 import { useCart } from "@/hooks/CartContext";
-import { Trash } from 'lucide-react';
+import { Trash } from "lucide-react";
 
 export default function CartItemPage(props) {
-  const { addToCart, reduceFromCart, removeFromCart } =
-    useCart();
-
+  const { addToCart, reduceFromCart, removeFromCart } = useCart();
 
   const { item } = props;
 
@@ -18,7 +16,7 @@ export default function CartItemPage(props) {
         <img
           src={item.image_url[0]}
           alt={item.name}
-          className="h-50 w-50 rounded object-cover mr-10"
+          className="mr-10 h-50 w-50 rounded object-cover"
         />
         <div className="ml-3 flex flex-1 flex-col">
           <span className="text-2xl font-medium">{item.name}</span>
@@ -36,11 +34,10 @@ export default function CartItemPage(props) {
             >
               +
             </button>
-            
           </div>
           <button
-            onClick={() => removeFromCart(item.id)}
-            className="text-gray-500 hover:text-red-700 w-4 mt-20 hover:cursor-pointer underline text-lg"
+            onClick={() => removeFromCart(item._id)}
+            className="mt-20 w-4 text-lg text-gray-500 underline hover:cursor-pointer hover:text-red-700"
           >
             Xóa
           </button>
@@ -51,9 +48,8 @@ export default function CartItemPage(props) {
               ? `${((item.price - (item.discount * item.price) / 100) * item.quantity).toLocaleString()}đ`
               : `${(item.price * item.quantity).toLocaleString()}đ`}
           </span>
-
         </div>
       </li>
     </div>
-  )
+  );
 }

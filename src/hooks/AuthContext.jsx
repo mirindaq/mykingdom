@@ -1,8 +1,13 @@
-import { createContext, useEffect, useState } from "react";
+import { authApi } from "@/api/auth.api";
+import { path } from "@/constants/path";
+import { createContext, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  const navigate = useNavigate();
   const [user, setUser] = useState({});
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -14,18 +19,27 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const login = (email, password) => {
-    const fakeUser = { id: 1, name: "John Doe", email };
-    setUser(fakeUser);
-    setIsAuthenticated(true);
-    localStorage.setItem("user", JSON.stringify(fakeUser));
+  const login = async (user) => {
+    const auth = await authApi.login(user);
+    if (auth) {
+      toast.success("Đăng nhập thành công");
+      setUser(auth);
+      setIsAuthenticated(true);
+      localStorage.setItem("user", JSON.stringify(auth));
+      navigate(path.homepage);
+    }
+    else {
+      toast.error("Tài khoản hoặc mật khẩu không đúng");
+    }
+ 
   };
 
-  const register = (name, email, password) => {
-    const newUser = { id: Date.now(), name, email };
-    setUser(newUser);
-    setIsAuthenticated(true);
-    localStorage.setItem("user", JSON.stringify(newUser));
+  const register = async (user) => {
+    const newUser = await authApi.register(user);
+    if (newUser) {
+      toast.success("Tài khoản đã được tạo");
+      navigate(path.login);
+    }
   };
 
   const logout = () => {

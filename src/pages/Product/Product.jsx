@@ -38,13 +38,15 @@ export default function Product() {
   };
 
   useEffect(() => {
-    const foundProduct = data.products.find((p) => p.slug === slug);
     setProducts(data.products);
-    if (foundProduct) {
-      setProduct(foundProduct);
-      setImages(foundProduct.image_url);
-      setSelectedImageIndex(0);
-    }
+    fetch(`http://localhost:5001/api/products/${slug}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setProduct(data);
+        setImages(data.image_url);
+        setSelectedImageIndex(0);
+      });
   }, [slug]);
 
   useEffect(() => {
@@ -112,7 +114,7 @@ export default function Product() {
           <Carousel className="mx-auto w-200">
             <CarouselContent className="px-1 py-1">
               {images.map((img, index) => (
-                <CarouselItem key={index} className="basis-1/5">
+                <CarouselItem key={index} className="basis-1/3">
                   <img
                     src={img}
                     className={`w-30 hover:cursor-pointer ${
@@ -130,17 +132,14 @@ export default function Product() {
 
         <div className="mt-8">
           <div className="flex">
-            <p className="mb-4 text-2xl font-medium">
-              Con quay B-160 Booster King Helios.Zn 1B BEYBLADE 5 157199
-            </p>
+            <p className="mb-4 text-2xl font-medium">{product.name}</p>
             <Heart className="h-9 w-9 text-red-600" />
           </div>
           <div className="mb-4 flex">
             <p className="pr-5">Thương hiệu</p>{" "}
             <a href="#" className="font-medium text-blue-900 underline">
-              {product.brand}
+              {product?.brand?.name}
             </a>{" "}
-            <p className="pl-10">SKU {product.id}</p>{" "}
           </div>
           <PriceProduct
             priceType="Giá thành viên"
@@ -196,7 +195,7 @@ export default function Product() {
 
           <div className="mt-5 w-full pb-10">
             <p className="mb-4 text-2xl font-bold">Thông tin sản phẩm</p>
-            <TableInformationProduct />
+            {product && <TableInformationProduct product={product} />}
           </div>
         </div>
       </div>

@@ -64,7 +64,7 @@ export default function Cart() {
             <div className="col-span-7 grid grid-cols-1 items-center pr-30">
               <ul className="space-y-4">
                 {cart.map((item) => (
-                  <CartItemPage item={item} key={item.id} />
+                  <CartItemPage item={item} key={item._id} />
                 ))}
               </ul>
 
@@ -93,9 +93,11 @@ export default function Cart() {
               </div>
 
               <div className="mt-8 flex items-center justify-center">
-                <button className="w-full rounded-xl bg-red-600 py-3 text-base font-bold text-white hover:cursor-pointer">
-                  Thanh toán ngay
-                </button>
+                <Link to={path.pay} className="w-full">
+                  <button className="w-full rounded-xl bg-red-600 py-3 text-base font-bold text-white hover:cursor-pointer">
+                    Thanh toán ngay
+                  </button>
+                </Link>
               </div>
 
               <div className="mt-5 flex items-center text-sm">

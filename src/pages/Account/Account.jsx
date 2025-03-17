@@ -1,13 +1,24 @@
+import BirthRegister from "@/components/BirthRegister/BirthRegister";
 import { path } from "@/constants/path";
 import { NavLink, Outlet } from "react-router-dom";
+import { useAuth } from "@/hooks/AuthContext";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export default function Account() {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
   const menuItems = [
     { name: "Tài khoản", path: path.account },
     { name: "Lịch sử mua hàng", path: path.orderHistory },
     { name: "Danh sách yêu thích", path: path.wishlist },
     { name: "Địa chỉ giao hàng", path: path.address },
   ];
+
+  const handleLogout = () => {
+    logout();
+    navigate(path.homepage);
+  };
 
   return (
     <div className="container py-20">
@@ -32,12 +43,12 @@ export default function Account() {
                   {item.name}
                 </NavLink>
               ))}
-              <NavLink
-                to="/logout"
-                className="rounded-lg px-4 py-2 text-red-600 hover:bg-gray-200"
+              <button
+                onClick={handleLogout}
+                className="rounded-lg px-4 py-2 text-start text-red-600 hover:cursor-pointer hover:bg-gray-200"
               >
                 Đăng xuất
-              </NavLink>
+              </button>
             </nav>
           </div>
         </div>

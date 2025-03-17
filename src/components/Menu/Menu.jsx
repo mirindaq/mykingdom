@@ -8,7 +8,7 @@ import { path } from "@/constants/path";
 import { Link } from "react-router-dom";
 
 const menuItems = [
-  { label: "HÀNG MỚI", path: path.collections },
+  // { label: "HÀNG MỚI", path: path.collections },
   { label: "Sản Phẩm", path: path.collections },
   { label: "Thương Hiệu", path: path.brands },
   { label: "Độc Quyền Online", path: path.exclusive },
@@ -25,9 +25,20 @@ export default function NavBar() {
           <NavigationMenuItem key={index} className="relative">
             <NavigationMenuLink
               asChild
-              className="cursor-pointer bg-red-600 p-2 text-base font-bold text-white hover:text-red-600"
+              className="cursor-pointer bg-red-600 p-2 text-lg font-bold text-white hover:text-red-600"
             >
-              <Link to={item.path}>{item.label}</Link>
+              {index === 0 ? (
+                <Link to={item.path} className="flex flex-row text-center items-center">
+                  {item.label}
+                  <img
+                    src="https://cdn.shopify.com/s/files/1/0731/6514/4343/files/icon-birthday-menu.gif?v=1741941506"
+                    alt=""
+                    className="h-8 w-8"
+                  />
+                </Link>
+              ) : (
+                <Link to={item.path}>{item.label}</Link>
+              )}
             </NavigationMenuLink>
           </NavigationMenuItem>
         ))}

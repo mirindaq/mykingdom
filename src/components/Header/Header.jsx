@@ -6,8 +6,11 @@ import Menu from "../Menu/Menu";
 import { Link } from "react-router-dom";
 import { path } from "@/constants/path";
 import CardHoverHeader from "../CartHoverHeader/CartHoverHeader";
+import { useAuth } from "@/hooks/AuthContext";
 
 export default function Header() {
+  const { isAuthenticated } = useAuth();
+
   return (
     <>
       <header>
@@ -35,10 +38,24 @@ export default function Header() {
                     icon={<Truck />}
                     title={"Theo dõi đơn hàng"}
                   />
-
-                  <Link to={path.account}>
-                    <ButtonWithIcon icon={<SquareUser />} title={"Tài khoản"} />
-                  </Link>
+                  {isAuthenticated ? (
+                    <Link to={path.account}>
+                      <ButtonWithIcon
+                        icon={<SquareUser />}
+                        title={"Tài khoản"}
+                      />
+                    </Link>
+                  ) : (
+                    <>
+                      {" "}
+                      <Link to={path.login}>
+                        <ButtonWithIcon
+                          icon={<SquareUser />}
+                          title={"Đăng nhập"}
+                        />
+                      </Link>
+                    </>
+                  )}
 
                   <CardHoverHeader />
                 </li>
