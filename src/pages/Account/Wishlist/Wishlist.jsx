@@ -1,23 +1,34 @@
-import React, { useState } from 'react';
-import FavoriteProduct from '@/components/FavoriteProduct/FavoriteProduct';
-import { data } from '@/database/data';
+import React, { useState } from "react";
+import FavoriteProduct from "@/components/FavoriteProduct/FavoriteProduct";
+import { data } from "@/database/data";
+import ProductBox from "@/components/ProductBox/ProductBox";
+import { PaginationBox } from "@/components/PaginationBox/PaginationBox";
 
 export default function Wishlist() {
   const [favoriteProducts, setFavoriteProducts] = useState(data.products);
   const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 4;
+  const productsPerPage = 6;
 
-  const handleRemove = (productId) => {
-    const updatedProducts = favoriteProducts.filter((product) => product.id !== productId);
-    setFavoriteProducts(updatedProducts);
-    console.log(`Đã xóa sản phẩm với id: ${productId}`);
-    if (updatedProducts.length <= (currentPage - 1) * productsPerPage && currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
+  // const handleRemove = (productId) => {
+  //   const updatedProducts = favoriteProducts.filter(
+  //     (product) => product.id !== productId,
+  //   );
+  //   setFavoriteProducts(updatedProducts);
+  //   console.log(`Đã xóa sản phẩm với id: ${productId}`);
+  //   if (
+  //     updatedProducts.length <= (currentPage - 1) * productsPerPage &&
+  //     currentPage > 1
+  //   ) {
+  //     setCurrentPage(currentPage - 1);
+  //   }
+  // };
+
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = favoriteProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+  const currentProducts = favoriteProducts.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct,
+  );
 
   const totalPages = Math.ceil(favoriteProducts.length / productsPerPage);
 
@@ -25,27 +36,29 @@ export default function Wishlist() {
 
   return (
     <div className="container mx-auto py-6">
-      <h1 className="text-2xl font-bold text-center mb-6">Danh sách sản phẩm yêu thích</h1>
+      <h1 className="text-start text-2xl font-bold">
+        Danh sách sản phẩm yêu thích
+      </h1>
       {favoriteProducts.length > 0 ? (
         <div>
-          <div className="grid grid-cols-1 gap-6">
+          <div className="grid grid-cols-3 gap-4">
             {currentProducts.map((product) => (
-              <FavoriteProduct
-                key={product.id}
+              <ProductBox
+                key={product._id}
                 product={product}
-                onRemove={handleRemove}
+                // onRemove={handleRemove}
               />
             ))}
           </div>
           {totalPages > 1 && (
-            <div className="flex justify-center mt-6 gap-2">
-              <button
+            <div className="mt-6 flex justify-center gap-2">
+              {/* <button
                 onClick={() => paginate(currentPage - 1)}
                 disabled={currentPage === 1}
-                className={`px-4 py-2 rounded ${
+                className={`rounded px-4 py-2 ${
                   currentPage === 1
-                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    : 'bg-blue-500 text-white hover:bg-blue-600'
+                    ? "cursor-not-allowed bg-gray-300 text-gray-500"
+                    : "bg-blue-500 text-white hover:bg-blue-600"
                 } transition-colors`}
               >
                 Trước
@@ -54,10 +67,10 @@ export default function Wishlist() {
                 <button
                   key={index + 1}
                   onClick={() => paginate(index + 1)}
-                  className={`px-4 py-2 rounded ${
+                  className={`rounded px-4 py-2 ${
                     currentPage === index + 1
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                      ? "bg-blue-600 text-white"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                   } transition-colors`}
                 >
                   {index + 1}
@@ -66,19 +79,26 @@ export default function Wishlist() {
               <button
                 onClick={() => paginate(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                className={`px-4 py-2 rounded ${
+                className={`rounded px-4 py-2 ${
                   currentPage === totalPages
-                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    : 'bg-blue-500 text-white hover:bg-blue-600'
+                    ? "cursor-not-allowed bg-gray-300 text-gray-500"
+                    : "bg-blue-500 text-white hover:bg-blue-600"
                 } transition-colors`}
               >
                 Tiếp
-              </button>
+              </button> */}
+              <PaginationBox
+                currentPage={currentPage}
+                totalPage={totalPages}
+                onPageChange={paginate}
+              />
             </div>
           )}
         </div>
       ) : (
-        <p className="text-center text-gray-500">Danh sách yêu thích của bạn đang trống.</p>
+        <p className="text-center text-gray-500">
+          Danh sách yêu thích của bạn đang trống.
+        </p>
       )}
     </div>
   );

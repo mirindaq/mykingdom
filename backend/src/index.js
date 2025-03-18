@@ -38,7 +38,9 @@ app.listen(PORT, () => {
 app.use("/api/products", require("./routes/product.routes"));
 app.use("/api/brands", require("./routes/brand.routes"));
 app.use("/api/categories", require("./routes/category.routes"));
-// app.use("/api/articles", require("./routes/article.routes"));
+app.use("/api/articles", require("./routes/article.routes"));
 app.use("/api/branches", require("./routes/branch.routes"));
 app.use("/api/wishlist", require("./routes/wishlist.routes"));
 app.use("/api/orders", require("./routes/order.routes"));
+
+

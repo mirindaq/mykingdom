@@ -16,22 +16,16 @@ const articleSchema = new mongoose.Schema({
     required: true,
   },
   thumbnail: {
-    type: String, // URL của ảnh thumbnail
+    type: String,
   },
   slug: {
     type: String,
     unique: true,
     trim: true,
   },
-  tags: [
-    {
-      type: String,
-      trim: true,
-    },
-  ],
-  category: {
+  tag: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Category",
+    ref: "Tag",
   },
   createdAt: {
     type: Date,

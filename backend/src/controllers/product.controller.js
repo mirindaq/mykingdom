@@ -91,12 +91,9 @@ const getAllProducts = async (req, res) => {
     if (gender) {
       const genderArray = gender.split(",").filter(Boolean);
       if (genderArray.length > 0) {
-        console.log(genderArray);
         conditions.push({ gender: { $in: genderArray } });
       }
     }
-    console.log(conditions);
-
     if (conditions.length > 0) {
       query.$and = conditions;
     }
