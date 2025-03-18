@@ -2,13 +2,13 @@ const Wishlist = require("../models/wishlist.model");
 
 const getWishlist = async (req, res) => {
   try {
-    const wishlist = await Wishlist.findOne({ user: req.user.id }).populate(
+    const wishlist = await Wishlist.findOne({ user: req.query.user }).populate(
       "products",
       "name price images",
     );
 
     if (!wishlist) {
-      const newWishlist = new Wishlist({ user: req.user.id, products: [] });
+      const newWishlist = new Wishlist({ user: req.query.user, products: [] });
       await newWishlist.save();
       return res.json(newWishlist);
     }
@@ -21,11 +21,11 @@ const getWishlist = async (req, res) => {
 
 const addToWishlist = async (req, res) => {
   try {
-    let wishlist = await Wishlist.findOne({ user: req.user.id });
+    let wishlist = await Wishlist.findOne({ user: req.body.user });
 
     if (!wishlist) {
       wishlist = new Wishlist({
-        user: req.user.id,
+        user: req.body.user,
         products: [req.params.productId],
       });
     } else if (!wishlist.products.includes(req.params.productId)) {
@@ -40,9 +40,10 @@ const addToWishlist = async (req, res) => {
 };
 
 const removeFromWishlist = async (req, res) => {
+  console.log(req.body);
   try {
-    const wishlist = await Wishlist.findOne({ user: req.user.id });
-
+    const wishlist = await Wishlist.findOne({ user: req.body.user });
+    console.log(wishlist);
     if (!wishlist) {
       return res.status(404).json({ message: "Wishlist not found" });
     }
@@ -58,25 +59,8 @@ const removeFromWishlist = async (req, res) => {
   }
 };
 
-const clearWishlist = async (req, res) => {
-  try {
-    const wishlist = await Wishlist.findOne({ user: req.user.id });
-
-    if (!wishlist) {
-      return res.status(404).json({ message: "Wishlist not found" });
-    }
-
-    wishlist.products = [];
-    await wishlist.save();
-    res.json({ message: "Wishlist cleared successfully" });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
 module.exports = {
   getWishlist,
   addToWishlist,
   removeFromWishlist,
-  clearWishlist,
 };

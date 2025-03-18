@@ -4,14 +4,48 @@ import { Link } from "react-router-dom";
 import { useCart } from "@/hooks/CartContext";
 import { toast } from "sonner";
 import { Skeleton } from "../ui/skeleton";
+import { wishlistApi } from "@/api/wishlist.api";
+import { useAuth } from "@/hooks/AuthContext";
+import { useEffect, useState } from "react";
 
 export default function ProductBox(props) {
+  const [isWishlist, setIsWishlist] = useState(false);
   const { product } = props;
   const { addToCart } = useCart();
+  const { user } = useAuth();
+  useEffect(() => {
+    if (product?.isWishlist) {
+      setIsWishlist(true);
+    }
+  }, [product?.isWishlist]);
 
   const handleAddToCart = () => {
     addToCart(product);
     toast.success("Đã thêm vào giỏ hàng");
+  };
+
+  const handleAddToWishlist = async () => {
+    if (!user?.user) {
+      toast.error("Vui lòng đăng nhập để thêm vào danh sách yêu thích");
+      return;
+    }
+    const result = await wishlistApi.addToWishlist(user.user, product._id);
+    if (result) {
+      setIsWishlist(true);
+      toast.success("Đã thêm vào danh sách yêu thích");
+    }
+  };
+
+  const handleRemoveFromWishlist = async () => {
+    if (!user?.user) {
+      toast.error("Vui lòng đăng nhập để xóa khỏi danh sách yêu thích");
+      return;
+    }
+    const result = await wishlistApi.removeFromWishlist(user.user, product._id);
+    if (result) {
+      setIsWishlist(false);
+      toast.success("Đã xóa khỏi danh sách yêu thích");
+    }
   };
 
   return (
@@ -69,7 +103,18 @@ export default function ProductBox(props) {
             Thêm Vào Giỏ Hàng
           </Button>
           <div className="col-span-1 flex items-center justify-center">
-            <Heart className="h-9 w-9 text-red-600" />
+            <div
+              onClick={
+                isWishlist ? handleRemoveFromWishlist : handleAddToWishlist
+              }
+              className="cursor-pointer"
+            >
+              {isWishlist ? (
+                <Heart className="h-9 w-9 fill-red-600 text-red-600 transition-all duration-300" />
+              ) : (
+                <Heart className="h-9 w-9 text-red-600 transition-all duration-300" />
+              )}
+            </div>
           </div>
         </div>
       </div>

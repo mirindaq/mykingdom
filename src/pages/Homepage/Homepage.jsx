@@ -3,30 +3,44 @@ import { CarouselBox } from "@/components/CarouselBox/CarouselBox";
 import CarouselCategory from "@/components/CarouselCategory/CarouselCategory";
 import SectionHomepage from "@/components/SectionHomepage/SectionHomepage";
 import { data } from "@/database/data";
+import { categoryApi } from "@/api/category.api";
+import { productApi } from "@/api/product.api";
+import { useAuth } from "@/hooks/AuthContext";
+import { wishlistApi } from "@/api/wishlist.api";
 import React, { useEffect, useState } from "react";
 
 export default function Homepage() {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchCategoriesAndProducts = async () => {
       const [categoriesRes, productsRes] = await Promise.all([
-        fetch("http://localhost:5001/api/categories"),
-        fetch("http://localhost:5001/api/products"),
+        categoryApi.getAllCategories(),
+        productApi.getAllProducts(),
       ]);
 
-      const categoriesData = await categoriesRes.json();
-      const productsData = await productsRes.json();
+      let wishlist = { products: [] };
 
-      setCategories(categoriesData);
-      setProducts(productsData.products);
+      if (user?.user) {
+        const wishlistResponse = await wishlistApi.getWishlist(user.user);
+        wishlist = wishlistResponse || { products: [] };
+      }
+
+      const updatedProducts = productsRes.products.map((product) => ({
+        ...product,
+        isWishlist: wishlist.products.some((item) => item._id === product._id),
+      }));
+
+      setCategories(categoriesRes);
+      setProducts(updatedProducts);
       setIsLoading(false);
     };
 
     fetchCategoriesAndProducts();
-  }, []);
+  }, [user?.user]);
 
   return (
     <div>

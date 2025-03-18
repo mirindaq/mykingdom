@@ -1,19 +1,12 @@
-const router = require("express").Router();
 const {
   getArticles,
-  getArticle,
-  createArticle,
-  updateArticle,
-  deleteArticle,
-  getArticlesByCategory,
+  getArticlesGroupByTag,
 } = require("../controllers/article.controller");
+
+const router = require("express").Router();
 
 // Base route: /api/articles
 router.get("/", getArticles);
-router.get("/category/:categoryId", getArticlesByCategory);
-router.get("/:id", getArticle);
-router.post("/", createArticle);
-router.put("/:id", updateArticle);
-router.delete("/:id", deleteArticle);
+router.get("/group-by-tag", getArticlesGroupByTag);
 
 module.exports = router;

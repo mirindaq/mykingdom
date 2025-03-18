@@ -12,8 +12,8 @@ const menuItems = [
   { label: "Sản Phẩm", path: path.collections },
   { label: "Thương Hiệu", path: path.brands },
   { label: "Độc Quyền Online", path: path.exclusive },
-  { label: "Khuyến Mãi", path: path.collections },
   { label: "Chương Trình Thành Viên", path: path.membership },
+  { label: "Điều khoản - Điều kiện", path: path.termsAndConditions },
   { label: "Cẩm Nang", path: path.blogs },
 ];
 
@@ -28,7 +28,10 @@ export default function NavBar() {
               className="cursor-pointer bg-red-600 p-2 text-lg font-bold text-white hover:text-red-600"
             >
               {index === 0 ? (
-                <Link to={item.path} className="flex flex-row text-center items-center">
+                <Link
+                  to={item.path}
+                  className="flex flex-row items-center text-center"
+                >
                   {item.label}
                   <img
                     src="https://cdn.shopify.com/s/files/1/0731/6514/4343/files/icon-birthday-menu.gif?v=1741941506"
