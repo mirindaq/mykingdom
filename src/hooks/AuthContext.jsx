@@ -31,7 +31,6 @@ export const AuthProvider = ({ children }) => {
     else {
       toast.error("Tài khoản hoặc mật khẩu không đúng");
     }
- 
   };
 
   const register = async (user) => {

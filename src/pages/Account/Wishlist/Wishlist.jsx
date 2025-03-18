@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import FavoriteProduct from "@/components/FavoriteProduct/FavoriteProduct";
 import { data } from "@/database/data";
 import ProductBox from "@/components/ProductBox/ProductBox";
 import { PaginationBox } from "@/components/PaginationBox/PaginationBox";
+import { wishlistApi } from "@/api/wishlist.api";
+import { useAuth } from "@/hooks/AuthContext";
 
 export default function Wishlist() {
+  const { user } = useAuth();
   const [favoriteProducts, setFavoriteProducts] = useState(data.products);
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 6;
@@ -22,6 +25,20 @@ export default function Wishlist() {
   //     setCurrentPage(currentPage - 1);
   //   }
   // };
+
+  useEffect(() => {
+    const fetchWishlist = async () => {
+      try {
+        const response = await wishlistApi.getWishlist(user.user);
+        // setFavoriteProducts(response);
+        console.log(response);
+      } catch (error) {
+        console.error("Error fetching wishlist:", error);
+      } 
+    };
+
+    fetchWishlist();
+  }, []);
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
