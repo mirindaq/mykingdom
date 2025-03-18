@@ -4,7 +4,7 @@ const {
 } = require("../controllers/article.controller");
 
 const router = require("express").Router();
-
+// /api/articles
 // Base route: /api/articles
 router.get("/", getArticles);
 router.get("/group-by-tag", getArticlesGroupByTag);

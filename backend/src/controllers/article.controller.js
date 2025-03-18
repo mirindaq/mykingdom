@@ -13,7 +13,6 @@ const getArticles = async (req, res) => {
 };
 
 const getArticlesGroupByTag = async (req, res) => {
-  
   try {
     const articles = await Article.aggregate([
       {

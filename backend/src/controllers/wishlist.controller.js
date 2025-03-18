@@ -4,7 +4,6 @@ const getWishlist = async (req, res) => {
   try {
     const wishlist = await Wishlist.findOne({ user: req.query.user }).populate(
       "products",
-      "name price images",
     );
 
     if (!wishlist) {

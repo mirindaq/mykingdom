@@ -23,6 +23,7 @@ export default function Brand() {
           return acc;
         }, {});
 
+        console.log(groupedBrands);
         setBrandsByAlphabet(
           Object.values(groupedBrands).sort((a, b) =>
             a.key.localeCompare(b.key),
