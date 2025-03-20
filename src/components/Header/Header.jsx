@@ -34,10 +34,12 @@ export default function Header() {
             <div>
               <ul>
                 <li className="flex">
-                  <ButtonWithIcon
-                    icon={<Truck />}
-                    title={"Theo dõi đơn hàng"}
-                  />
+                  <Link to={path.deliveryPolicy}>
+                    <ButtonWithIcon
+                      icon={<Truck />}
+                      title={"Chính sách giao hàng"}
+                    />
+                  </Link>
                   {isAuthenticated ? (
                     <Link to={path.account}>
                       <ButtonWithIcon

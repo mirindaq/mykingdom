@@ -29,6 +29,7 @@ export default function ProductBox(props) {
       toast.error("Vui lòng đăng nhập để thêm vào danh sách yêu thích");
       return;
     }
+
     const result = await wishlistApi.addToWishlist(user.user, product._id);
     if (result) {
       setIsWishlist(true);

@@ -5,7 +5,7 @@ import { path } from "@/constants/path";
 
 import { useCart } from "@/hooks/CartContext";
 
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function Cart() {
@@ -25,6 +25,8 @@ export default function Cart() {
         item.quantity,
     0,
   );
+
+  const [agree, setAgree] = useState(false);
 
   if (totalItems <= 0)
     return (
@@ -94,23 +96,39 @@ export default function Cart() {
 
               <div className="mt-8 flex items-center justify-center">
                 <Link to={path.pay} className="w-full">
-                  <button className="w-full rounded-xl bg-red-600 py-3 text-base font-bold text-white hover:cursor-pointer">
+                  <button
+                    className={`w-full rounded-xl py-3 text-base font-bold ${
+                      agree
+                        ? "bg-red-600 text-white hover:cursor-pointer"
+                        : "cursor-not-allowed bg-gray-300 text-gray-500"
+                    }`}
+                    disabled={!agree}
+                  >
                     Thanh toán ngay
                   </button>
                 </Link>
               </div>
 
               <div className="mt-5 flex items-center text-sm">
-                <Checkbox id="agree-terms" className="mr-2" />
+                <Checkbox
+                  id="agree-terms"
+                  className="mr-2"
+                  checked={agree}
+                  onCheckedChange={setAgree}
+                />
                 <label htmlFor="agree-terms">
                   Tôi đã đọc và đồng ý với
-                  <a href="#" className="ml-1 text-blue-600 underline">
-                    điều khoản
-                  </a>{" "}
+                  <Link to={path.termsAndConditions}>
+                    <a href="#" className="ml-1 text-blue-600 underline">
+                      điều khoản
+                    </a>
+                  </Link>{" "}
                   và
-                  <a href="#" className="ml-1 text-blue-600 underline">
-                    điều kiện thanh toán
-                  </a>
+                  <Link to={path.termsAndConditions}>
+                    <a href="#" className="ml-1 text-blue-600 underline">
+                      điều kiện thanh toán
+                    </a>
+                  </Link>
                 </label>
               </div>
             </div>

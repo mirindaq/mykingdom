@@ -1,3 +1,4 @@
+import { path } from "@/constants/path";
 import React from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -96,36 +97,12 @@ export default function FormAddress() {
         </div>
 
         <div className="mt-4">
-          <select
-            className="w-full rounded-lg border p-3 focus:ring-2 focus:ring-green-500"
-            value={selectedProvince}
-            onChange={(e) => {
-              setSelectedProvince(e.target.value);
-              setSelectedDistrict("");
-              setSelectedWard("");
-            }}
-          >
-            <option value="">Quốc gia / Vùng</option>
-            <option value="VN">Việt Nam</option>
-          </select>
-        </div>
-
-        <div className="mt-4 grid grid-cols-10 gap-4">
-          <div className="col-span-5">
+          <div>
             <input
               type="text"
-              id="first_name"
+              id="name"
               className="w-full rounded-lg border p-3 focus:ring-2 focus:ring-green-500"
-              placeholder="Tên"
-            />
-          </div>
-
-          <div className="col-span-5">
-            <input
-              type="text"
-              id="first_name"
-              className="w-full rounded-lg border p-3 focus:ring-2 focus:ring-green-500"
-              placeholder="Họ"
+              placeholder="Họ và tên"
             />
           </div>
         </div>
@@ -148,9 +125,9 @@ export default function FormAddress() {
           />
         </div>
         <div className="mt-8 flex items-center justify-between border-b-1 border-b-gray-300 pb-20">
-              <Link className="text-green-600">&#60; Quay lại giỏ hàng</Link>
+              <Link to={path.cart} className="text-green-600">&#60; Quay lại giỏ hàng</Link>
               <Link>
-                <button className="rounded-lg bg-red-600 px-10 py-4 text-white">
+                <button className="rounded-lg bg-red-600 px-10 py-4 text-white hover:cursor-pointer">
                   Xác nhận thanh toán
                 </button>
               </Link>
