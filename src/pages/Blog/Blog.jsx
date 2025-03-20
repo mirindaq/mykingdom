@@ -6,22 +6,26 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Grid, List, Search } from "lucide-react";
-import NewsBox from "@/components/NewsBox/NewsBox";
+import NewsBox, { NewsBoxSkeleton } from "@/components/NewsBox/NewsBox";
 import Breadcrumbs from "@/components/Breadcrumbs/Breadcrumbs";
 import { path } from "@/constants/path";
 import { articleApi } from "@/api/article.api";
 
 export default function Blog() {
   const [data, setData] = useState([]);
-
+  const [loading, setLoading] = useState(false);
   const [data2, setData2] = useState([]);
+  const [visibleCount, setVisibleCount] = useState(6);
 
   const fetchData = (url, setDataResponse) => {
+    setLoading(true);
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
         setDataResponse(data);
+        setLoading(false);
       });
+
   };
 
   useEffect(() => {
@@ -134,19 +138,25 @@ export default function Blog() {
               </div>
             </div>
 
-            <div
-              className={`grid gap-6 ${viewType === "grid" ? "grid-cols-2" : "grid-cols-1"}`}
-            >
-              {data.map((post) => (
-                <NewsBox
-                  key={post.id}
-                  image={post.image}
-                  title={post.title}
-                  description={post.description}
-                  link={post.link}
-                />
-              ))}
-            </div>
+            <div className={`grid gap-6 ${viewType === "grid" ? "grid-cols-2" : "grid-cols-1"}`}>
+              {loading
+                ? (
+                  Array(4) // Hiển thị 4 Skeletons khi đang tải dữ liệu
+                .fill(0)
+                .map((_, index) => <NewsBoxSkeleton key={index} />)
+                )
+                : (
+                  data.map((post) => (
+                    <NewsBox
+                      key={post.id}
+                      image={post.image}
+                      title={post.title}
+                      description={post.description}
+                      link={post.link}
+                    />
+                  ))
+                )}
+              </div>
 
             {/* Chuyển trang */}
             <div className="mt-6 flex justify-center">

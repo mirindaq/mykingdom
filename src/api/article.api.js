@@ -1,24 +1,24 @@
 import axios from "axios";
 
 export const articleApi = {
-  getAllArticles: async () => {
-    try {
-      const response = await axios.get("http://localhost:5001/api/articles");
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching articles:", error);
-      return [];
-    }
-  },
-  getArticlesGroupByTag: async () => {
-    try {
-      const response = await axios.get(
-        "http://localhost:5001/api/articles/group-by-tag",
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching articles by tag:", error);
-      return [];
-    }
-  },
+    getAllArticles: async() => {
+        try {
+            const response = await axios.get("http://localhost:5001/api/articles");
+            return response.data;
+        } catch (error) {
+            console.error("Error fetching articles:", error);
+            return [];
+        }
+    },
+    getArticlesGroupByTag: async() => {
+        try {
+            const response = await axios.get(
+                "http://localhost:5001/api/articles/group-by-tag",
+            );
+            return response.data;
+        } catch (error) {
+            console.error("Error fetching articles by tag:", error);
+            return [];
+        }
+    },
 };
