@@ -5,6 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "@/hooks/CartContext";
+import { path } from "@/constants/path";
 
 export default function Pay() {
   const [discountCode, setDiscountCode] = useState("");
@@ -54,7 +55,7 @@ export default function Pay() {
                 </Link>
               </div>
               <div>
-                <Link className="text-green-600 underline">
+                <Link to={path.deliveryPolicy} className="text-green-600 underline">
                   Chính sách vận chuyển
                 </Link>
               </div>
@@ -64,7 +65,7 @@ export default function Pay() {
                 </Link>
               </div>
               <div>
-                <Link className="text-green-600 underline">
+                <Link to={path.termsAndConditions} className="text-green-600 underline">
                   Điều khoản dịch vụ
                 </Link>
               </div>

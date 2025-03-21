@@ -28,6 +28,8 @@ export default function CartHoverHeader() {
     0,
   );
 
+  const [agree, setAgree] = useState(false);
+
   return (
     <HoverCard
       openDelay={100}
@@ -55,21 +57,30 @@ export default function CartHoverHeader() {
           {cart.length > 0 ? (
             <>
               <ul className="max-h-72 space-y-4 overflow-y-auto">
-                {cart.map((item,index) => (
+                {cart.map((item, index) => (
                   <CartItemBox item={item} key={index} />
                 ))}
               </ul>
               <div className="mt-4 flex items-center text-sm">
-                <Checkbox id="agree-terms" className="mr-2" />
+                <Checkbox
+                  id="agree-terms"
+                  className="mr-2"
+                  checked={agree}
+                  onCheckedChange={setAgree}
+                />
                 <label htmlFor="agree-terms">
                   Tôi đã đọc và đồng ý với
-                  <a href="#" className="ml-1 text-blue-600 underline">
-                    điều khoản
-                  </a>{" "}
+                  <Link to={path.termsAndConditions}>
+                    <a href="#" className="ml-1 text-blue-600 underline">
+                      điều khoản
+                    </a>
+                  </Link>{" "}
                   và
-                  <a href="#" className="ml-1 text-blue-600 underline">
-                    điều kiện thanh toán
-                  </a>
+                  <Link to={path.termsAndConditions}>
+                    <a href="#" className="ml-1 text-blue-600 underline">
+                      điều kiện thanh toán
+                    </a>
+                  </Link>
                 </label>
               </div>
 
@@ -79,13 +90,22 @@ export default function CartHoverHeader() {
 
               <div className="mt-5 flex justify-between gap-4">
                 <Link to={path.cart} className="w-1/2">
-                  <Button className="w-full border border-red-500 bg-white text-red-500 hover:bg-gray-100">
+                  <button className="w-full border border-red-500 bg-white text-red-500 hover:bg-gray-100 py-2 rounded-lg hover:cursor-pointer">
                     Xem giỏ hàng
-                  </Button>
+                  </button>
                 </Link>
-                <Button className="w-1/2 bg-red-600 text-white hover:bg-red-700">
-                  Thanh toán ngay
-                </Button>
+                <Link to={path.pay} className="w-1/2">
+                  <button
+                    className={`w-full py-2 rounded-lg ${
+                      agree
+                        ? "bg-red-600 text-white hover:bg-red-700 hover:cursor-pointer"
+                        : "hover:cursor-not-allowed bg-gray-300 text-gray-500"
+                    }`}
+                    disabled={!agree}
+                  >
+                    Thanh toán ngay
+                  </button>
+                </Link>
               </div>
             </>
           ) : (

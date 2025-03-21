@@ -21,6 +21,7 @@ import TermsAndConditions from "@/pages/TermsAndConditions/TermsAndConditions";
 import Pay from "@/pages/Pay/Pay";
 import { useAuth } from "@/hooks/AuthContext";
 import Exclusive from "@/pages/Exclusive/Exclusive";
+import DeliveryPolicy from "@/pages/DeliveryPolicy/DeliveryPolicy";
 
 // Bảo vệ route cần đăng nhập
 function ProtectedRoute() {
@@ -49,6 +50,7 @@ const useRouteElements = () => {
         { path: path.cart, element: <Cart /> },
         { path: path.termsAndConditions, element: <TermsAndConditions /> },
         { path: path.exclusive, element: <Exclusive /> },
+        { path: path.deliveryPolicy, element: <DeliveryPolicy /> },
 
         // Chặn truy cập Login/Register nếu đã đăng nhập
         {
