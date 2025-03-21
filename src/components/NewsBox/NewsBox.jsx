@@ -12,3 +12,21 @@ export default function NewsBox({ image, title, description, link }) {
     </div>
   );
 }
+export function NewsBoxSkeleton() {
+  return (
+    <div className="bg-white p-4 rounded-lg shadow-md animate-pulse">
+      {/* Skeleton cho hình ảnh */}
+      <div className="w-full h-40 bg-gray-300 rounded-lg mb-3"></div>
+
+      {/* Skeleton cho tiêu đề */}
+      <div className="w-3/4 h-5 bg-gray-300 rounded mb-2"></div>
+
+      {/* Skeleton cho mô tả */}
+      <div className="w-full h-4 bg-gray-300 rounded mb-1"></div>
+      <div className="w-5/6 h-4 bg-gray-300 rounded"></div>
+
+      {/* Skeleton cho nút */}
+      <div className="w-1/3 h-4 bg-gray-300 rounded mt-2"></div>
+    </div>
+  );
+}
