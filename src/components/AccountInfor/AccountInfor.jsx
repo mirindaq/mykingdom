@@ -1,6 +1,7 @@
 import React from "react";
 import BirthRegister from '@/components/BirthRegister/BirthRegister'
 import img from '../../../public/images/FB_6.png'
+import { useAuth } from "@/hooks/AuthContext";
 
 export default function AccountInfor(props){
     return(

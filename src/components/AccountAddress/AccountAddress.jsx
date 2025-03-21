@@ -1,27 +1,22 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "../ui/button";
 import AddressSelect from "../AddressSelect/AddressSelect";
-import address from '@/database/address'
+import { useAuth } from "@/hooks/AuthContext";
+import { addressApi } from "@/api/address.api";
+import { toast } from "react-toastify";
 
 const AccountAddress = () => {
   const [showForm, setShowForm] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
   const [defaultAddressIndex, setDefaultAddressIndex] = useState(0);
-  const [addressList, setAddressList] = useState([
-    {
-      firstName: "Nguyễn",
-      lastName: "Quốc Huy",
-      phoneNumber: "0358734574",
-      province: "1",
-      district: "101",
-      commune: "1001",
-      addressDetail: "123 Đường Láng",
-      isDefault: true,
-    },
-  ]);
+  const [provinces, setProvinces] = useState([]);
+  const [districts, setDistricts] = useState([]);
+  const [wards, setWards] = useState([]);
+  const { user } = useAuth();
+  // const [addressList, setAddressList] = useState(user.address);
+  const [addressList, setAddressList] = useState(user?.address || []);
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    name: "",
     phoneNumber: "",
     province: "",
     district: "",
@@ -32,23 +27,43 @@ const AccountAddress = () => {
   const [errors, setErrors] = useState({});
 
   const inputRefs = {
-    firstName: useRef(null),
-    lastName: useRef(null),
+    name: useRef(null),
     phoneNumber: useRef(null),
     addressDetail: useRef(null),
   };
 
-  const filterDistricts = address.districts.filter((d) => d.provinceId === Number(formData.province));
-  const filterCommunes = address.communes.filter((c) => c.districtId === Number(formData.district));
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [provincesData, districtsData, wardsData] = await Promise.all([
+          addressApi.getAllProvinces(),
+          addressApi.getAllDistricts(),
+          addressApi.getAllWards(),
+        ]);
+
+        setProvinces(provincesData);
+        setDistricts(districtsData);
+        setWards(wardsData);
+      } catch (error) {
+        console.error("Error fetching address data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const filterDistricts = districts.filter(
+    (d) => d.province_code === Number(formData.province),
+  );
+  const filterCommunes = wards.filter(
+    (c) => c.district_code === Number(formData.district),
+  );
 
   const validateField = (name, value) => {
     let error = "";
     switch (name) {
-      case "firstName":
-        if (!value.trim()) error = "Tên không được để trống";
-        break;
-      case "lastName":
-        if (!value.trim()) error = "Họ không được để trống";
+      case "name":
+        if (!value.trim()) error = "Họ và tên không được để trống";
         break;
       case "province":
         if (!value) error = "Vui lòng chọn Tỉnh/Thành phố";
@@ -83,8 +98,7 @@ const AccountAddress = () => {
 
   const validateForm = () => {
     const newErrors = {
-      firstName: validateField("firstName", formData.firstName),
-      lastName: validateField("lastName", formData.lastName),
+      name: validateField("name", formData.name),
       province: validateField("province", formData.province),
       district: validateField("district", formData.district),
       commune: validateField("commune", formData.commune),
@@ -102,9 +116,12 @@ const AccountAddress = () => {
       if (formData.isDefault) {
         updatedList = updatedList.map((addr, idx) => ({
           ...addr,
-          isDefault: idx === (editIndex !== null ? editIndex : updatedList.length),
+          isDefault:
+            idx === (editIndex !== null ? editIndex : updatedList.length),
         }));
-        setDefaultAddressIndex(editIndex !== null ? editIndex : updatedList.length);
+        setDefaultAddressIndex(
+          editIndex !== null ? editIndex : updatedList.length,
+        );
       }
 
       if (editIndex !== null) {
@@ -112,11 +129,9 @@ const AccountAddress = () => {
       } else {
         updatedList.push(formData);
       }
-
       setAddressList(updatedList);
       setFormData({
-        firstName: "",
-        lastName: "",
+        name: "",
         phoneNumber: "",
         province: "",
         district: "",
@@ -155,29 +170,46 @@ const AccountAddress = () => {
   };
 
   const getFullAddress = (addr) => {
-    const province = address.provinces.find((p) => p.id === Number(addr.province))?.name || "";
-    const district = address.districts.find((d) => d.id === Number(addr.district))?.name || "";
-    const commune = address.communes.find((c) => c.id === Number(addr.commune))?.name || "";
-    return `${addr.addressDetail}, ${commune}, ${district}, ${province}`;
+    const province =
+      provinces.find((p) => p.code === Number(addr.province))?.name || "";
+    const district =
+      districts.find((d) => d.code === Number(addr.district))?.name || "";
+    const ward = wards.find((c) => c.code === Number(addr.commune))?.name || "";
+    return `${addr.addressDetail}, ${ward}, ${district}, ${province}`;
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-4 bg-white shadow-lg rounded-lg">
-      <h2 className="text-xl font-bold mb-4">Địa chỉ giao hàng</h2>
+    <div className="mx-auto max-w-2xl rounded-lg bg-white p-4 shadow-lg">
+      <h2 className="mb-4 text-xl font-bold">Địa chỉ giao hàng</h2>
       {!showForm && (
-        <div id="address" className="h-fit w-full border rounded-2xl flex flex-col justify-around">
+        <div
+          id="address"
+          className="flex h-fit w-full flex-col justify-around rounded-2xl border"
+        >
           {addressList.map((addr, index) => (
-            <div id="child_address" key={index} className="border-b last:border-b-0 p-4">
+            <div
+              id="child_address"
+              key={index}
+              className="border-b p-4 last:border-b-0"
+            >
               <div className="flex justify-between">
                 <div>
                   <p className="font-light text-gray-400">Họ và tên</p>
-                  <p className="font-medium">{`${addr.firstName} ${addr.lastName}`}</p>
+                  <p className="font-medium">{`${addr.name}`}</p>
                 </div>
                 <div className="flex">
-                  <Button variant="more" className="m-2" onClick={() => handleEdit(index)}>
+                  <Button
+                    variant="more"
+                    className="m-2"
+                    onClick={() => handleEdit(index)}
+                  >
                     Sửa
                   </Button>
-                  <Button variant="more" className="m-2" onClick={() => handleDelete(index)}>
+                  <Button
+                    variant="more"
+                    className="m-2"
+                    onClick={() => handleDelete(index)}
+                  >
                     Xóa
                   </Button>
                 </div>
@@ -190,68 +222,65 @@ const AccountAddress = () => {
                 <p className="font-light text-gray-400">Địa chỉ</p>
                 <p className="font-medium">{getFullAddress(addr)}</p>
               </div>
-              {addr.isDefault && <p className="text-green-500 font-medium">Mặc định</p>}
+              {addr.isDefault && (
+                <p className="font-medium text-green-500">Mặc định</p>
+              )}
             </div>
           ))}
         </div>
       )}
       {!showForm && (
-        <Button variant="addToCart" className="mt-5" onClick={() => setShowForm(true)}>
+        <Button
+          variant="addToCart"
+          className="mt-5"
+          onClick={() => setShowForm(true)}
+        >
           Thêm địa chỉ giao hàng
         </Button>
       )}
 
       {showForm && (
         <div className="mt-4 border-t pt-4">
-          <h3 className="text-lg font-semibold mb-2">
+          <h3 className="mb-2 text-lg font-semibold">
             {editIndex !== null ? "Sửa địa chỉ" : "Thêm địa chỉ giao hàng"}
           </h3>
           <form className="space-y-3" onSubmit={handleSubmit}>
             <div>
               <label className="block font-medium">
-                Tên <span className="text-red-500">*</span>
+                Họ và Tên <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
-                name="lastName"
+                name="name"
                 placeholder="Tên"
-                className="w-full p-2 border rounded"
-                value={formData.lastName}
-                onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                className="w-full rounded border p-2"
+                value={formData.name}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
                 onBlur={handleBlur}
-                ref={inputRefs.lastName}
-                onKeyDown={(e) => handleKeyDown(e, "lastName")}
+                ref={inputRefs.name}
+                onKeyDown={(e) => handleKeyDown(e, "name")}
               />
-              {errors.lastName && <span className="text-red-500 text-sm">{errors.lastName}</span>}
-            </div>
-            <div>
-              <label className="block font-medium">
-                Họ <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                name="firstName"
-                placeholder="Họ"
-                className="w-full p-2 border rounded"
-                value={formData.firstName}
-                onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                onBlur={handleBlur}
-                ref={inputRefs.firstName}
-                onKeyDown={(e) => handleKeyDown(e, "phoneNumber")}
-              />
-              {errors.firstName && <span className="text-red-500 text-sm">{errors.firstName}</span>}
+              {errors.name && (
+                <span className="text-sm text-red-500">{errors.name}</span>
+              )}
             </div>
             <div>
               <label className="block font-medium">
                 Tỉnh/Thành phố <span className="text-red-500">*</span>
               </label>
               <AddressSelect
-                options={address.provinces}
-                onChange={(value) => setFormData({ ...formData, province: value })}
+                options={provinces}
+                onChange={(value) =>
+                  setFormData({ ...formData, province: value })
+                }
                 label={"Tỉnh/Thành phố"}
                 value={formData.province}
               />
-              {errors.province && <span className="text-red-500 text-sm">{errors.province}</span>}
+              {errors.province && (
+                <span className="text-sm text-red-500">{errors.province}</span>
+              )}
             </div>
             <div>
               <label className="block font-medium">
@@ -259,11 +288,15 @@ const AccountAddress = () => {
               </label>
               <AddressSelect
                 options={filterDistricts}
-                onChange={(value) => setFormData({ ...formData, district: value })}
+                onChange={(value) =>
+                  setFormData({ ...formData, district: value })
+                }
                 label={"Quận/Huyện"}
                 value={formData.district}
               />
-              {errors.district && <span className="text-red-500 text-sm">{errors.district}</span>}
+              {errors.district && (
+                <span className="text-sm text-red-500">{errors.district}</span>
+              )}
             </div>
             <div>
               <label className="block font-medium">
@@ -271,11 +304,15 @@ const AccountAddress = () => {
               </label>
               <AddressSelect
                 options={filterCommunes}
-                onChange={(value) => setFormData({ ...formData, commune: value })}
+                onChange={(value) =>
+                  setFormData({ ...formData, commune: value })
+                }
                 label={"Phường/Xã"}
                 value={formData.commune}
               />
-              {errors.commune && <span className="text-red-500 text-sm">{errors.commune}</span>}
+              {errors.commune && (
+                <span className="text-sm text-red-500">{errors.commune}</span>
+              )}
             </div>
             <div>
               <label className="block font-medium">
@@ -285,15 +322,19 @@ const AccountAddress = () => {
                 type="text"
                 name="addressDetail"
                 placeholder="Địa chỉ 1"
-                className="w-full p-2 border rounded"
+                className="w-full rounded border p-2"
                 value={formData.addressDetail}
-                onChange={(e) => setFormData({ ...formData, addressDetail: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, addressDetail: e.target.value })
+                }
                 onBlur={handleBlur}
                 ref={inputRefs.addressDetail}
                 onKeyDown={(e) => handleKeyDown(e, "phoneNumber")}
               />
               {errors.addressDetail && (
-                <span className="text-red-500 text-sm">{errors.addressDetail}</span>
+                <span className="text-sm text-red-500">
+                  {errors.addressDetail}
+                </span>
               )}
             </div>
             <div>
@@ -304,14 +345,18 @@ const AccountAddress = () => {
                 type="tel"
                 name="phoneNumber"
                 placeholder="Điện thoại"
-                className="w-full p-2 border rounded"
+                className="w-full rounded border p-2"
                 value={formData.phoneNumber}
-                onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, phoneNumber: e.target.value })
+                }
                 onBlur={handleBlur}
                 ref={inputRefs.phoneNumber}
               />
               {errors.phoneNumber && (
-                <span className="text-red-500 text-sm">{errors.phoneNumber}</span>
+                <span className="text-sm text-red-500">
+                  {errors.phoneNumber}
+                </span>
               )}
             </div>
             <div className="flex items-center">
@@ -320,7 +365,9 @@ const AccountAddress = () => {
                 id="default-address"
                 className="mr-2"
                 checked={formData.isDefault}
-                onChange={(e) => setFormData({ ...formData, isDefault: e.target.checked })}
+                onChange={(e) =>
+                  setFormData({ ...formData, isDefault: e.target.checked })
+                }
               />
               <label htmlFor="default-address">Đặt làm địa chỉ mặc định</label>
             </div>
