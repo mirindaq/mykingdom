@@ -35,48 +35,47 @@ export default function Blog() {
     fetchTags();
   }, []);
 
- //  Lấy tất cả bài viết khi mới tải trang
- useEffect(() => {
-  const fetchAllArticles = async () => {
+  //  Lấy tất cả bài viết khi mới tải trang
+  useEffect(() => {
+    const fetchAllArticles = async () => {
+      setLoading(true);
+      try {
+        const articles = await articleApi.getAllArticles();
+        console.log("All articles fetched:", articles);
+        setAllArticles(articles); // Lưu tất cả bài viết
+        setData(articles); // Hiển thị tất cả bài viết khi mới tải trang
+      } catch (error) {
+        console.error("Error fetching all articles:", error);
+      }
+      setLoading(false);
+    };
+    fetchAllArticles();
+  }, []);
+
+  // lay dlieu theo tag
+  const fetchArticlesBySlugTag = async (slug) => {
     setLoading(true);
     try {
-      const articles = await articleApi.getAllArticles();
-      console.log("All articles fetched:", articles);
-      setAllArticles(articles); // Lưu tất cả bài viết
-      setData(articles); // Hiển thị tất cả bài viết khi mới tải trang
+      const articles = await articleApi.getArticlesBySlugTag(slug);
+
+      setData(articles || []);
     } catch (error) {
-      console.error("Error fetching all articles:", error);
+      console.error("Error fetching articles:", error);
     }
     setLoading(false);
   };
-  fetchAllArticles();
-}, []);
-
-
-// lay dlieu theo tag
-const fetchArticlesByTag = async (tagId) => {
-  setLoading(true);
-  try {
-    const articles = await articleApi.getArticlesByTag(tagId);
-    
-    setData(articles || []);
-  } catch (error) {
-    console.error("Error fetching articles:", error);
-  }
-  setLoading(false);
-};
   //chon vao danh muc
-  const handleTagClick = (tagId) => {
-    if (selectedTag !== tagId) {
-      setSelectedTag(tagId);
+  const handleTagClick = (tag) => {
+    if (selectedTag !== tag._id) {
+      setSelectedTag(tag._id);
       setVisibleCount(6);
-      fetchArticlesByTag(tagId);
+      fetchArticlesBySlugTag(tag.slug);
     } else {
       setSelectedTag(null);
       setData(allArticles); // Quay lại danh sách tất cả bài viết nếu nhấn lại cùng một danh mục
     }
   };
-  
+
   const fetchData = (url, setDataResponse) => {
     setLoading(true);
     fetch(url)
@@ -85,7 +84,6 @@ const fetchArticlesByTag = async (tagId) => {
         setDataResponse(data);
         setLoading(false);
       });
-
   };
 
   // useEffect(() => {
@@ -98,9 +96,6 @@ const fetchArticlesByTag = async (tagId) => {
   useEffect(() => {
     fetchData("https://67d54d82d2c7857431eff604.mockapi.io/newsbox2", setData2);
   }, []);
-
-
-
 
   const handleViewChange = (type) => {
     setViewType(type);
@@ -126,7 +121,6 @@ const fetchArticlesByTag = async (tagId) => {
 
         {/* Phần tìm kiếm & danh mục bài viết */}
         <div className="flex flex-col gap-6 md:flex-row">
-
           {/* Sidebar */}
           <div className="w-full space-y-4 md:w-1/3">
             {/* Ô tìm kiếm */}
@@ -150,20 +144,26 @@ const fetchArticlesByTag = async (tagId) => {
               <Accordion type="single" collapsible className="w-full">
                 {tags.length > 0 ? (
                   tags.map((tag) => (
-                    <AccordionItem key={tag._id} value={`category-${tag._id}`}>
+                    <AccordionItem
+                      key={tag._id}
+                      value={`category-${tag._id}`}
+                      className="py-2"
+                    >
                       <AccordionTrigger
-                        className={`text-base font-medium px-4 py-2 rounded-lg transition ${
+                        className={`rounded-lg px-4 py-3 text-base font-medium transition ${
                           selectedTag === tag._id
-                            ? "text-red-500 font-semibold bg-red-100"
+                            ? "bg-red-100 font-semibold text-red-500"
                             : "hover:bg-gray-100"
                         }`}
-                        onClick={() => handleTagClick(tag._id)}
+                        onClick={() => handleTagClick(tag)}
                       >
                         {tag.name}
                       </AccordionTrigger>
                       <AccordionContent>
-                        có nên sửa api thêm 1 cái kiểu contentTag để thêm vào chỗ này k captain?
-                       </AccordionContent>
+                        <p className="px-2 py-2 text-justify text-base text-gray-500">
+                          {tag.contentTag}
+                        </p>
+                      </AccordionContent>
                     </AccordionItem>
                   ))
                 ) : (
@@ -175,24 +175,31 @@ const fetchArticlesByTag = async (tagId) => {
 
           {/* Phần hiển thị bài viết */}
           <div className="w-full md:w-2/3">
-          <div className="mb-4 flex items-center justify-between">
+            <div className="mb-4 flex items-center justify-between">
               <h3 className="text-xl font-semibold text-gray-800">
                 {selectedTag ? `Bài viết liên quan` : "Tất cả bài viết"}
               </h3>
               <div className="flex space-x-3">
-                <button onClick={() => setViewType("grid")} className="rounded-lg border p-2 hover:bg-gray-100">
+                <button
+                  onClick={() => setViewType("grid")}
+                  className="rounded-lg border p-2 hover:bg-gray-100"
+                >
                   <Grid size={20} />
                 </button>
-                <button onClick={() => setViewType("list")} className="rounded-lg border p-2 hover:bg-gray-100">
+                <button
+                  onClick={() => setViewType("list")}
+                  className="rounded-lg border p-2 hover:bg-gray-100"
+                >
                   <List size={20} />
                 </button>
               </div>
             </div>
 
-
             {/* Danh sách bài viết */}
-            <div className={`grid gap-6 ${viewType === "grid" ? "grid-cols-2" : "grid-cols-1"}`}>
-            {loading ? (
+            <div
+              className={`grid gap-6 ${viewType === "grid" ? "grid-cols-2" : "grid-cols-1"}`}
+            >
+              {loading ? (
                 Array(6)
                   .fill(0)
                   .map((_, index) => <NewsBoxSkeleton key={index} />)
@@ -200,20 +207,29 @@ const fetchArticlesByTag = async (tagId) => {
                 data.slice(0, visibleCount).map((post) => (
                   <NewsBox
                     key={post._id}
-                    image={"/images/news1.1.webp"} // Không có ảnh trong API, hiển thị ảnh mặc định
+                    image={post.image} // Không có ảnh trong API, hiển thị ảnh mặc định
                     title={post.title}
                     description={post.content}
                     link={`/articles/${post.slug}`}
                   />
                 ))
               ) : (
-                <p className="text-gray-500">Không có bài viết nào.</p>
+                <span className="col-span-2">
+                  <img
+                    src="/images/noArticle.webp"
+                    alt="No news available"
+                    className="mx-auto w-1/2 mt-5"
+                  />
+                  <div className="text-center text-lg font-semibold text-gray-500">
+                    Không có bài viết nào
+                  </div>
+                </span>
               )}
             </div>
 
             {/* Nút "Xem thêm bài viết" */}
             {!loading && visibleCount < data.length && (
-              <div className="mt-6 flex justify-center animate-fade-in">
+              <div className="animate-fade-in mt-6 flex justify-center">
                 <button
                   className="rounded-lg bg-red-500 px-4 py-2 text-white shadow-md transition hover:bg-red-600"
                   onClick={() => setVisibleCount((prev) => prev + 6)}

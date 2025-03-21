@@ -10,10 +10,10 @@ export const articleApi = {
             return [];
         }
     },
-    getArticlesByTag: async(tagId) => {
+    getArticlesBySlugTag: async(slug) => {
         try {
             const response = await axios.get(
-                `http://localhost:5001/api/articles/get-by-tag/${tagId}`,
+                `http://localhost:5001/api/articles/get-by-tag/${slug}`,
             );
             return response.data;
         } catch (error) {
