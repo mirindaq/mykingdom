@@ -7,11 +7,15 @@ import { useCart } from "@/hooks/CartContext";
 import { useAuth } from "@/hooks/AuthContext";
 import { orderApi } from "@/api/order.api";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
+import { path } from "@/constants/path";
 export default function Pay() {
   const [discountCode, setDiscountCode] = useState("");
+  const [useDefaultAddress, setUseDefaultAddress] = useState(false);
+  const [defaultAddress, setDefaultAddress] = useState(null);
   const { cart } = useCart();
   const { user } = useAuth();
-
+  const navigate = useNavigate();
   const breadcrumbsData = [
     { path: "/", label: "Trang chủ" },
     { path: "/pay", label: "Thanh toán" },
@@ -29,6 +33,18 @@ export default function Pay() {
   );
 
   const handleSubmit = async (object) => {
+    const totalDiscountCart = cart.reduce((sum, item) => {
+      if (item.product.discount > 0) {
+        const originalPrice = item.product.price * item.quantity;
+        const discountedPrice =
+          item.product.price *
+          (1 - item.product.discount / 100) *
+          item.quantity;
+        return sum + (originalPrice - discountedPrice);
+      }
+      return sum;
+    }, 0);
+
     const order = {
       user: user.user._id,
       recipient: {
@@ -42,17 +58,31 @@ export default function Pay() {
       items: cart.map((item) => ({
         product: item.product._id,
         quantity: item.quantity,
-        price: item.product.discount
-          ? item.product.price -
-            (item.product.discount * item.product.price) / 100
-          : item.product.price,
+        price: item.product.price,
+        discount: item.product.discount,
       })),
+      totalDiscount: totalDiscountCart,
       totalAmount: totalPrice,
     };
 
     const orderNew = await orderApi.createOrder(order);
     if (orderNew) {
       toast.success("Đặt hàng thành công");
+      navigate(path.homepage);
+    }
+  };
+
+  const handleDefaultAddress = (e) => {
+    const isDefault = e.target.checked;
+    setUseDefaultAddress(isDefault);
+
+    if (isDefault) {
+      const defaultAddress = user.user.address.find((addr) => addr.isDefault);
+      if (defaultAddress) {
+        setDefaultAddress(defaultAddress);
+      }
+    } else {
+      setDefaultAddress(null);
     }
   };
 
@@ -71,12 +101,23 @@ export default function Pay() {
               {user.user.email})
             </p>
             <div className="mt-5 flex items-center">
-              <Checkbox id="" className="mr-2" />
-              <label htmlFor="">Gửi cho tôi tin tức và ưu đãi qua email</label>
+              <Checkbox
+                id="default-address"
+                checked={useDefaultAddress}
+                onCheckedChange={(checked) => {
+                  setUseDefaultAddress(checked);
+                  handleDefaultAddress({ target: { checked } });
+                }}
+                className="mr-2"
+              />
+              <label htmlFor="">Sử dụng địa chỉ giao hàng mặc định</label>
             </div>
             <div className="mt-5">
               <p className="mb-2">Địa chỉ giao hàng</p>
-              <FormAddress handleSubmit={handleSubmit} />
+              <FormAddress
+                handleSubmit={handleSubmit}
+                defaultAddress={defaultAddress}
+              />
             </div>
             {/* <div className="grid grid-cols-4 gap-2 text-center text-sm">
               <div>
@@ -109,8 +150,8 @@ export default function Pay() {
 
           <div className="col-span-5 pr-20 pl-20">
             <ul className="max-h-96 space-y-4 overflow-y-auto">
-              {cart.map((item) => (
-                <CartItemPay item={item} key={item._id} />
+              {cart.map((item, index) => (
+                <CartItemPay item={item} key={index} />
               ))}
             </ul>
             <div className="mt-7 flex items-center justify-between">

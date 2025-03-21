@@ -4,61 +4,60 @@ import { Link } from "react-router-dom";
 
 export default function OrderHistoryBox(props) {
   const { order } = props;
-  const dataProduct = order.products;
+  const dataProduct = order.items;
   return (
     <div>
       {" "}
       <div className="mx-auto w-full rounded-md border bg-white px-4 pt-4 pb-5">
         <div className="flex justify-between border-b pb-2">
           <p className="text-base">
-            <span className="font-semibold">Đơn hàng:</span> {order.id}
+            <span className="font-semibold">Đơn hàng:</span>{" "}
+            <span className="uppercase">{order._id}</span>
           </p>
           <p className="text-base">
-            {order.status === "Đã hủy" ? (
-              <span className="font-semibold text-red-600">{order.status}</span>
-            ) : order.status === "Đã giao" ? (
-              <span className="font-semibold text-blue-600">
-                {order.status}
-              </span>
-            ) : order.status === "Đang xử lý" ? (
+            {order.status === "pending" ? (
               <span className="font-semibold text-yellow-600">
-                {order.status}
+                Đang chờ xử lý
               </span>
+            ) : order.status === "processing" ? (
+              <span className="font-semibold text-blue-600">Đang xử lý</span>
+            ) : order.status === "shipped" ? (
+              <span className="font-semibold text-purple-600">
+                Đang giao hàng
+              </span>
+            ) : order.status === "delivered" ? (
+              <span className="font-semibold text-green-600">Đã giao</span>
+            ) : order.status === "cancelled" ? (
+              <span className="font-semibold text-red-600">Đã hủy</span>
             ) : (
-              <span className="font-semibold text-green-600">
-                {order.status}
+              <span className="font-semibold text-gray-600">
+                Trạng thái không xác định
               </span>
             )}
           </p>
         </div>
-        {dataProduct.slice(0, 3).map((product, index) => (
+        {dataProduct.slice(0, 3).map((item, index) => (
           <div key={index}>
-            <div className="grid grid-cols-12 pt-4">
+            <div className="grid grid-cols-12 pt-5">
               <div className="col-span-2 flex justify-center">
                 <img
-                  src={product.image_url}
+                  src={item.product.image_url}
                   alt="Product"
                   className="h-20 w-20"
                 />
               </div>
               <div className="col-span-6">
-                <p className="text-lg">{product.name}</p>
+                <p className="text-lg">{item.product.name}</p>
                 <p className="font-semibold">x3</p>
               </div>
               <div className="col-span-4">
                 <p className="text-end text-base">
-                  {product.discount > 0 ? (
+                  {item.discount > 0 ? (
                     <>
-                      <span className="mr-2 text-gray-400 line-through">
-                        {product.price.toLocaleString("vi-VN", {
-                          style: "currency",
-                          currency: "VND",
-                        })}
-                      </span>
-                      <span className="text-red-500">
+                      <span>
                         {(
-                          product.price *
-                          (1 - product.discount / 100)
+                          item.price *
+                          (1 - item.discount / 100)
                         ).toLocaleString("vi-VN", {
                           style: "currency",
                           currency: "VND",
@@ -67,7 +66,7 @@ export default function OrderHistoryBox(props) {
                     </>
                   ) : (
                     <span>
-                      {product.price.toLocaleString("vi-VN", {
+                      {item.price.toLocaleString("vi-VN", {
                         style: "currency",
                         currency: "VND",
                       })}
@@ -80,7 +79,7 @@ export default function OrderHistoryBox(props) {
         ))}
         <div className="grid grid-cols-12">
           <div className="col-span-2 col-start-11">
-            <Link to={`/account/order-history/${order.id}`}>
+            <Link to={`/account/order-history/${order._id}`}>
               <Button variant="more" className="w-full">
                 Xem chi tiết
               </Button>

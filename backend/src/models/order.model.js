@@ -22,6 +22,10 @@ const orderSchema = new mongoose.Schema({
         type: Number,
         required: true,
       },
+      discount: {
+        type: Number,
+        default: 0,
+      },
     },
   ],
   totalAmount: {
@@ -35,6 +39,10 @@ const orderSchema = new mongoose.Schema({
     province: String,
     district: String,
     ward: String,
+  },
+  totalDiscount: {
+    type: Number,
+    default: 0,
   },
   status: {
     type: String,

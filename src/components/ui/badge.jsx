@@ -16,6 +16,11 @@ const badgeVariants = cva(
         processing: "bg-orange-500 text-white px-3 py-1",
         shipped: "bg-purple-400 text-white  px-3 py-1",
         success: "bg-green-600 text-white px-3 py-1",
+        pending: "bg-yellow-400 text-white px-3 py-1",
+        processing: "bg-blue-400 text-white px-3 py-1",
+        shipped: "bg-purple-400 text-white px-3 py-1",
+        delivered: "bg-green-600 text-white px-3 py-1",
+        cancelled: "bg-red-400 text-white px-3 py-1",
       },
     },
     defaultVariants: {

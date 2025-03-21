@@ -4,6 +4,7 @@ import AddressSelect from "../AddressSelect/AddressSelect";
 import { useAuth } from "@/hooks/AuthContext";
 import { addressApi } from "@/api/address.api";
 import { toast } from "react-toastify";
+import { userApi } from "@/api/user.api";
 
 const AccountAddress = () => {
   const [showForm, setShowForm] = useState(false);
@@ -12,25 +13,31 @@ const AccountAddress = () => {
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
-  const { user } = useAuth();
+  const { user, updateUserAddress } = useAuth();
   // const [addressList, setAddressList] = useState(user.address);
-  const [addressList, setAddressList] = useState(user?.address || []);
+  const [addressList, setAddressList] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
-    phoneNumber: "",
+    phone: "",
     province: "",
     district: "",
-    commune: "",
-    addressDetail: "",
+    ward: "",
+    address: "",
     isDefault: false,
   });
   const [errors, setErrors] = useState({});
 
   const inputRefs = {
     name: useRef(null),
-    phoneNumber: useRef(null),
-    addressDetail: useRef(null),
+    phone: useRef(null),
+    address: useRef(null),
   };
+
+  useEffect(() => {
+    if (user) {
+      setAddressList(user.user.address);
+    }
+  }, [user]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,13 +78,13 @@ const AccountAddress = () => {
       case "district":
         if (!value) error = "Vui lòng chọn Quận/Huyện";
         break;
-      case "commune":
+      case "ward":
         if (!value) error = "Vui lòng chọn Xã/Phường";
         break;
-      case "addressDetail":
+      case "address":
         if (!value.trim()) error = "Địa chỉ không được để trống";
         break;
-      case "phoneNumber":
+      case "phone":
         if (!value.trim()) {
           error = "Số điện thoại không được để trống";
         } else if (!/^\d{10}$/.test(value)) {
@@ -101,48 +108,84 @@ const AccountAddress = () => {
       name: validateField("name", formData.name),
       province: validateField("province", formData.province),
       district: validateField("district", formData.district),
-      commune: validateField("commune", formData.commune),
-      addressDetail: validateField("addressDetail", formData.addressDetail),
-      phoneNumber: validateField("phoneNumber", formData.phoneNumber),
+      ward: validateField("ward", formData.ward),
+      address: validateField("address", formData.address),
+      phone: validateField("phone", formData.phone),
     };
     setErrors(newErrors);
+
+    console.log(newErrors);
     return Object.values(newErrors).every((error) => !error);
   };
 
-  const handleSubmit = (e) => {
+  const handleUpdateUserAddress = async (userId, updatedAddressList) => {
+    try {
+      const response = await updateUserAddress(userId, updatedAddressList);
+      if (response) {
+        toast.success("Cập nhật địa chỉ thành công");
+      }
+    } catch (error) {
+      toast.error("Có lỗi xảy ra. Vui lòng thử lại.");
+      console.error("Error updating user address:", error);
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      let updatedList = [...addressList];
+    if (!validateForm()) {
+      toast.error("Vui lòng kiểm tra lại thông tin nhập vào.");
+      return;
+    }
+
+    try {
+      const newAddress = {
+        name: formData.name,
+        phone: formData.phone,
+        address: formData.address,
+        province: formData.province,
+        district: formData.district,
+        ward: formData.ward,
+        isDefault: formData.isDefault,
+      };
+      const updatedAddressList =
+        editIndex !== null
+          ? [...addressList].map((addr, idx) =>
+              idx === editIndex ? newAddress : addr,
+            )
+          : [...addressList, newAddress];
+
+      // Update default address status
       if (formData.isDefault) {
-        updatedList = updatedList.map((addr, idx) => ({
-          ...addr,
-          isDefault:
-            idx === (editIndex !== null ? editIndex : updatedList.length),
-        }));
+        updatedAddressList.forEach((addr, idx) => {
+          addr.isDefault =
+            idx ===
+            (editIndex !== null ? editIndex : updatedAddressList.length - 1);
+        });
         setDefaultAddressIndex(
-          editIndex !== null ? editIndex : updatedList.length,
+          editIndex !== null ? editIndex : updatedAddressList.length - 1,
         );
       }
 
-      if (editIndex !== null) {
-        updatedList[editIndex] = formData;
-      } else {
-        updatedList.push(formData);
-      }
-      setAddressList(updatedList);
+      // Update local state
+      setAddressList(updatedAddressList);
+      console.log(updatedAddressList);
+      // Reset form
       setFormData({
         name: "",
-        phoneNumber: "",
+        phone: "",
         province: "",
         district: "",
-        commune: "",
-        addressDetail: "",
+        ward: "",
+        address: "",
         isDefault: false,
       });
       setEditIndex(null);
       setShowForm(false);
-    } else {
-      alert("Vui lòng kiểm tra lại thông tin nhập vào.");
+
+      await handleUpdateUserAddress(user.user._id, updatedAddressList);
+    } catch (error) {
+      toast.error("Có lỗi xảy ra. Vui lòng thử lại.");
+      console.error("Error saving address:", error);
     }
   };
 
@@ -152,15 +195,18 @@ const AccountAddress = () => {
     setShowForm(true);
   };
 
-  const handleDelete = (index) => {
+  const handleDelete = async (index) => {
     const updatedList = addressList.filter((_, i) => i !== index);
     setAddressList(updatedList);
+
     if (index === defaultAddressIndex && updatedList.length > 0) {
       updatedList[0].isDefault = true;
       setDefaultAddressIndex(0);
     } else if (updatedList.length === 0) {
       setDefaultAddressIndex(-1);
     }
+
+    await handleUpdateUserAddress(user.user._id, updatedList);
   };
 
   const handleKeyDown = (e, nextField) => {
@@ -174,12 +220,12 @@ const AccountAddress = () => {
       provinces.find((p) => p.code === Number(addr.province))?.name || "";
     const district =
       districts.find((d) => d.code === Number(addr.district))?.name || "";
-    const ward = wards.find((c) => c.code === Number(addr.commune))?.name || "";
-    return `${addr.addressDetail}, ${ward}, ${district}, ${province}`;
+    const ward = wards.find((c) => c.code === Number(addr.ward))?.name || "";
+    return `${addr.address}, ${ward}, ${district}, ${province}`;
   };
 
   return (
-    <div className="mx-auto max-w-2xl rounded-lg bg-white p-4 shadow-lg">
+    <div className="mx-auto rounded-lg bg-white p-4 shadow-md">
       <h2 className="mb-4 text-xl font-bold">Địa chỉ giao hàng</h2>
       {!showForm && (
         <div
@@ -216,7 +262,7 @@ const AccountAddress = () => {
               </div>
               <div className="mt-2">
                 <p className="font-light text-gray-400">Điện thoại</p>
-                <p className="font-medium">{addr.phoneNumber}</p>
+                <p className="font-medium">{addr.phone}</p>
               </div>
               <div className="mt-2">
                 <p className="font-light text-gray-400">Địa chỉ</p>
@@ -304,14 +350,12 @@ const AccountAddress = () => {
               </label>
               <AddressSelect
                 options={filterCommunes}
-                onChange={(value) =>
-                  setFormData({ ...formData, commune: value })
-                }
+                onChange={(value) => setFormData({ ...formData, ward: value })}
                 label={"Phường/Xã"}
-                value={formData.commune}
+                value={formData.ward}
               />
-              {errors.commune && (
-                <span className="text-sm text-red-500">{errors.commune}</span>
+              {errors.ward && (
+                <span className="text-sm text-red-500">{errors.ward}</span>
               )}
             </div>
             <div>
@@ -320,21 +364,19 @@ const AccountAddress = () => {
               </label>
               <input
                 type="text"
-                name="addressDetail"
+                name="address"
                 placeholder="Địa chỉ 1"
                 className="w-full rounded border p-2"
-                value={formData.addressDetail}
+                value={formData.address}
                 onChange={(e) =>
-                  setFormData({ ...formData, addressDetail: e.target.value })
+                  setFormData({ ...formData, address: e.target.value })
                 }
                 onBlur={handleBlur}
-                ref={inputRefs.addressDetail}
+                ref={inputRefs.address}
                 onKeyDown={(e) => handleKeyDown(e, "phoneNumber")}
               />
-              {errors.addressDetail && (
-                <span className="text-sm text-red-500">
-                  {errors.addressDetail}
-                </span>
+              {errors.address && (
+                <span className="text-sm text-red-500">{errors.address}</span>
               )}
             </div>
             <div>
@@ -343,12 +385,12 @@ const AccountAddress = () => {
               </label>
               <input
                 type="tel"
-                name="phoneNumber"
+                name="phone"
                 placeholder="Điện thoại"
                 className="w-full rounded border p-2"
-                value={formData.phoneNumber}
+                value={formData.phone}
                 onChange={(e) =>
-                  setFormData({ ...formData, phoneNumber: e.target.value })
+                  setFormData({ ...formData, phone: e.target.value })
                 }
                 onBlur={handleBlur}
                 ref={inputRefs.phoneNumber}

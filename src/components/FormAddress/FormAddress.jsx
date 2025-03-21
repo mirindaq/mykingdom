@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 import { path } from "@/constants/path";
 import axios from "axios";
 
-export default function FormAddress(props) {
-  const { handleSubmit } = props;
+export default function FormAddress({ handleSubmit, defaultAddress }) {
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
@@ -24,46 +23,117 @@ export default function FormAddress(props) {
   const phoneRef = useRef("");
 
   useEffect(() => {
-    axios
-      .get("https://provinces.open-api.vn/api/?depth=1")
-      .then((res) => setProvinces(res.data));
+    if (!defaultAddress) {
+      setSelectedProvince({ code: "", name: "" });
+      setSelectedDistrict({ code: "", name: "" });
+      setSelectedWard({ code: "", name: "" });
+
+      addressRef.current.value = "";
+      nameRef.current.value = "";
+      phoneRef.current.value = "";
+      return;
+    }
+
+
+    const province = provinces.find((p) => String(p.code) === String(defaultAddress.province));
+    const district = districts.find((d) => String(d.code) === String(defaultAddress.district));
+    const ward = wards.find((w) => String(w.code) === String(defaultAddress.ward));
+
+    setSelectedProvince({
+      code: defaultAddress.province || "",
+      name: province?.name || "",
+    });
+    setSelectedDistrict({
+      code: defaultAddress.district || "",
+      name: district?.name || "",
+    });
+    setSelectedWard({
+      code: defaultAddress.ward || "",
+      name: ward?.name || "",
+    });
+
+    addressRef.current.value = defaultAddress.address || "";
+    nameRef.current.value = defaultAddress.name || "";
+    phoneRef.current.value = defaultAddress.phone || "";
+  }, [defaultAddress, provinces, districts, wards]);
+
+  useEffect(() => {
+    axios.get("https://provinces.open-api.vn/api/?depth=1").then((res) => {
+      setProvinces(res.data);
+      if (selectedProvince.code) {
+        const province = res.data.find((p) => p.code === selectedProvince.code);
+        if (province) {
+          setSelectedProvince((prev) => ({ ...prev, name: province.name }));
+        }
+      }
+    });
   }, []);
+
+  useEffect(() => {
+    if (selectedProvince.code) {
+      axios
+        .get(
+          `https://provinces.open-api.vn/api/p/${selectedProvince.code}?depth=2`,
+        )
+        .then((res) => {
+          setDistricts(res.data.districts);
+          if (selectedDistrict.code) {
+            const district = res.data.districts.find(
+              (d) => d.code === selectedDistrict.code,
+            );
+            if (district) {
+              setSelectedDistrict((prev) => ({ ...prev, name: district.name }));
+            }
+          }
+        });
+    } else {
+      setDistricts([]);
+    }
+  }, [selectedProvince.code]);
+
+  useEffect(() => {
+    if (selectedDistrict.code) {
+      axios
+        .get(
+          `https://provinces.open-api.vn/api/d/${selectedDistrict.code}?depth=2`,
+        )
+        .then((res) => {
+          setWards(res.data.wards);
+          if (selectedWard.code) {
+            const ward = res.data.wards.find(
+              (w) => w.code === selectedWard.code,
+            );
+            if (ward) {
+              setSelectedWard((prev) => ({ ...prev, name: ward.name }));
+            }
+          }
+        });
+    } else {
+      setWards([]);
+    }
+  }, [selectedDistrict.code]);
 
   const handleProvinceChange = (e) => {
     const provinceCode = e.target.value;
-    const provinceName = e.target.selectedOptions[0].text;
+    const provinceName = e.target.selectedOptions[0]?.text || "";
     setSelectedProvince({ code: provinceCode, name: provinceName });
     setSelectedDistrict({ code: "", name: "" });
     setSelectedWard({ code: "", name: "" });
-
-    if (provinceCode) {
-      axios
-        .get(`https://provinces.open-api.vn/api/p/${provinceCode}?depth=2`)
-        .then((res) => setDistricts(res.data.districts));
-    } else {
-      setDistricts([]);
-      setWards([]);
-    }
+    setDistricts([]);
+    setWards([]);
   };
 
   const handleDistrictChange = (e) => {
     const districtCode = e.target.value;
-    const districtName = e.target.selectedOptions[0].text;
+    const districtName = e.target.selectedOptions[0]?.text || "";
     setSelectedDistrict({ code: districtCode, name: districtName });
     setSelectedWard({ code: "", name: "" });
-
-    if (districtCode) {
-      axios
-        .get(`https://provinces.open-api.vn/api/d/${districtCode}?depth=2`)
-        .then((res) => setWards(res.data.wards));
-    } else {
-      setWards([]);
-    }
+    setWards([]);
   };
 
   const handleWardChange = (e) => {
     const wardCode = e.target.value;
-    const wardName = e.target.selectedOptions[0].text;
+    const wardName = e.target.selectedOptions[0]?.text || "";
     setSelectedWard({ code: wardCode, name: wardName });
   };
 
