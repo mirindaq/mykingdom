@@ -1,8 +1,9 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
-const OrderProductBox = ({ product }) => {
+const OrderProductBox = ({ product, quantity, discount }) => {
   return (
-    <div className="my-2 rounded-lg border border-gray-200 bg-white px-5 py-5">
+    <div className="my-2 rounded-lg border border-gray-200 bg-white px-5 py-3">
       <div className="flex justify-between pb-2">
         <div className="flex items-center">
           <img
@@ -21,15 +22,13 @@ const OrderProductBox = ({ product }) => {
             </div>
             <p className="text-base text-gray-700">
               Số lượng:{" "}
-              <span className="font-semibold text-red-500">
-                {product.quantity}
-              </span>
+              <span className="font-semibold text-red-500">{quantity}</span>
             </p>
           </div>
         </div>
         <div className="flex items-center">
           <p className="text-end text-base">
-            {product.discount > 0 ? (
+            {discount > 0 ? (
               <>
                 <span className="mr-2 text-gray-400 line-through">
                   {product.price.toLocaleString("vi-VN", {
@@ -38,13 +37,13 @@ const OrderProductBox = ({ product }) => {
                   })}
                 </span>
                 <span className="text-red-500">
-                  {(
-                    product.price *
-                    (1 - product.discount / 100)
-                  ).toLocaleString("vi-VN", {
-                    style: "currency",
-                    currency: "VND",
-                  })}
+                  {(product.price * (1 - discount / 100)).toLocaleString(
+                    "vi-VN",
+                    {
+                      style: "currency",
+                      currency: "VND",
+                    },
+                  )}
                 </span>
               </>
             ) : (
@@ -59,14 +58,18 @@ const OrderProductBox = ({ product }) => {
         </div>
       </div>
 
-      <div className="mt-1 text-right">
+      <div className="text-right">
         <div className="space-x-2">
-          <button className="rounded border border-red-500 px-3 py-1 text-base text-red-500 hover:bg-red-50">
-            Đánh giá
-          </button>
-          <button className="rounded bg-red-500 px-3 py-1 text-base text-white hover:bg-red-600">
-            Mua lại
-          </button>
+          <Link to={`/collections/${product.slug}`}>
+            <button className="rounded border-red-500 px-3 py-1 text-base text-red-500 hover:cursor-pointer hover:bg-red-50">
+              Đánh giá
+            </button>
+          </Link>
+          <Link to={`/collections/${product.slug}`}>
+            <button className="rounded bg-red-500 px-3 py-1 text-base text-white hover:cursor-pointer hover:bg-red-600">
+              Mua lại
+            </button>
+          </Link>
         </div>
       </div>
     </div>

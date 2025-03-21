@@ -3,28 +3,88 @@ import CartItemPay from "@/components/CartItemPay/CartItemPay";
 import FormAddress from "@/components/FormAddress/FormAddress";
 import { Checkbox } from "@/components/ui/checkbox";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import { useCart } from "@/hooks/CartContext";
-
+import { useAuth } from "@/hooks/AuthContext";
+import { orderApi } from "@/api/order.api";
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
+import { path } from "@/constants/path";
 export default function Pay() {
   const [discountCode, setDiscountCode] = useState("");
-
+  const [useDefaultAddress, setUseDefaultAddress] = useState(false);
+  const [defaultAddress, setDefaultAddress] = useState(null);
+  const { cart } = useCart();
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const breadcrumbsData = [
     { path: "/", label: "Trang chủ" },
     { path: "/pay", label: "Thanh toán" },
   ];
 
-  const { cart, totalItems } = useCart();
-
   const totalPrice = cart.reduce(
     (sum, item) =>
       sum +
-      (item.discount
-        ? item.price - (item.discount * item.price) / 100
-        : item.price) *
+      (item.product.discount
+        ? item.product.price -
+          (item.product.discount * item.product.price) / 100
+        : item.product.price) *
         item.quantity,
     0,
   );
+
+  const handleSubmit = async (object) => {
+    const totalDiscountCart = cart.reduce((sum, item) => {
+      if (item.product.discount > 0) {
+        const originalPrice = item.product.price * item.quantity;
+        const discountedPrice =
+          item.product.price *
+          (1 - item.product.discount / 100) *
+          item.quantity;
+        return sum + (originalPrice - discountedPrice);
+      }
+      return sum;
+    }, 0);
+
+    const order = {
+      user: user.user._id,
+      recipient: {
+        name: object.name,
+        phone: object.phone,
+        address: object.address,
+        province: object.province,
+        district: object.district,
+        ward: object.ward,
+      },
+      items: cart.map((item) => ({
+        product: item.product._id,
+        quantity: item.quantity,
+        price: item.product.price,
+        discount: item.product.discount,
+      })),
+      totalDiscount: totalDiscountCart,
+      totalAmount: totalPrice,
+    };
+
+    const orderNew = await orderApi.createOrder(order);
+    if (orderNew) {
+      toast.success("Đặt hàng thành công");
+      navigate(path.homepage);
+    }
+  };
+
+  const handleDefaultAddress = (e) => {
+    const isDefault = e.target.checked;
+    setUseDefaultAddress(isDefault);
+
+    if (isDefault) {
+      const defaultAddress = user.user.address.find((addr) => addr.isDefault);
+      if (defaultAddress) {
+        setDefaultAddress(defaultAddress);
+      }
+    } else {
+      setDefaultAddress(null);
+    }
+  };
 
   return (
     <div>
@@ -32,29 +92,41 @@ export default function Pay() {
         <Breadcrumbs links={breadcrumbsData} />
       </div>
 
-      <div className="container mx-auto mt-10 mb-10">
+      <div className="container mx-auto mt-10 mb-10 py-4">
         <div className="grid grid-cols-10 gap-6">
           <div className="col-span-5 pl-20">
             <p>Liên hệ</p>
-            <p className="mt-5">Lê Việt Hoàng (viet04hoang@gmail.com)</p>
+            <p className="mt-5">
+              <span className="font-semibold">{user.user.name} </span>(
+              {user.user.email})
+            </p>
             <div className="mt-5 flex items-center">
-              <Checkbox id="" className="mr-2" />
-              <label htmlFor="">
-                Gửi cho tôi tin tức và ưu đãi qua email
-              </label>
+              <Checkbox
+                id="default-address"
+                checked={useDefaultAddress}
+                onCheckedChange={(checked) => {
+                  setUseDefaultAddress(checked);
+                  handleDefaultAddress({ target: { checked } });
+                }}
+                className="mr-2"
+              />
+              <label htmlFor="">Sử dụng địa chỉ giao hàng mặc định</label>
             </div>
             <div className="mt-5">
               <p className="mb-2">Địa chỉ giao hàng</p>
-              <FormAddress />
+              <FormAddress
+                handleSubmit={handleSubmit}
+                defaultAddress={defaultAddress}
+              />
             </div>
-            <div className="grid grid-cols-4 gap-2 text-center text-sm">
+            {/* <div className="grid grid-cols-4 gap-2 text-center text-sm">
               <div>
                 <Link className="text-green-600 underline">
                   Chính sách hoàn tiền
                 </Link>
               </div>
               <div>
-                <Link className="text-green-600 underline">
+                <Link to={path.deliveryPolicy} className="text-green-600 underline">
                   Chính sách vận chuyển
                 </Link>
               </div>
@@ -64,7 +136,7 @@ export default function Pay() {
                 </Link>
               </div>
               <div>
-                <Link className="text-green-600 underline">
+                <Link to={path.termsAndConditions} className="text-green-600 underline">
                   Điều khoản dịch vụ
                 </Link>
               </div>
@@ -73,13 +145,13 @@ export default function Pay() {
                   Thông tin liên hệ
                 </Link>
               </div>
-            </div>
+            </div> */}
           </div>
 
           <div className="col-span-5 pr-20 pl-20">
-            <ul className="space-y-4">
-              {cart.map((item) => (
-                <CartItemPay item={item} key={item.id} />
+            <ul className="max-h-96 space-y-4 overflow-y-auto">
+              {cart.map((item, index) => (
+                <CartItemPay item={item} key={index} />
               ))}
             </ul>
             <div className="mt-7 flex items-center justify-between">
@@ -121,13 +193,13 @@ export default function Pay() {
                 {totalPrice.toLocaleString()} Đ
               </p>
             </div>
-
+            {/* 
             <div className="mt-7 flex items-center">
               <Checkbox id="" className="mr-2" />
               <label htmlFor="">
                 Yêu cầu xuất thông tin VAT
               </label>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

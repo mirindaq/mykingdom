@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import FavoriteProduct from "@/components/FavoriteProduct/FavoriteProduct";
-import { data } from "@/database/data";
 import ProductBox from "@/components/ProductBox/ProductBox";
 import { PaginationBox } from "@/components/PaginationBox/PaginationBox";
 import { wishlistApi } from "@/api/wishlist.api";
@@ -8,33 +6,23 @@ import { useAuth } from "@/hooks/AuthContext";
 
 export default function Wishlist() {
   const { user } = useAuth();
-  const [favoriteProducts, setFavoriteProducts] = useState(data.products);
+  const [favoriteProducts, setFavoriteProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 6;
-
-  // const handleRemove = (productId) => {
-  //   const updatedProducts = favoriteProducts.filter(
-  //     (product) => product.id !== productId,
-  //   );
-  //   setFavoriteProducts(updatedProducts);
-  //   console.log(`Đã xóa sản phẩm với id: ${productId}`);
-  //   if (
-  //     updatedProducts.length <= (currentPage - 1) * productsPerPage &&
-  //     currentPage > 1
-  //   ) {
-  //     setCurrentPage(currentPage - 1);
-  //   }
-  // };
 
   useEffect(() => {
     const fetchWishlist = async () => {
       try {
         const response = await wishlistApi.getWishlist(user.user);
-        // setFavoriteProducts(response);
-        console.log(response);
+        response.products = response.products.map((product) => ({
+          ...product,
+          isWishlist: true,
+        }));
+        setFavoriteProducts(response.products);
+        console.log(response.products);
       } catch (error) {
         console.error("Error fetching wishlist:", error);
-      } 
+      }
     };
 
     fetchWishlist();
@@ -46,6 +34,10 @@ export default function Wishlist() {
     indexOfFirstProduct,
     indexOfLastProduct,
   );
+
+  useEffect(() => {
+    console.log(favoriteProducts);
+  }, [favoriteProducts]);
 
   const totalPages = Math.ceil(favoriteProducts.length / productsPerPage);
 
@@ -60,50 +52,11 @@ export default function Wishlist() {
         <div>
           <div className="grid grid-cols-3 gap-4">
             {currentProducts.map((product) => (
-              <ProductBox
-                key={product._id}
-                product={product}
-                // onRemove={handleRemove}
-              />
+              <ProductBox key={product._id} product={product} />
             ))}
           </div>
           {totalPages > 1 && (
             <div className="mt-6 flex justify-center gap-2">
-              {/* <button
-                onClick={() => paginate(currentPage - 1)}
-                disabled={currentPage === 1}
-                className={`rounded px-4 py-2 ${
-                  currentPage === 1
-                    ? "cursor-not-allowed bg-gray-300 text-gray-500"
-                    : "bg-blue-500 text-white hover:bg-blue-600"
-                } transition-colors`}
-              >
-                Trước
-              </button>
-              {Array.from({ length: totalPages }, (_, index) => (
-                <button
-                  key={index + 1}
-                  onClick={() => paginate(index + 1)}
-                  className={`rounded px-4 py-2 ${
-                    currentPage === index + 1
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                  } transition-colors`}
-                >
-                  {index + 1}
-                </button>
-              ))}
-              <button
-                onClick={() => paginate(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className={`rounded px-4 py-2 ${
-                  currentPage === totalPages
-                    ? "cursor-not-allowed bg-gray-300 text-gray-500"
-                    : "bg-blue-500 text-white hover:bg-blue-600"
-                } transition-colors`}
-              >
-                Tiếp
-              </button> */}
               <PaginationBox
                 currentPage={currentPage}
                 totalPage={totalPages}

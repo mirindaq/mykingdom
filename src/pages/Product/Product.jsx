@@ -20,6 +20,8 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { useAuth } from "@/hooks/AuthContext";
+import { wishlistApi } from "@/api/wishlist.api";
 
 export default function Product() {
   const { slug } = useParams();
@@ -30,6 +32,8 @@ export default function Product() {
   const [quantity, setQuantity] = useState(1);
   const [quantityFromCart, setQuantityFromCart] = useState(0);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [isWishlist, setIsWishlist] = useState(false);
+  const { user } = useAuth();
 
   const handleAddToCartWithQuantity = (product, quantity) => {
     addToCartWithQuantity(product, quantity);
@@ -53,6 +57,12 @@ export default function Product() {
     const quantity = quantityProductFromCart(product.id);
     setQuantityFromCart(quantity);
   }, [product.id, quantityProductFromCart]);
+
+  useEffect(() => {
+    if (product?.isWishlist) {
+      setIsWishlist(true);
+    }
+  }, [product?.isWishlist]);
 
   const stores = [
     {
@@ -90,6 +100,30 @@ export default function Product() {
       phone: "+842393633363",
     },
   ];
+
+  const handleAddToWishlist = async () => {
+    if (!user?.user) {
+      toast.error("Vui lòng đăng nhập để thêm vào danh sách yêu thích");
+      return;
+    }
+    const result = await wishlistApi.addToWishlist(user.user, product._id);
+    if (result) {
+      setIsWishlist(true);
+      toast.success("Đã thêm vào danh sách yêu thích");
+    }
+  };
+
+  const handleRemoveFromWishlist = async () => {
+    if (!user?.user) {
+      toast.error("Vui lòng đăng nhập để xóa khỏi danh sách yêu thích");
+      return;
+    }
+    const result = await wishlistApi.removeFromWishlist(user.user, product._id);
+    if (result) {
+      setIsWishlist(false);
+      toast.success("Đã xóa khỏi danh sách yêu thích");
+    }
+  };
 
   const breadcrumbsData = [
     { path: "/", label: "Trang chủ" },
@@ -131,9 +165,20 @@ export default function Product() {
         </div>
 
         <div className="mt-8">
-          <div className="flex">
+          <div className="flex justify-between">
             <p className="mb-4 text-2xl font-medium">{product.name}</p>
-            <Heart className="h-9 w-9 text-red-600" />
+            <div
+              onClick={
+                isWishlist ? handleRemoveFromWishlist : handleAddToWishlist
+              }
+              className="cursor-pointer"
+            >
+              {isWishlist ? (
+                <Heart className="h-9 w-9 fill-red-600 text-red-600 transition-all duration-300" />
+              ) : (
+                <Heart className="h-9 w-9 text-red-600 transition-all duration-300" />
+              )}
+            </div>
           </div>
           <div className="mb-4 flex">
             <p className="pr-5">Thương hiệu</p>{" "}

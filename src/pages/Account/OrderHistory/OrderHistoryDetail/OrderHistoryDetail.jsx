@@ -4,41 +4,21 @@ import { useParams } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import OrderProductBox from "@/components/OrderProductBox/OrderProductBox";
 import { CreditCard, Phone, Store, User } from "lucide-react";
+import { orderApi } from "@/api/order.api";
 
 export default function OrderHistoryDetail() {
   const { id } = useParams();
   const [order, setOrder] = useState({});
 
   useEffect(() => {
-    const foundOrder = data.orders.find((p) => p.id === id);
-    if (foundOrder) {
-      setOrder(foundOrder);
-      console.log(foundOrder);
-    }
+    orderApi.getOrderById(id).then((data) => {
+      setOrder(data);
+    });
   }, [id]);
 
-  //   id: "HD03219312321222",
-  //   customer_id: 102,
-  //   products: [
-  //     {
-  //       product_id: 3,
-  //       name: "Đồ Chơi Lắp Ghép Xe Đua",
-  //       quantity: 1,
-  //       price: 1500000,
-  //       image_url: "https://cdn.shopify.com/s/files/1/0731/6514/4343/files/thap-banh-cupcake-ngot-ngao-playdoh-g0529_1.jpg?v=1741104026&width=400",
-  //       discount: 0
-  //     }
-  //   ],
-  //   total_price: 1500000,
-  //   status: "Hoàn thành",
-  //   order_date: "2025-03-10T15:45:00Z",
-  //   payment_method: "Thẻ tín dụng",
-  //   shipping_address: {
-  //     full_name: "Trần Thị B",
-  //     phone: "0901234567",
-  //     address: "456 Đường Nguyễn Trãi, Quận 5, TP.HCM"
-  //   }
-  // }
+  const totalPrice = order?.items?.reduce((total, item) => {
+    return total + item.price * item.quantity;
+  }, 0);
 
   return (
     <div>
@@ -48,7 +28,7 @@ export default function OrderHistoryDetail() {
           <div>
             <p className="text-base">
               Mã đơn hàng:{" "}
-              <span className="mt-2 font-bold">{order.id}</span>{" "}
+              <span className="mt-2 font-bold uppercase">{order._id}</span>{" "}
             </p>
             <p className="text-base">
               {new Intl.DateTimeFormat("vi-VN", {
@@ -63,74 +43,91 @@ export default function OrderHistoryDetail() {
             </p>
           </div>
           <div>
-            {order.status === "Đã hủy" ? (
-              <Badge variant="destructive"> {order.status}</Badge>
-            ) : order.status === "Đã giao" ? (
-              <Badge variant="success"> {order.status}</Badge>
-            ) : order.status === "Đang xử lý" ? (
-              <Badge variant="processing"> {order.status}</Badge>
-            ) : order.status === "Đang giao" ? (
-              <Badge variant="shipped"> {order.status}</Badge>
+            {order.status === "pending" ? (
+              <Badge variant="pending">Đang chờ xử lý</Badge>
+            ) : order.status === "processing" ? (
+              <Badge variant="processing">Đang xử lý</Badge>
+            ) : order.status === "shipped" ? (
+              <Badge variant="shipped">Đang giao hàng</Badge>
+            ) : order.status === "delivered" ? (
+              <Badge variant="delivered">Đã giao</Badge>
+            ) : order.status === "cancelled" ? (
+              <Badge variant="cancelled">Đã hủy</Badge>
             ) : (
-              <Badge variant="default"> {order.status}</Badge>
+              <Badge variant="pending">Trạng thái không xác định</Badge>
             )}
           </div>
         </div>
         <div className="mt-5">
-          {order?.products?.map((product) => (
+          {order?.items?.map((item) => (
             <>
-              <OrderProductBox product={product} key={product.id} />
+              <OrderProductBox
+                product={item.product}
+                key={item.product._id}
+                quantity={item.quantity}
+                discount={item.discount}
+              />
             </>
           ))}
         </div>
         <div className="my-5">
-          <div className="border-b px-6 py-4">
-            <div className="flex items-center text-lg font-semibold text-red-600">
-              Thông tin thanh toán
+          <div className="rounded-lg border-b border-gray-200 bg-white px-6 py-6 shadow-sm">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold">Thông tin thanh toán</h3>
             </div>
-            <div className="mt-3 space-y-2 text-gray-700">
-              <div className="flex justify-between">
-                <span>Tổng tiền sản phẩm:</span>
-                <span>{order?.total_price?.toLocaleString()}đ</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Giảm giá:</span>
-                <span className="text-red-500">
-                  {order?.total_price?.toLocaleString()}đ
+            <div className="mt-4 space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-gray-600">Tổng tiền sản phẩm:</span>
+                <span className="font-medium text-red-600 text-lg">
+                  {totalPrice?.toLocaleString()}đ
                 </span>
               </div>
-
-              <div className="flex justify-between text-lg font-semibold">
-                <span>Phải thanh toán:</span>
-                <span className="text-black">
-                  {order?.total_price?.toLocaleString()}đ
+              <div className="flex items-center justify-between">
+                <span className="text-gray-600">Giảm giá:</span>
+                <span className="font-medium text-red-500 text-lg">
+                  {order?.totalDiscount?.toLocaleString()}đ
                 </span>
               </div>
-              <div className="flex justify-between text-lg font-semibold">
+              <div className="flex items-center justify-between text-lg font-semibold">
                 <span>Đã thanh toán:</span>
-                <span className="text-green-600">
-                  {order?.total_price?.toLocaleString()}đ
+                <span className="font-bold text-green-600 text-xl">
+                  {order?.totalAmount?.toLocaleString()}đ
                 </span>
               </div>
             </div>
           </div>
 
-          <div className="mx-auto my-5 rounded-lg bg-white px-6 py-4">
-            <div className="flex items-center text-lg font-semibold text-gray-800">
-              Thông tin khách hàng
+          <div className="mx-auto my-5 rounded-lg bg-white px-6 py-6 shadow-sm">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-gray-800">
+                Thông tin người nhận
+              </h3>
             </div>
-            <div className="mt-3 space-y-2 text-gray-700">
+            <div className="mt-4 space-y-4">
               <div className="flex items-center">
-                <User className="mr-2 text-gray-500" />
-                <span>{order?.shipping_address?.full_name}</span>
+                <User className="mr-3 h-5 w-5 text-gray-500" />
+                <div className="flex-1">
+                  <span className="font-medium text-gray-800">
+                    {order?.recipient?.name}
+                  </span>
+                </div>
               </div>
               <div className="flex items-center">
-                <Phone className="mr-2 text-gray-500" />
-                <span>{order?.shipping_address?.phone}</span>
+                <Phone className="mr-3 h-5 w-5 text-gray-500" />
+                <div className="flex-1">
+                  <span className="font-medium text-gray-800">
+                    {order?.recipient?.phone}
+                  </span>
+                </div>
               </div>
               <div className="flex items-center">
-                <Store className="mr-2 text-gray-500" />
-                <span>{order?.shipping_address?.address}</span>
+                <Store className="mr-3 h-5 w-5 text-gray-500" />
+                <div className="flex-1">
+                  <span className="font-medium text-gray-800">
+                    {order?.recipient?.address}, {order?.recipient?.ward},{" "}
+                    {order?.recipient?.district}, {order?.recipient?.province}
+                  </span>
+                </div>
               </div>
             </div>
           </div>

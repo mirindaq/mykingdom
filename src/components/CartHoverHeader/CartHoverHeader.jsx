@@ -21,12 +21,14 @@ export default function CartHoverHeader() {
   const totalPrice = cart.reduce(
     (sum, item) =>
       sum +
-      (item.discount
-        ? item.price - (item.discount * item.price) / 100
-        : item.price) *
+      (item.product.discount
+        ? item.product.price - (item.product.discount * item.product.price) / 100
+        : item.product.price) *
         item.quantity,
     0,
   );
+
+  const [agree, setAgree] = useState(false);
 
   return (
     <HoverCard
@@ -55,21 +57,30 @@ export default function CartHoverHeader() {
           {cart.length > 0 ? (
             <>
               <ul className="max-h-72 space-y-4 overflow-y-auto">
-                {cart.map((item,index) => (
+                {cart.map((item, index) => (
                   <CartItemBox item={item} key={index} />
                 ))}
               </ul>
               <div className="mt-4 flex items-center text-sm">
-                <Checkbox id="agree-terms" className="mr-2" />
+                <Checkbox
+                  id="agree-terms"
+                  className="mr-2"
+                  checked={agree}
+                  onCheckedChange={setAgree}
+                />
                 <label htmlFor="agree-terms">
                   Tôi đã đọc và đồng ý với
-                  <a href="#" className="ml-1 text-blue-600 underline">
-                    điều khoản
-                  </a>{" "}
+                  <Link to={path.termsAndConditions}>
+                    <span className="ml-1 text-blue-600 underline">
+                      điều khoản
+                    </span>
+                  </Link>{" "}
                   và
-                  <a href="#" className="ml-1 text-blue-600 underline">
-                    điều kiện thanh toán
-                  </a>
+                  <Link to={path.termsAndConditions}>
+                    <span className="ml-1 text-blue-600 underline">
+                      điều kiện thanh toán
+                    </span>
+                  </Link>
                 </label>
               </div>
 
@@ -79,13 +90,22 @@ export default function CartHoverHeader() {
 
               <div className="mt-5 flex justify-between gap-4">
                 <Link to={path.cart} className="w-1/2">
-                  <Button className="w-full border border-red-500 bg-white text-red-500 hover:bg-gray-100">
+                  <button className="w-full rounded-lg border border-red-500 bg-white py-2 text-red-500 hover:cursor-pointer hover:bg-gray-100">
                     Xem giỏ hàng
-                  </Button>
+                  </button>
                 </Link>
-                <Button className="w-1/2 bg-red-600 text-white hover:bg-red-700">
-                  Thanh toán ngay
-                </Button>
+                <Link to={path.pay} className="w-1/2">
+                  <button
+                    className={`w-full rounded-lg py-2 ${
+                      agree
+                        ? "bg-red-600 text-white hover:cursor-pointer hover:bg-red-700"
+                        : "bg-gray-300 text-gray-500 hover:cursor-not-allowed"
+                    }`}
+                    disabled={!agree}
+                  >
+                    Thanh toán ngay
+                  </button>
+                </Link>
               </div>
             </>
           ) : (

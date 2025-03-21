@@ -1,4 +1,5 @@
 import { authApi } from "@/api/auth.api";
+import { userApi } from "@/api/user.api";
 import { path } from "@/constants/path";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -27,8 +28,7 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(true);
       localStorage.setItem("user", JSON.stringify(auth));
       navigate(path.homepage);
-    }
-    else {
+    } else {
       toast.error("Tài khoản hoặc mật khẩu không đúng");
     }
   };
@@ -46,6 +46,39 @@ export const AuthProvider = ({ children }) => {
     setIsAuthenticated(false);
     localStorage.removeItem("user");
   };
+  const updateUserAddress = async (userId, updatedAddressList) => {
+    console.log(userId, updatedAddressList);
+    try {
+      const response = await userApi.updateUserAddress(
+        userId,
+        updatedAddressList,
+      );
+
+      setUser((prevUser) => ({
+        ...prevUser,
+        user: {
+          ...prevUser.user,
+          address: updatedAddressList,
+        },
+      }));
+
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          ...user,
+          user: {
+            ...user.user,
+            address: updatedAddressList,
+          },
+        }),
+      );
+
+      return response;
+    } catch (error) {
+      console.error("Error updating user address:", error);
+      throw error;
+    }
+  };
 
   return (
     <AuthContext.Provider
@@ -56,6 +89,7 @@ export const AuthProvider = ({ children }) => {
         register,
         logout,
         setUser,
+        updateUserAddress,
       }}
     >
       {children}

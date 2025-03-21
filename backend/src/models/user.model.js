@@ -30,6 +30,10 @@ const userSchema = new mongoose.Schema({
       province: String,
       district: String,
       ward: String,
+      isDefault: {
+        type: Boolean,
+        default: false,
+      },
     },
   ],
   role: {

@@ -11,6 +11,13 @@ const tagSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  contentTag: {
+    type: String,
+  },
+  slug: {
+    type: String,
+    unique: true,
+  },
 });
 
 module.exports = mongoose.model("Tag", tagSchema);

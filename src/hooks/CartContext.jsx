@@ -14,52 +14,58 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
 
-  const addToCart = (product) => {
+  const addToCart = (product, quantity = 1) => {
     setCart((prevCart) => {
-      const existingItem = prevCart.find((item) => item._id === product._id);
+      const existingItem = prevCart.find(
+        (item) => item.product._id === product._id,
+      );
 
       if (existingItem) {
         return prevCart.map((item) =>
-          item._id === product._id
-            ? { ...item, quantity: item.quantity + 1 }
+          item.product._id === product._id
+            ? { product: item.product, quantity: item.quantity + quantity }
             : item,
         );
       } else {
-        return [...prevCart, { ...product, quantity: 1 }];
+        return [...prevCart, { product, quantity }];
       }
     });
   };
 
   const addToCartWithQuantity = (product, quantity) => {
     setCart((prevCart) => {
-      const existingItem = prevCart.find((item) => item._id === product._id);
+      const existingItem = prevCart.find(
+        (item) => item.product._id === product._id,
+      );
 
       if (existingItem) {
         return prevCart.map((item) =>
-          item._id === product._id
-            ? { ...item, quantity: item.quantity + quantity }
+          item.product._id === product._id
+            ? { product: item.product, quantity: item.quantity + quantity }
             : item,
         );
       } else {
-        return [...prevCart, { ...product, quantity: quantity }];
+        return [...prevCart, { product, quantity }];
       }
     });
   };
 
   const quantityProductFromCart = (product_id) => {
-    const existingItem = cart.find((item) => item._id === product_id);
+    const existingItem = cart.find((item) => item.product._id === product_id);
     return existingItem ? existingItem.quantity : 0;
   };
 
   const removeFromCart = (product_id) => {
-    setCart((prevCart) => prevCart.filter((item) => item._id !== product_id));
+    setCart((prevCart) =>
+      prevCart.filter((item) => item.product._id !== product_id),
+    );
   };
 
   const reduceFromCart = (product_id) => {
     setCart((prevCart) =>
       prevCart
         .map((item) =>
-          item._id === product_id
+          item.product._id === product_id
             ? { ...item, quantity: item.quantity - 1 }
             : item,
         )
@@ -67,7 +73,7 @@ export const CartProvider = ({ children }) => {
     );
   };
 
-  const totalItems = cart.reduce((sum, product) => sum + product.quantity, 0);
+  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <CartContext.Provider
