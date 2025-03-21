@@ -42,5 +42,6 @@ app.use("/api/articles", require("./routes/article.routes"));
 app.use("/api/branches", require("./routes/branch.routes"));
 app.use("/api/wishlist", require("./routes/wishlist.routes"));
 app.use("/api/orders", require("./routes/order.routes"));
+app.use("/api/tags", require("./routes/tag.routes"));
 
 

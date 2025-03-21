@@ -10,15 +10,15 @@ export const articleApi = {
             return [];
         }
     },
-    getArticlesGroupByTag: async() => {
+    getArticlesByTag: async(tagId) => {
         try {
             const response = await axios.get(
-                "http://localhost:5001/api/articles/group-by-tag",
+                `http://localhost:5001/api/articles/get-by-tag/${tagId}`,
             );
             return response.data;
         } catch (error) {
-            console.error("Error fetching articles by tag:", error);
-            return [];
+            console.error("Error adding to wishlist:", error);
+            return null;
         }
     },
 };
