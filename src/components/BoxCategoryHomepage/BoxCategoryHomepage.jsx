@@ -1,7 +1,8 @@
 import { Button } from "../ui/button";
+import { Link } from "react-router-dom";
 
 export default function BoxCategoryHomepage(props) {
-  const { imageUrl,categoryName } = props;
+  const { imageUrl, categoryName, slug } = props;
   return (
     <div className="rounded-3xl bg-neutral-100 pb-6">
       <img
@@ -13,9 +14,11 @@ export default function BoxCategoryHomepage(props) {
         {categoryName}
       </h1>
       <div className="flex justify-center">
-        <Button className="p-5 text-xl" variant="more">
-          Xem thêm
-        </Button>
+        <Link to={`/collections?categories=${slug}`}>
+          <Button className="p-5 text-xl" variant="more">
+            Xem thêm
+          </Button>
+        </Link>
       </div>
     </div>
   );

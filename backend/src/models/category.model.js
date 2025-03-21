@@ -25,6 +25,9 @@ const categorySchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  position: {
+    type: Number,
+  },
 });
 
 module.exports = mongoose.model("Category", categorySchema);

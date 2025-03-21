@@ -9,6 +9,7 @@ import {
 import BoxCategoryHomepage from "../BoxCategoryHomepage/BoxCategoryHomepage";
 export default function CarouselCategory(props) {
   const { categories } = props;
+  console.log(categories);
   return (
     <div>
       <Carousel>

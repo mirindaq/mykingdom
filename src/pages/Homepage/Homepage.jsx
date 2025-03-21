@@ -8,18 +8,26 @@ import { productApi } from "@/api/product.api";
 import { useAuth } from "@/hooks/AuthContext";
 import { wishlistApi } from "@/api/wishlist.api";
 import React, { useEffect, useState } from "react";
+import { articleApi } from "@/api/article.api";
+import NewsBox from "@/components/NewsBox/NewsBox";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import { path } from "@/constants/path";
+import CarouselBlog from "@/components/CarouselBlog/CarouselBlog";
 
 export default function Homepage() {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [articles, setArticles] = useState([]);
   const { user } = useAuth();
 
   useEffect(() => {
     const fetchCategoriesAndProducts = async () => {
-      const [categoriesRes, productsRes] = await Promise.all([
+      const [categoriesRes, productsRes, articlesRes] = await Promise.all([
         categoryApi.getAllCategories(),
         productApi.getAllProducts(),
+        articleApi.getAllArticles(),
       ]);
 
       let wishlist = { products: [] };
@@ -36,6 +44,7 @@ export default function Homepage() {
 
       setCategories(categoriesRes);
       setProducts(updatedProducts);
+      setArticles(articlesRes);
       setIsLoading(false);
     };
 
@@ -59,14 +68,37 @@ export default function Homepage() {
                 <BoxCategoryHomepage
                   categoryName={category.category_name}
                   imageUrl={category.image_url}
+                  slug={category.slug}
                 />
               </div>
             ))}
           </div>
-          <div className="my-9 text-center text-4xl font-bold text-blue-950">
-            Danh mục Sản phẩm theo mùa
+          <div className="w-full">
+            <div className="my-9 text-center text-4xl font-bold text-blue-950">
+              Danh mục Sản phẩm theo mùa
+            </div>
+            <CarouselCategory categories={categories} />
           </div>
-          <CarouselCategory categories={categories} />
+
+          <div className="w-full">
+            <div className="my-10 text-center text-4xl font-bold text-blue-950">
+              Cẩm nang
+            </div>
+            {articles?.length > 0 && (
+              <>
+                <div className="">
+                  <CarouselBlog blogs={articles} /> 
+                </div>
+                <div className="mt-9 flex justify-center">
+                  <Link to={path.blogs}>
+                    <Button className="p-5 text-xl" variant="more">
+                      Xem thêm
+                    </Button>
+                  </Link>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -3,29 +3,58 @@ import CartItemPay from "@/components/CartItemPay/CartItemPay";
 import FormAddress from "@/components/FormAddress/FormAddress";
 import { Checkbox } from "@/components/ui/checkbox";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import { useCart } from "@/hooks/CartContext";
-import { path } from "@/constants/path";
-
+import { useAuth } from "@/hooks/AuthContext";
+import { orderApi } from "@/api/order.api";
+import { toast } from "sonner";
 export default function Pay() {
   const [discountCode, setDiscountCode] = useState("");
+  const { cart } = useCart();
+  const { user } = useAuth();
 
   const breadcrumbsData = [
     { path: "/", label: "Trang chủ" },
     { path: "/pay", label: "Thanh toán" },
   ];
 
-  const { cart, totalItems } = useCart();
-
   const totalPrice = cart.reduce(
     (sum, item) =>
       sum +
-      (item.discount
-        ? item.price - (item.discount * item.price) / 100
-        : item.price) *
+      (item.product.discount
+        ? item.product.price -
+          (item.product.discount * item.product.price) / 100
+        : item.product.price) *
         item.quantity,
     0,
   );
+
+  const handleSubmit = async (object) => {
+    const order = {
+      user: user.user._id,
+      recipient: {
+        name: object.name,
+        phone: object.phone,
+        address: object.address,
+        province: object.province,
+        district: object.district,
+        ward: object.ward,
+      },
+      items: cart.map((item) => ({
+        product: item.product._id,
+        quantity: item.quantity,
+        price: item.product.discount
+          ? item.product.price -
+            (item.product.discount * item.product.price) / 100
+          : item.product.price,
+      })),
+      totalAmount: totalPrice,
+    };
+
+    const orderNew = await orderApi.createOrder(order);
+    if (orderNew) {
+      toast.success("Đặt hàng thành công");
+    }
+  };
 
   return (
     <div>
@@ -33,22 +62,23 @@ export default function Pay() {
         <Breadcrumbs links={breadcrumbsData} />
       </div>
 
-      <div className="container mx-auto mt-10 mb-10">
+      <div className="container mx-auto mt-10 mb-10 py-4">
         <div className="grid grid-cols-10 gap-6">
           <div className="col-span-5 pl-20">
             <p>Liên hệ</p>
-            <p className="mt-5">Lê Việt Hoàng (viet04hoang@gmail.com)</p>
+            <p className="mt-5">
+              <span className="font-semibold">{user.user.name} </span>(
+              {user.user.email})
+            </p>
             <div className="mt-5 flex items-center">
               <Checkbox id="" className="mr-2" />
-              <label htmlFor="">
-                Gửi cho tôi tin tức và ưu đãi qua email
-              </label>
+              <label htmlFor="">Gửi cho tôi tin tức và ưu đãi qua email</label>
             </div>
             <div className="mt-5">
               <p className="mb-2">Địa chỉ giao hàng</p>
-              <FormAddress />
+              <FormAddress handleSubmit={handleSubmit} />
             </div>
-            <div className="grid grid-cols-4 gap-2 text-center text-sm">
+            {/* <div className="grid grid-cols-4 gap-2 text-center text-sm">
               <div>
                 <Link className="text-green-600 underline">
                   Chính sách hoàn tiền
@@ -74,13 +104,13 @@ export default function Pay() {
                   Thông tin liên hệ
                 </Link>
               </div>
-            </div>
+            </div> */}
           </div>
 
           <div className="col-span-5 pr-20 pl-20">
-            <ul className="space-y-4">
+            <ul className="max-h-96 space-y-4 overflow-y-auto">
               {cart.map((item) => (
-                <CartItemPay item={item} key={item.id} />
+                <CartItemPay item={item} key={item._id} />
               ))}
             </ul>
             <div className="mt-7 flex items-center justify-between">
@@ -122,13 +152,13 @@ export default function Pay() {
                 {totalPrice.toLocaleString()} Đ
               </p>
             </div>
-
+            {/* 
             <div className="mt-7 flex items-center">
               <Checkbox id="" className="mr-2" />
               <label htmlFor="">
                 Yêu cầu xuất thông tin VAT
               </label>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

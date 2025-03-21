@@ -19,9 +19,9 @@ export default function Cart() {
   const totalPrice = cart.reduce(
     (sum, item) =>
       sum +
-      (item.discount
-        ? item.price - (item.discount * item.price) / 100
-        : item.price) *
+      (item.product.discount
+        ? item.product.price - (item.product.discount * item.product.price) / 100
+        : item.product.price) *
         item.quantity,
     0,
   );
@@ -66,7 +66,7 @@ export default function Cart() {
             <div className="col-span-7 grid grid-cols-1 items-center pr-30">
               <ul className="space-y-4">
                 {cart.map((item) => (
-                  <CartItemPage item={item} key={item._id} />
+                  <CartItemPage item={item} key={item.product._id} />
                 ))}
               </ul>
 
@@ -119,15 +119,15 @@ export default function Cart() {
                 <label htmlFor="agree-terms">
                   Tôi đã đọc và đồng ý với
                   <Link to={path.termsAndConditions}>
-                    <a href="#" className="ml-1 text-blue-600 underline">
+                    <span className="ml-1 text-blue-600 underline">
                       điều khoản
-                    </a>
+                    </span>
                   </Link>{" "}
                   và
                   <Link to={path.termsAndConditions}>
-                    <a href="#" className="ml-1 text-blue-600 underline">
+                    <span className="ml-1 text-blue-600 underline">
                       điều kiện thanh toán
-                    </a>
+                    </span>
                   </Link>
                 </label>
               </div>

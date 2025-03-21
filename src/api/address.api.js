@@ -10,7 +10,6 @@ export const addressApi = {
       return [];
     }
   },
-
   getAllDistricts: async () => {
     try {
       const response = await axios.get("https://provinces.open-api.vn/api/d");
