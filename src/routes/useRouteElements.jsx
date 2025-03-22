@@ -22,6 +22,7 @@ import Pay from "@/pages/Pay/Pay";
 import { useAuth } from "@/hooks/AuthContext";
 import Exclusive from "@/pages/Exclusive/Exclusive";
 import DeliveryPolicy from "@/pages/DeliveryPolicy/DeliveryPolicy";
+import PaySuccess from "@/pages/PaySuccess/PaySuccess";
 
 // Bảo vệ route cần đăng nhập
 function ProtectedRoute() {
@@ -66,6 +67,7 @@ const useRouteElements = () => {
           element: <ProtectedRoute />,
           children: [
             { path: path.pay, element: <Pay /> },
+            { path: path.paySuccess, element: <PaySuccess /> },
             {
               path: path.account,
               element: <Account />,

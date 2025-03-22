@@ -68,7 +68,7 @@ export default function Pay() {
     const orderNew = await orderApi.createOrder(order);
     if (orderNew) {
       toast.success("Đặt hàng thành công");
-      navigate(path.homepage);
+      navigate(path.paySuccess);
     }
   };
 

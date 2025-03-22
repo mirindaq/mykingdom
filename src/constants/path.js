@@ -16,5 +16,6 @@ export const path = {
     cart: "/cart",
     termsAndConditions: "/terms-and-conditions",
     pay: "/pay",
-    deliveryPolicy: "/delivery-policy"
+    deliveryPolicy: "/delivery-policy",
+    paySuccess: "/paySuccess"
 }
