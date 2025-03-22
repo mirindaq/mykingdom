@@ -10,6 +10,7 @@ import ProductBox, { ProductBoxSkeleton } from "../ProductBox/ProductBox";
 
 export default function CarouselProduct(props) {
   const { products, isLoading } = props;
+  console.log(products);
 
   return (
     <div>

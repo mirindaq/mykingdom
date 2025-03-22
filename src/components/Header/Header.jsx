@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { SearchInput } from "../ui/input";
 import ButtonWithIcon from "../ButtonWithIcon/ButtonWithIcon";
 import { ShoppingBasket, SquareUser, Truck } from "lucide-react";
@@ -7,9 +7,56 @@ import { Link } from "react-router-dom";
 import { path } from "@/constants/path";
 import CardHoverHeader from "../CartHoverHeader/CartHoverHeader";
 import { useAuth } from "@/hooks/AuthContext";
+import { productApi } from "@/api/product.api";
+import ProductSearchInputBox from "../ProductSearchInputBox/ProductSearchInputBox";
 
 export default function Header() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedTerm, setDebouncedTerm] = useState("");
+  const [productSearch, setProductSearch] = useState([]);
   const { isAuthenticated } = useAuth();
+  useEffect(() => {
+    if (!searchTerm.trim()) {
+      setDebouncedTerm("");
+      setProductSearch([]);
+      return;
+    }
+
+    const timeout = setTimeout(() => {
+      setDebouncedTerm(searchTerm);
+    }, 500);
+
+    return () => clearTimeout(timeout);
+  }, [searchTerm]);
+
+  useEffect(() => {
+    if (!debouncedTerm) return;
+
+    fetchProducts(debouncedTerm);
+  }, [debouncedTerm]);
+
+  const fetchProducts = (term) => {
+    productApi
+      .searchProductsByName({ name: term })
+      .then((products) => {
+        setProductSearch(products);
+      })
+      .catch((error) => {
+        console.error("Error fetching products:", error);
+      });
+  };
+
+  const handleBlur = () => {
+    setTimeout(() => {
+      setProductSearch([]);
+    }, 200);
+  };
+
+  const handleFocus = () => {
+    if (searchTerm.trim()) {
+      fetchProducts(searchTerm);
+    }
+  };
 
   return (
     <>
@@ -24,12 +71,27 @@ export default function Header() {
                 />
               </Link>
             </div>
-            <div>
+            <div className="relative">
               {" "}
               <SearchInput
                 type="text"
                 placeholder="Nhập từ khóa để tìm kiếm (ví dụ: lắp ráp, mô hình, ...)"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
               />
+              {productSearch.length > 0 && (
+                <div className="absolute top-10 left-0 z-10 mt-2 w-full border-2">
+                  <div className="max-h-[400px] overflow-auto">
+                    {productSearch.map((item) => (
+                      <div className="" key={item._id}>
+                        <ProductSearchInputBox product={item} />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
             <div>
               <ul>

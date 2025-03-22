@@ -7,18 +7,18 @@ export default function AccountInfor(props) {
   return (
     <div>
       <div className="flex gap-4 py-8 flex-col justify-around rounded-2xl border">
-        <p className="ms-5 text-xl font-bold text-blue-900">
+        <p className="ms-5 text-xl font-bold text-blue-900 ">
           Thông tin tài khoản
         </p>
-        <div className="ms-5 text-base">
+        <div className="ms-5 text-lg">
           <p className="font-light text-gray-400">Họ và tên</p>
           <p className="font-medium">{props.user.name}</p>
         </div>
-        <div className="ms-5 text-base">
+        <div className="ms-5 text-lg">
           <p className="font-light text-gray-400">Điện thoại</p>
           <p className="font-medium">{props.user.phone}</p>
         </div>
-        <div className="ms-5 text-base">
+        <div className="ms-5 text-lg">
           <p className="font-light text-gray-400">Email</p>
           <p className="font-medium">{props.user.email}</p>
         </div>

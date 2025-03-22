@@ -166,16 +166,16 @@ const getDiscountedProducts = async (req, res) => {
   }
 };
 
-const searchProducts = async (req, res) => {
+const searchProductsByName = async (req, res) => {
   try {
-    const { q } = req.query;
-    if (!q) {
+    const { name } = req.query; 
+    if (!name) {
       return res.status(400).json({ message: "Search query is required" });
     }
 
-    const regex = new RegExp(q, "i");
+    const regex = new RegExp(name, "i");
     const products = await Product.find({
-      $or: [{ name: regex }, { description: regex }],
+      name: regex,
     })
       .populate("category", "name slug")
       .populate("brand", "name slug");
@@ -189,5 +189,5 @@ const searchProducts = async (req, res) => {
 module.exports = {
   getAllProducts,
   getProduct,
-  searchProducts,
+  searchProductsByName,
 };

@@ -26,11 +26,11 @@ export default function OrderHistoryDetail() {
         <p className="mb-4 text-2xl">Chi tiết đơn hàng</p>
         <div className="mt-2 flex justify-between">
           <div>
-            <p className="text-base">
+            <p className="text-lg">
               Mã đơn hàng:{" "}
               <span className="mt-2 font-bold uppercase">{order._id}</span>{" "}
             </p>
-            <p className="text-base">
+            <p className="text-lg">
               {new Intl.DateTimeFormat("vi-VN", {
                 day: "2-digit",
                 month: "2-digit",
@@ -73,24 +73,24 @@ export default function OrderHistoryDetail() {
         <div className="my-5">
           <div className="rounded-lg border-b border-gray-200 bg-white px-6 py-6 shadow-sm">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold">Thông tin thanh toán</h3>
+              <h3 className="text-xl font-semibold">Thông tin thanh toán</h3>
             </div>
             <div className="mt-4 space-y-4">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between text-lg">
                 <span className="text-gray-600">Tổng tiền sản phẩm:</span>
-                <span className="font-medium text-red-600 text-lg">
+                <span className="text-lg font-medium text-red-600">
                   {totalPrice?.toLocaleString()}đ
                 </span>
               </div>
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between text-lg">
                 <span className="text-gray-600">Giảm giá:</span>
-                <span className="font-medium text-red-500 text-lg">
+                <span className="text-lg font-medium text-red-500">
                   {order?.totalDiscount?.toLocaleString()}đ
                 </span>
               </div>
               <div className="flex items-center justify-between text-lg font-semibold">
                 <span>Đã thanh toán:</span>
-                <span className="font-bold text-green-600 text-xl">
+                <span className="text-xl font-bold text-green-600">
                   {order?.totalAmount?.toLocaleString()}đ
                 </span>
               </div>
@@ -99,7 +99,7 @@ export default function OrderHistoryDetail() {
 
           <div className="mx-auto my-5 rounded-lg bg-white px-6 py-6 shadow-sm">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-gray-800">
+              <h3 className="text-xl font-semibold text-gray-800">
                 Thông tin người nhận
               </h3>
             </div>
@@ -107,7 +107,7 @@ export default function OrderHistoryDetail() {
               <div className="flex items-center">
                 <User className="mr-3 h-5 w-5 text-gray-500" />
                 <div className="flex-1">
-                  <span className="font-medium text-gray-800">
+                  <span className="font-medium text-gray-800 text-lg">
                     {order?.recipient?.name}
                   </span>
                 </div>
@@ -115,7 +115,7 @@ export default function OrderHistoryDetail() {
               <div className="flex items-center">
                 <Phone className="mr-3 h-5 w-5 text-gray-500" />
                 <div className="flex-1">
-                  <span className="font-medium text-gray-800">
+                  <span className="font-medium text-gray-800 text-lg">
                     {order?.recipient?.phone}
                   </span>
                 </div>
@@ -123,7 +123,7 @@ export default function OrderHistoryDetail() {
               <div className="flex items-center">
                 <Store className="mr-3 h-5 w-5 text-gray-500" />
                 <div className="flex-1">
-                  <span className="font-medium text-gray-800">
+                  <span className="font-medium text-gray-800 text-lg">
                     {order?.recipient?.address}, {order?.recipient?.ward},{" "}
                     {order?.recipient?.district}, {order?.recipient?.province}
                   </span>

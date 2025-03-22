@@ -14,7 +14,7 @@ export default function OrderHistory() {
   }, []);
   return (
     <>
-      <p className="mb-4 text-2xl">Lịch sử mua hàng</p>
+      <p className="mb-4 text-2xl font-bold">Lịch sử mua hàng</p>
       {orders?.length > 0 ? (
         <>
           <div className="flex flex-col gap-3">
@@ -28,7 +28,7 @@ export default function OrderHistory() {
           <div>
             <img
               src="/images/noArticle.webp"
-              alt="No news available"
+              alt="No_news"
               className="mx-auto mt-5 w-1/2"
             />
             <div className="text-center text-lg font-semibold text-gray-500">

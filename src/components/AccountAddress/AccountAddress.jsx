@@ -226,7 +226,7 @@ const AccountAddress = () => {
 
   return (
     <div className="mx-auto rounded-lg bg-white p-4 shadow-md">
-      <h2 className="mb-4 text-xl font-bold">Địa chỉ giao hàng</h2>
+      <h2 className="mb-4 text-2xl font-bold">Địa chỉ giao hàng</h2>
       {!showForm && (
         <div
           id="address"
@@ -240,8 +240,8 @@ const AccountAddress = () => {
             >
               <div className="flex justify-between">
                 <div>
-                  <p className="font-light text-gray-400">Họ và tên</p>
-                  <p className="font-medium">{`${addr.name}`}</p>
+                  <p className="text-lg font-light text-gray-400">Họ và tên</p>
+                  <p className="text-lg font-medium">{`${addr.name}`}</p>
                 </div>
                 <div className="flex">
                   <Button
@@ -261,15 +261,15 @@ const AccountAddress = () => {
                 </div>
               </div>
               <div className="mt-2">
-                <p className="font-light text-gray-400">Điện thoại</p>
-                <p className="font-medium">{addr.phone}</p>
+                <p className="text-lg font-light text-gray-400">Điện thoại</p>
+                <p className="text-lg font-medium">{addr.phone}</p>
               </div>
               <div className="mt-2">
-                <p className="font-light text-gray-400">Địa chỉ</p>
-                <p className="font-medium">{getFullAddress(addr)}</p>
+                <p className="text-lg font-light text-gray-400">Địa chỉ</p>
+                <p className="text-lg font-medium">{getFullAddress(addr)}</p>
               </div>
               {addr.isDefault && (
-                <p className="font-medium text-green-500">Mặc định</p>
+                <p className="text-lg font-medium text-green-500">Mặc định</p>
               )}
             </div>
           ))}
@@ -293,7 +293,7 @@ const AccountAddress = () => {
           <form className="space-y-3" onSubmit={handleSubmit}>
             <div>
               <label className="block font-medium">
-                Họ và Tên <span className="text-red-500">*</span>
+                Họ và Tên <span className="text-red-500 ">*</span>
               </label>
               <input
                 type="text"
