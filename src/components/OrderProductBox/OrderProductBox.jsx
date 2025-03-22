@@ -20,14 +20,14 @@ const OrderProductBox = ({ product, quantity, discount }) => {
                 {product.name}
               </a>
             </div>
-            <p className="text-base text-gray-700">
+            <p className="text-lg text-gray-700">
               Số lượng:{" "}
               <span className="font-semibold text-red-500">{quantity}</span>
             </p>
           </div>
         </div>
         <div className="flex items-center">
-          <p className="text-end text-base">
+          <p className="text-end text-lg">
             {discount > 0 ? (
               <>
                 <span className="mr-2 text-gray-400 line-through">
@@ -61,12 +61,12 @@ const OrderProductBox = ({ product, quantity, discount }) => {
       <div className="text-right">
         <div className="space-x-2">
           <Link to={`/collections/${product.slug}`}>
-            <button className="rounded border-red-500 px-3 py-1 text-base text-red-500 hover:cursor-pointer hover:bg-red-50">
+            <button className="rounded border-red-500 px-3 py-1 text-lg text-red-500 hover:cursor-pointer hover:bg-red-50">
               Đánh giá
             </button>
           </Link>
           <Link to={`/collections/${product.slug}`}>
-            <button className="rounded bg-red-500 px-3 py-1 text-base text-white hover:cursor-pointer hover:bg-red-600">
+            <button className="rounded bg-red-500 px-3 py-1 text-lg text-white hover:cursor-pointer hover:bg-red-600">
               Mua lại
             </button>
           </Link>

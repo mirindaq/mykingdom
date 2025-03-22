@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/carousel";
 import { useAuth } from "@/hooks/AuthContext";
 import { wishlistApi } from "@/api/wishlist.api";
+import { productApi } from "@/api/product.api";
 
 export default function Product() {
   const { slug } = useParams();
@@ -33,6 +34,7 @@ export default function Product() {
   const [quantityFromCart, setQuantityFromCart] = useState(0);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isWishlist, setIsWishlist] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const { user } = useAuth();
 
   const handleAddToCartWithQuantity = (product, quantity) => {
@@ -42,16 +44,47 @@ export default function Product() {
   };
 
   useEffect(() => {
-    setProducts(data.products);
     fetch(`http://localhost:5001/api/products/${slug}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setProduct(data);
         setImages(data.image_url);
         setSelectedImageIndex(0);
       });
   }, [slug]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const [ productsRes] = await Promise.all([
+          productApi.getAllProducts(),
+        ]);
+  
+        let wishlist = { products: [] };
+  
+        if (user?.user) {
+          const wishlistResponse = await wishlistApi.getWishlist(user.user);
+          wishlist = wishlistResponse || { products: [] };
+        }
+  
+        const updatedProducts = productsRes.products.map((product) => ({
+          ...product,
+          isWishlist: wishlist.products.some((item) => item._id === product._id),
+        }));
+  
+        setProducts(updatedProducts);
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error fetching products or wishlist:', error);
+
+      } finally {
+        setIsLoading(false);
+      }
+    };
+  
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const quantity = quantityProductFromCart(product.id);
@@ -249,12 +282,16 @@ export default function Product() {
         <DescriptionProduct description={product.description} />
       </div>
 
-      <div className="mt-20 mb-40 grid grid-cols-1 items-center px-50">
-        <p className="text-center text-5xl font-medium text-blue-900">
-          Sản Phẩm Liên Quan
-        </p>
-        <CarouselProduct products={products} />
-      </div>
+      {!isLoading && (
+        <div className="mt-20 mb-40 grid grid-cols-1 items-center px-50">
+          <p className="text-center text-5xl font-medium text-blue-900">
+            Sản Phẩm Liên Quan
+          </p>
+          {products.length > 0 && (
+            <CarouselProduct products={products} isLoading={isLoading} />
+          )}
+        </div>
+      )}
     </div>
   );
 }

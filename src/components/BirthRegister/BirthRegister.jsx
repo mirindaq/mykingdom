@@ -119,7 +119,7 @@ export default function BirthRegister() {
         <div>
           <input
             ref={emailRef}
-            className="border rounded-sm h-12 block w-full ps-2"
+            className="border rounded-sm text-lg h-12 block w-full ps-2"
             type="text"
             name="email"
             placeholder="Nhập lại email đăng kí tài khoản"
@@ -134,7 +134,7 @@ export default function BirthRegister() {
         <div>
           <input
             ref={nameRef}
-            className="border rounded-sm h-12 block w-full ps-2"
+            className="border rounded-sm text-lg h-12 block w-full ps-2"
             type="text"
             name="name"
             placeholder="Tên người nhận code sinh nhật"
@@ -148,7 +148,7 @@ export default function BirthRegister() {
         <div>
           <label className="block mb-2">Ngày sinh</label>
           <input
-            className="border rounded-sm h-12 block w-full ps-2"
+            className="border rounded-sm text-lg h-12 block w-full ps-2"
             type="date"
             name="birthday"
             value={formData.birthday}
@@ -164,7 +164,7 @@ export default function BirthRegister() {
         <div>
           <label className="block mb-2">Giới tính</label>
           <select
-            className="border rounded-sm h-12 block w-full ps-2"
+            className="border rounded-sm text-lg h-12 block w-full ps-2"
             name="gender"
             value={formData.gender}
             onChange={handleChange}
@@ -181,7 +181,7 @@ export default function BirthRegister() {
         <div>
           <label className="block mb-2">Quan hệ với chủ thẻ</label>
           <select
-            className="border rounded-sm h-12 block w-full ps-2"
+            className="border rounded-sm text-lg h-12 block w-full ps-2"
             name="relation"
             value={formData.relation}
             onChange={handleChange}
@@ -195,7 +195,7 @@ export default function BirthRegister() {
         </div>
 
         <Button
-          className="w-full h-12 mt-2"
+          className="w-full h-12 mt-2 text-lg"
           variant="addToCart"
           type="submit"
           onClick={handleSubmit}

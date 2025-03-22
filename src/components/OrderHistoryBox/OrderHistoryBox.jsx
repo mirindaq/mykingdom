@@ -11,26 +11,26 @@ export default function OrderHistoryBox(props) {
       <div className="mx-auto w-full rounded-md border bg-white px-4 pt-4 pb-5">
         <div className="flex justify-between border-b pb-2">
           <p className="text-base">
-            <span className="font-semibold">Đơn hàng:</span>{" "}
+            <span className="font-semibold text-lg">Đơn hàng:</span>{" "}
             <span className="uppercase">{order._id}</span>
           </p>
           <p className="text-base">
             {order.status === "pending" ? (
-              <span className="font-semibold text-yellow-600">
+              <span className="font-semibold text-lg text-yellow-600">
                 Đang chờ xử lý
               </span>
             ) : order.status === "processing" ? (
-              <span className="font-semibold text-blue-600">Đang xử lý</span>
+              <span className="font-semibold text-lg text-blue-600">Đang xử lý</span>
             ) : order.status === "shipped" ? (
-              <span className="font-semibold text-purple-600">
+              <span className="font-semibold text-lg text-purple-600">
                 Đang giao hàng
               </span>
             ) : order.status === "delivered" ? (
-              <span className="font-semibold text-green-600">Đã giao</span>
+              <span className="font-semibold text-lg text-green-600">Đã giao</span>
             ) : order.status === "cancelled" ? (
-              <span className="font-semibold text-red-600">Đã hủy</span>
+              <span className="font-semibold text-lg text-red-600">Đã hủy</span>
             ) : (
-              <span className="font-semibold text-gray-600">
+              <span className="font-semibold text-lg text-gray-600">
                 Trạng thái không xác định
               </span>
             )}
@@ -48,10 +48,10 @@ export default function OrderHistoryBox(props) {
               </div>
               <div className="col-span-6">
                 <p className="text-lg">{item.product.name}</p>
-                <p className="font-semibold">x3</p>
+                <p className="font-semibold text-base">x3</p>
               </div>
               <div className="col-span-4">
-                <p className="text-end text-base">
+                <p className="text-end text-lg">
                   {item.discount > 0 ? (
                     <>
                       <span>
