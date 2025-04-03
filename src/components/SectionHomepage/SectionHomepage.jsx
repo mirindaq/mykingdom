@@ -1,5 +1,7 @@
+import { Link } from "react-router-dom";
 import CarouselProduct from "../CarouselProduct/CarouselProduct";
 import { Button } from "../ui/button";
+import { path } from "@/constants/path";
 
 export default function SectionHomepage(props) {
   const { products, isLoading } = props;
@@ -11,9 +13,11 @@ export default function SectionHomepage(props) {
       </div>
       <CarouselProduct products={products} isLoading={isLoading} />
       <div className="flex justify-center">
-        <Button className="mt-4 px-8 py-6.5 text-2xl" variant="more">
-          Xem thêm
-        </Button>
+        <Link  to={path.exclusive}>
+          <Button className="mt-4 px-8 py-6.5 text-2xl" variant="more">
+            Xem thêm
+          </Button>
+        </Link>
       </div>
     </div>
   );

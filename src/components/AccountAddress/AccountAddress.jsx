@@ -2,9 +2,9 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "../ui/button";
 import AddressSelect from "../AddressSelect/AddressSelect";
 import { useAuth } from "@/hooks/AuthContext";
-import { addressApi } from "@/api/address.api";
+import { addressApi } from "@/services/address.api";
 import { toast } from "react-toastify";
-import { userApi } from "@/api/user.api";
+import { userApi } from "@/services/user.api";
 
 const AccountAddress = () => {
   const [showForm, setShowForm] = useState(false);

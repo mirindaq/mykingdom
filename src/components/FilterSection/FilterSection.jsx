@@ -62,7 +62,7 @@ const FilterSection = ({
   return (
     <div className="mb-4">
       <div className="my-3 flex items-center justify-between gap-5">
-        <h2 className="text-lg font-semibold text-red-600">{title}</h2>
+        <h2 className="text-xl font-semibold text-red-600">{title}</h2>
         <button
           className="text-red-600 hover:cursor-pointer"
           onClick={() => toggleSection(sectionId)}
@@ -70,16 +70,18 @@ const FilterSection = ({
           {isOpen ? "▲" : "▼"}
         </button>
       </div>
-      {isOpen &&
-        items.map((item, index) => (
-          <FilterCheckbox
-            key={index}
-            id={item.slug || item.id}
-            label={item.name}
-            handleCheckboxChange={handleCheckboxChange}
-            isChecked={isItemChecked(item)}
-          />
-        ))}
+      <div className="max-h-[320px] overflow-y-auto my-2">
+        {isOpen &&
+          items.map((item, index) => (
+            <FilterCheckbox
+              key={index}
+              id={item.slug || item.id}
+              label={item.name}
+              handleCheckboxChange={handleCheckboxChange}
+              isChecked={isItemChecked(item)}
+            />
+          ))}
+      </div>
     </div>
   );
 };

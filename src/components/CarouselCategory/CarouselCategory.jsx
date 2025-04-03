@@ -19,6 +19,7 @@ export default function CarouselCategory(props) {
               <BoxCategoryHomepage
                 categoryName={category.category_name}
                 imageUrl={category.image_url}
+                slug={category.slug}
               />
             </CarouselItem>
           ))}

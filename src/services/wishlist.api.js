@@ -1,9 +1,9 @@
-import axios from "axios";
+import http from "@/config/axios.config";
 
 export const wishlistApi = {
   getWishlist: async (user) => {
     try {
-      const response = await axios.get("http://localhost:5001/api/wishlist", {
+      const response = await http.get("/api/wishlist", {
         params: { user },
       });
       return response.data;
@@ -15,12 +15,9 @@ export const wishlistApi = {
 
   addToWishlist: async (user, productId) => {
     try {
-      const response = await axios.post(
-        `http://localhost:5001/api/wishlist/add/${productId}`,
-        {
-          user: user,
-        },
-      );
+      const response = await http.post(`/api/wishlist/add/${productId}`, {
+        user: user,
+      });
       return response.data;
     } catch (error) {
       console.error("Error adding to wishlist:", error);
@@ -29,15 +26,22 @@ export const wishlistApi = {
   },
   removeFromWishlist: async (user, productId) => {
     try {
-      const response = await axios.delete(
-        `http://localhost:5001/api/wishlist/remove/${productId}`,
-        {
-          data: { user: user },
-        },
-      );
+      const response = await http.delete(`/api/wishlist/remove/${productId}`, {
+        data: { user: user },
+      });
       return response.data;
     } catch (error) {
       console.error("Error removing from wishlist:", error);
+      return null;
+    }
+  },
+  checkIsWishlist: async (user, productId) => {
+    console.log(user, productId);
+    try {
+      const response = await http.get(`/api/wishlist/${user}/${productId}`);
+      return response.data;
+    } catch (error) {
+      console.error("Error checking wishlist:", error);
       return null;
     }
   },

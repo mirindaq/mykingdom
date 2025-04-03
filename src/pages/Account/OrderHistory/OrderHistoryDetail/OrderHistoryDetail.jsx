@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import OrderProductBox from "@/components/OrderProductBox/OrderProductBox";
 import { CreditCard, Phone, Store, User } from "lucide-react";
-import { orderApi } from "@/api/order.api";
+import { orderApi } from "@/services/order.api";
 
 export default function OrderHistoryDetail() {
   const { id } = useParams();

@@ -4,8 +4,10 @@ import ProductBox, {
   ProductBoxSkeleton,
 } from "@/components/ProductBox/ProductBox";
 import React, { useEffect, useState } from "react";
-import { productApi } from "@/api/product.api";
+import { productApi } from "@/services/product.api";
 import { PaginationBox } from "@/components/PaginationBox/PaginationBox";
+import { wishlistApi } from "@/services/wishlist.api";
+import { useAuth } from "@/hooks/AuthContext";
 
 export default function Exclusive() {
   const [products, setProducts] = useState([]);
@@ -13,16 +15,34 @@ export default function Exclusive() {
   const [totalPage, setTotalPage] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const data = await productApi.getAllProducts({
-          limit: 8,
-          page: currentPage,
-        });
-        setProducts(data.products);
+        const productResponse = await productApi.getAllProducts(
+          `limit=8&page=${currentPage}`,
+        );
+
+        let wishlist = { products: [] };
+
+        if (user?.user) {
+          const wishlistResponse = await wishlistApi.getWishlist(user.user);
+          wishlist = wishlistResponse || { products: [] };
+        }
+
+        const data = productResponse;
+
+        const updatedProducts = data.products.map((product) => ({
+          ...product,
+          isWishlist: wishlist.products.some(
+            (item) => item._id === product._id,
+          ),
+        }));
+        console.log(updatedProducts);
+
+        setProducts(updatedProducts);
         setTotalProducts(data.pagination.total);
         setTotalPage(data.pagination.totalPages);
         setCurrentPage(data.pagination.page);

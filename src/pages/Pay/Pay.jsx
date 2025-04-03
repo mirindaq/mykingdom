@@ -5,7 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import React, { useState } from "react";
 import { useCart } from "@/hooks/CartContext";
 import { useAuth } from "@/hooks/AuthContext";
-import { orderApi } from "@/api/order.api";
+import { orderApi } from "@/services/order.api";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { path } from "@/constants/path";
@@ -13,7 +13,7 @@ export default function Pay() {
   const [discountCode, setDiscountCode] = useState("");
   const [useDefaultAddress, setUseDefaultAddress] = useState(false);
   const [defaultAddress, setDefaultAddress] = useState(null);
-  const { cart } = useCart();
+  const { cart, clearCart } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
   const breadcrumbsData = [
@@ -68,6 +68,7 @@ export default function Pay() {
     const orderNew = await orderApi.createOrder(order);
     if (orderNew) {
       toast.success("Đặt hàng thành công");
+      clearCart();
       navigate(path.paySuccess);
     }
   };

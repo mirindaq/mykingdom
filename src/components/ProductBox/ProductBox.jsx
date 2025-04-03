@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useCart } from "@/hooks/CartContext";
 import { toast } from "sonner";
 import { Skeleton } from "../ui/skeleton";
-import { wishlistApi } from "@/api/wishlist.api";
+import { wishlistApi } from "@/services/wishlist.api";
 import { useAuth } from "@/hooks/AuthContext";
 import { useEffect, useState } from "react";
 
