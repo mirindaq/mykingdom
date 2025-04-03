@@ -1,7 +1,6 @@
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -9,6 +8,7 @@ import {
 } from "@/components/ui/pagination";
 
 export function PaginationBox({ totalPage, currentPage, onPageChange }) {
+  console.log(totalPage, currentPage);
   const paginationItems = getPaginationItems(currentPage, totalPage);
 
   const handlePageChange = (page) => {
@@ -24,6 +24,7 @@ export function PaginationBox({ totalPage, currentPage, onPageChange }) {
           <PaginationPrevious
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
+            className="rounded-sm bg-gray-100"
           />
         </PaginationItem>
 
@@ -36,6 +37,7 @@ export function PaginationBox({ totalPage, currentPage, onPageChange }) {
                 href="#"
                 onClick={() => handlePageChange(item)}
                 isActive={item === currentPage}
+                className="rounded-sm bg-gray-100"
               >
                 {item}
               </PaginationLink>
@@ -47,6 +49,7 @@ export function PaginationBox({ totalPage, currentPage, onPageChange }) {
           <PaginationNext
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPage}
+            className="rounded-sm bg-gray-100"
           />
         </PaginationItem>
       </PaginationContent>

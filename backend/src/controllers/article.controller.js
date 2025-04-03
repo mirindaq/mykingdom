@@ -28,8 +28,41 @@ const getArticleByTag = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+const searchArticles = async (req, res) => {
+  try {
+    const { tag, title } = req.query;
+    const query = {};
+
+    // Xử lý tìm kiếm theo tag (dựa trên slug)
+    if (tag?.trim()) {
+      const foundTag = await Tag.findOne({ slug: tag });
+      if (!foundTag) {
+        return res.status(404).json({ message: "Tag not found" });
+      }
+      query["tag"] = foundTag._id; // Gán ObjectId của Tag vào query
+    }
+
+    // Xử lý tìm kiếm theo title (dùng regex để tìm chuỗi trong title)
+    if (title?.trim()) {
+      query.title = { $regex: new RegExp(title, "i") }; // Không phân biệt hoa thường
+    }
+
+    console.log("Search Query:", query);
+
+    // Tìm bài viết theo điều kiện đã lọc
+    const articles = await Article.find(query)
+      .populate("author", "name")
+      .populate("tag", "name slug");
+
+    res.json(articles);
+  } catch (error) {
+    console.error("Search Articles Error:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 
 module.exports = {
   getArticles,
   getArticleByTag,
+  searchArticles,
 };

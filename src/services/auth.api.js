@@ -1,11 +1,11 @@
-import axios, { isCancel, AxiosError } from "axios";
+import http from "@/config/axios.config";
 import { toast } from "sonner";
 
 export const authApi = {
   login: async (user) => {
     try {
-      const response = await axios.post(
-        "http://localhost:5001/api/auth/login",
+      const response = await http.post(
+        "/api/auth/login",
         {
           email: user.email,
           password: user.password,
@@ -19,8 +19,8 @@ export const authApi = {
   },
   register: async (user) => {
     try {
-      const response = await axios.post(
-        "http://localhost:5001/api/auth/register",
+      const response = await http.post(
+        "/api/auth/register",
         {
           name: user.name,
           email: user.email,
@@ -31,7 +31,7 @@ export const authApi = {
       return response.data;
     } catch (error) {
       if (error.response && error.response.status === 400) {
-        toast.error("Tài khoản đã tồn tại");
+        toast.error("Email đã tồn tại");
       }
       console.error("Error registering:", error);
       return null;

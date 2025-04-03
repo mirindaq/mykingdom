@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ProductBox from "@/components/ProductBox/ProductBox";
 import { PaginationBox } from "@/components/PaginationBox/PaginationBox";
-import { wishlistApi } from "@/api/wishlist.api";
+import { wishlistApi } from "@/services/wishlist.api";
 import { useAuth } from "@/hooks/AuthContext";
 
 export default function Wishlist() {

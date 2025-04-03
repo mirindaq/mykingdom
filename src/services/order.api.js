@@ -1,10 +1,10 @@
-import axios from "axios";
+import http from "@/config/axios.config";
 
 export const orderApi = {
   createOrder: async (order) => {
     try {
-      const response = await axios.post(
-        "http://localhost:5001/api/orders",
+      const response = await http.post(
+        "/api/orders",
         order,
       );
       return response.data;
@@ -13,10 +13,10 @@ export const orderApi = {
       return null;
     }
   },
-  getUserOrders: async (user) => {
+  getUserOrders: async (user, page, limit) => {
     try {
-      const response = await axios.get(
-        `http://localhost:5001/api/orders/user/${user}`,
+      const response = await http.get(
+        `/api/orders/user/${user}?page=${page}&limit=${limit}`,
       );
       return response.data;
     } catch (error) {
@@ -27,8 +27,8 @@ export const orderApi = {
 
   getOrderById: async (id) => {
     try {
-      const response = await axios.get(
-        `http://localhost:5001/api/orders/${id}`,
+      const response = await http.get(
+        `/api/orders/${id}`,
       );
       return response.data;
     } catch (error) {

@@ -1,4 +1,5 @@
 const Wishlist = require("../models/wishlist.model");
+const mongoose = require("mongoose");
 
 const getWishlist = async (req, res) => {
   try {
@@ -58,8 +59,38 @@ const removeFromWishlist = async (req, res) => {
   }
 };
 
+const checkIsWishlist = async (req, res) => {
+  try {
+    const wishlist = await Wishlist.findOne({ user: req.params.user }).populate(
+      "products",
+      "_id",
+    );
+
+    if (!wishlist) {
+      return res.status(404).json({ message: "Wishlist not found" });
+    }
+
+    const productId = req.params.productId;
+
+    const isInWishlist = wishlist.products.some(
+      (product) => {
+        return product._id.toString() == productId.toString();
+      },
+    );
+
+    if (isInWishlist) {
+      return res.status(200).json({ isWishlist: true });
+    }
+
+    return res.status(200).json({ isWishlist: false });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getWishlist,
   addToWishlist,
   removeFromWishlist,
+  checkIsWishlist,
 };

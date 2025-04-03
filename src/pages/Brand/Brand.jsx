@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { path } from "@/constants/path";
 import Breadcrumbs from "@/components/Breadcrumbs/Breadcrumbs";
+import { brandApi } from "@/services/brand.api";
 
 export default function Brand() {
   const [selected, setSelected] = useState("ALL");
@@ -11,10 +12,10 @@ export default function Brand() {
     { path: path.homepage, label: "Trang chủ" },
     { path: path.brands, label: "Thương hiệu" },
   ];
-  
+
   useEffect(() => {
-    fetch("http://localhost:5001/api/brands")
-      .then((res) => res.json())
+    brandApi
+      .getAllBrands()
       .then((data) => {
         const groupedBrands = data.reduce((acc, brand) => {
           const firstChar = brand.name.charAt(0).toUpperCase();

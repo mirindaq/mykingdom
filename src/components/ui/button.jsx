@@ -21,7 +21,7 @@ const buttonVariants = cva(
         addToCart: "bg-red-600 text-base text-white font-bold rounded-xl",
         more: "flex items-center justify-center rounded-3xl border-2 border-red-600 bg-white text-red-600",
         paginationActive:
-          "bg-red-500 text-base text-white font-semibold rounded-xl shadow-md",
+          "!bg-red-500 text-base text-white font-semibold rounded-xl shadow-md",
         paginationNormal:
           "bg-gray-200 text-base text-black font-semibold rounded-xl hover:bg-red-500 hover:text-white",
       },

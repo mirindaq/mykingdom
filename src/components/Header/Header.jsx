@@ -7,13 +7,14 @@ import { Link } from "react-router-dom";
 import { path } from "@/constants/path";
 import CardHoverHeader from "../CartHoverHeader/CartHoverHeader";
 import { useAuth } from "@/hooks/AuthContext";
-import { productApi } from "@/api/product.api";
+import { productApi } from "@/services/product.api";
 import ProductSearchInputBox from "../ProductSearchInputBox/ProductSearchInputBox";
 
 export default function Header() {
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedTerm, setDebouncedTerm] = useState("");
   const [productSearch, setProductSearch] = useState([]);
+  const [showProductSearch, setShowProductSearch] = useState(false);
   const { isAuthenticated } = useAuth();
   useEffect(() => {
     if (!searchTerm.trim()) {
@@ -35,7 +36,7 @@ export default function Header() {
     fetchProducts(debouncedTerm);
   }, [debouncedTerm]);
 
-  const fetchProducts = (term) => {
+  const fetchProducts = async (term) => {
     productApi
       .searchProductsByName({ name: term })
       .then((products) => {
@@ -49,12 +50,14 @@ export default function Header() {
   const handleBlur = () => {
     setTimeout(() => {
       setProductSearch([]);
+      setShowProductSearch(false);
     }, 200);
   };
 
-  const handleFocus = () => {
+  const handleFocus = async () => {
     if (searchTerm.trim()) {
-      fetchProducts(searchTerm);
+       fetchProducts(searchTerm);
+      setShowProductSearch(true);
     }
   };
 
@@ -81,17 +84,24 @@ export default function Header() {
                 onFocus={handleFocus}
                 onBlur={handleBlur}
               />
-              {productSearch.length > 0 && (
-                <div className="absolute top-10 left-0 z-10 mt-2 w-full border-2">
-                  <div className="max-h-[400px] overflow-auto">
-                    {productSearch.map((item) => (
-                      <div className="" key={item._id}>
-                        <ProductSearchInputBox product={item} />
-                      </div>
-                    ))}
+              {showProductSearch &&
+                (productSearch.length > 0 ? (
+                  <div className="absolute top-10 left-0 z-10 mt-2 w-full border-2">
+                    <div className="max-h-[380px] overflow-auto">
+                      {productSearch.map((item) => (
+                        <div className="" key={item._id}>
+                          <ProductSearchInputBox product={item} />
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
+                ) : (
+                  <div className="absolute top-10 left-0 z-10 mt-2 w-full border-2">
+                    <div className="max-h-[380px] overflow-auto bg-white p-20 text-center text-lg">
+                      Không có sản phẩm
+                    </div>
+                  </div>
+                ))}
             </div>
             <div>
               <ul>

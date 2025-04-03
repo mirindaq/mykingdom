@@ -11,6 +11,9 @@ const getBrands = async (req, res) => {
 };
 
 const getBrand = async (req, res) => {
+  // :slug -> req.params
+  // req.query
+  // req.body
   try {
     const brand = await Brand.findById(req.params.id);
     if (!brand) {

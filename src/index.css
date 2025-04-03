@@ -2,6 +2,10 @@
 
 @plugin "tailwindcss-animate";
 
+body {
+  font-family: "Plus Jakarta Sans";
+}
+
 @custom-variant dark (&:is(.dark *));
 
 :root {

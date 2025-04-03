@@ -6,6 +6,7 @@ const {
 } = require("../controllers/product.controller");
 
 // Base route with filtering, sorting and pagination
+///api/products
 router.get("/", getAllProducts);
 
 router.get("/searchByName", searchProductsByName);

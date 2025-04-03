@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { path } from "@/constants/path";
 import axios from "axios";
@@ -7,55 +7,47 @@ export default function FormAddress({ handleSubmit, defaultAddress }) {
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
-
-  const [selectedProvince, setSelectedProvince] = useState({
-    code: "",
-    name: "",
-  });
-  const [selectedDistrict, setSelectedDistrict] = useState({
-    code: "",
-    name: "",
-  });
-  const [selectedWard, setSelectedWard] = useState({ code: "", name: "" });
-
   const addressRef = useRef("");
   const nameRef = useRef("");
   const phoneRef = useRef("");
 
+  const selectedProvince = useMemo(() => {
+    return (
+      provinces.find(
+        (p) => String(p.code) === String(defaultAddress?.province),
+      ) || { code: "", name: "" }
+    );
+  }, [defaultAddress?.province, provinces]);
+
+  const selectedDistrict = useMemo(() => {
+    return (
+      districts.find(
+        (d) => String(d.code) === String(defaultAddress?.district),
+      ) || { code: "", name: "" }
+    );
+  }, [defaultAddress?.district, districts]);
+
+  const selectedWard = useMemo(() => {
+    return (
+      wards.find((w) => String(w.code) === String(defaultAddress?.ward)) || {
+        code: "",
+        name: "",
+      }
+    );
+  }, [defaultAddress?.ward, wards]);
+
   useEffect(() => {
     if (!defaultAddress) {
-      setSelectedProvince({ code: "", name: "" });
-      setSelectedDistrict({ code: "", name: "" });
-      setSelectedWard({ code: "", name: "" });
-
       addressRef.current.value = "";
       nameRef.current.value = "";
       phoneRef.current.value = "";
       return;
     }
 
-
-    const province = provinces.find((p) => String(p.code) === String(defaultAddress.province));
-    const district = districts.find((d) => String(d.code) === String(defaultAddress.district));
-    const ward = wards.find((w) => String(w.code) === String(defaultAddress.ward));
-
-    setSelectedProvince({
-      code: defaultAddress.province || "",
-      name: province?.name || "",
-    });
-    setSelectedDistrict({
-      code: defaultAddress.district || "",
-      name: district?.name || "",
-    });
-    setSelectedWard({
-      code: defaultAddress.ward || "",
-      name: ward?.name || "",
-    });
-
     addressRef.current.value = defaultAddress.address || "";
     nameRef.current.value = defaultAddress.name || "";
     phoneRef.current.value = defaultAddress.phone || "";
-  }, [defaultAddress, provinces, districts, wards]);
+  }, [defaultAddress]);
 
   useEffect(() => {
     axios.get("https://provinces.open-api.vn/api/?depth=1").then((res) => {

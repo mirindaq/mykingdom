@@ -1,5 +1,5 @@
-import { authApi } from "@/api/auth.api";
-import { userApi } from "@/api/user.api";
+import { authApi } from "@/services/auth.api";
+import { userApi } from "@/services/user.api";
 import { path } from "@/constants/path";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";

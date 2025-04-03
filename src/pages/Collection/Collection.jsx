@@ -1,4 +1,4 @@
-import { productApi } from "@/api/product.api";
+import { productApi } from "@/services/product.api";
 import Breadcrumbs from "@/components/Breadcrumbs/Breadcrumbs";
 import FilterSidebar from "@/components/FilterSidebar/FilterSidebar";
 import ListProductSearch from "@/components/ListProductSearch/ListProductSearch";
@@ -9,7 +9,7 @@ import { Grid2X2, Grid3x3 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useAuth } from "@/hooks/AuthContext";
-import { wishlistApi } from "@/api/wishlist.api";
+import { wishlistApi } from "@/services/wishlist.api";
 
 export default function Collection() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -57,7 +57,7 @@ export default function Collection() {
               sortParam = "name_asc";
               break;
             case "Tên Z-A":
-              sortParam = "name_desc"; // Fix lỗi trùng name_asc
+              sortParam = "name_desc";  
               break;
             case "Khuyến mãi cao":
               sortParam = "discount";
@@ -131,15 +131,15 @@ export default function Collection() {
   return (
     <div>
       <Breadcrumbs links={breadcrumbsData} />
-      <div className="container mx-auto my-10 grid grid-cols-10 gap-6">
-        <div className="col-span-2">
+      <div className="container mx-auto my-10 grid grid-cols-12 gap-6">
+        <div className="col-span-3">
           <FilterSidebar
             onProductsUpdate={onProductsUpdate}
             searchParams={searchParams}
             setSearchParams={setSearchParams}
           />
         </div>
-        <div className="col-span-8">
+        <div className="col-span-9">
           <div className="mb-4 flex items-center justify-between border-b pb-4">
             <div className="flex items-center space-x-2">
               <span className="text-red-600">Kiểu xem</span>
@@ -164,7 +164,7 @@ export default function Collection() {
               <select
                 value={sortOption}
                 onChange={handleSortChange}
-                className="rounded-md border px-2 py-1 text-sm"
+                className="rounded-md border px-2 py-2 text-sm"
               >
                 <option value="Mặc định">Mặc định</option>
                 <option value="Khuyến mãi cao">Khuyến mãi cao</option>

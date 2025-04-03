@@ -1,10 +1,10 @@
-import axios from "axios";
+import http from "@/config/axios.config";
 
 export const userApi = {
   updateUserAddress: async (id, address) => {
     try {
-      const response = await axios.put(
-        `http://localhost:5001/api/users/${id}/address`,
+      const response = await http.put(
+        `/api/users/${id}/address`,
         { address },
       );
       return response.data;

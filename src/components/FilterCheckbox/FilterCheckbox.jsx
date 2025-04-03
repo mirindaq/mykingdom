@@ -19,7 +19,7 @@ export default function FilterCheckbox({
   };
 
   return (
-    <div className="flex items-center space-x-2">
+    <div className="flex items-center space-x-2 py-1">
       <Checkbox
         id={id}
         checked={checked}
@@ -28,7 +28,7 @@ export default function FilterCheckbox({
       />
       <label
         htmlFor={id}
-        className="cursor-pointer py-1 text-base leading-none select-none"
+        className="cursor-pointer py-1 text-base text-gray-700 ms-1 leading-none select-none"
       >
         {label}
       </label>
