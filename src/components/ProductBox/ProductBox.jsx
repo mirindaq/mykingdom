@@ -70,7 +70,7 @@ export default function ProductBox(props) {
             <p>{product.brand.name}</p>
             <p>{product.origin}</p>
           </div>
-          <p className="text-blue-800">{product.name}</p>
+          <p className="text-blue-800 line-clamp-1">{product.name}</p>
         </div>
         <div className="flex items-center justify-between pt-8">
           <p className="text-xl font-semibold text-red-600">
