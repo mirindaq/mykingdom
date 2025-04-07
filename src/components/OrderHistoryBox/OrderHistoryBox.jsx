@@ -48,7 +48,7 @@ export default function OrderHistoryBox(props) {
               </div>
               <div className="col-span-6">
                 <p className="text-lg">{item.product.name}</p>
-                <p className="font-semibold text-base">x3</p>
+                <p className="font-semibold text-base">x{item.quantity}</p>
               </div>
               <div className="col-span-4">
                 <p className="text-end text-lg">

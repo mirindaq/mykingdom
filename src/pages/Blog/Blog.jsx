@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -20,15 +20,14 @@ export default function Blog() {
   const [visibleCount, setVisibleCount] = useState(6);
   const [viewType, setViewType] = useState("grid");
   const [searchParams, setSearchParams] = useSearchParams();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTag, setSelectedTag] = useState(null);
-  const [searchTimeout, setSearchTimeout] = useState(null);
+  const [selectedTagSlug, setSelectedTagSlug] = useState(null);
+  const inputRef = useRef(null);
 
   const fetchArticles = async () => {
     setLoading(true);
     try {
       const tag = searchParams.get("tag") || "";
-      const query = searchQuery || "";
+      const query = searchParams.get("search") || "";
       const articles = await articleApi.searchArticles(tag, query);
       setData(articles || []);
     } catch (error) {
@@ -40,7 +39,6 @@ export default function Blog() {
   const fetchTags = async () => {
     try {
       const tagsData = await tagApi.getAllTag();
-      console.log(tagsData);
       setTags(tagsData || []);
     } catch (error) {
       console.error("Error fetching tags:", error);
@@ -50,26 +48,31 @@ export default function Blog() {
   useEffect(() => {
     fetchArticles();
     fetchTags();
-  }, [searchParams, searchQuery]);
+    setSelectedTagSlug(searchParams.get("tag"));
+  }, [searchParams]);
 
-  const handleSearchChange = (e) => {
-    const value = e.target.value;
-    setSearchQuery(value);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const value = inputRef.current.value;
 
-    if (searchTimeout) {
-      clearTimeout(searchTimeout);
+    const params = {
+      search: value,
+    };
+    if (selectedTagSlug) {
+      params.tag = selectedTagSlug;
     }
 
-    const timeout = setTimeout(() => {
-      setSearchParams({ tag: selectedTag || "", search: value });
-    }, 500);
-
-    setSearchTimeout(timeout);
+    setSearchParams(params);
   };
 
   const handleTagClick = (tag) => {
-    setSelectedTag(tag._id);
-    setSearchParams({ tag: tag.slug });
+    if (tag) {
+      setSearchParams({ tag: tag.slug });
+      setSelectedTagSlug(tag.slug);
+    } else {
+      setSearchParams({});
+      setSelectedTagSlug(tag);
+    }
   };
 
   const breadcrumbsData = [
@@ -91,13 +94,14 @@ export default function Blog() {
         <div className="flex flex-col gap-6 md:flex-row">
           <div className="w-full md:w-1/3">
             <div className="relative">
-              <input
-                type="text"
-                placeholder="Tìm kiếm bài viết..."
-                className="w-full rounded-lg border p-3 pl-10"
-                value={searchQuery}
-                onChange={handleSearchChange}
-              />
+              <form onSubmit={handleSubmit}>
+                <input
+                  ref={inputRef}
+                  type="text"
+                  placeholder="Tìm kiếm bài viết..."
+                  className="w-full rounded-lg border p-3 pl-10"
+                />
+              </form>
               <Search
                 className="absolute top-3 left-3 text-gray-400"
                 size={20}
@@ -113,21 +117,37 @@ export default function Blog() {
                   type="single"
                   collapsible
                   className="w-full"
-                  defaultValue={selectedTag ? `${selectedTag}` : undefined}
+                  defaultValue={
+                    selectedTagSlug ? `${selectedTagSlug}` : undefined
+                  }
                 >
+                  <AccordionItem key="all" value="all" className="py-2">
+                    <AccordionTrigger
+                      className={`rounded-lg px-4 py-3 text-base font-medium transition ${
+                        selectedTagSlug == null
+                          ? "bg-red-100 font-semibold text-red-500"
+                          : "hover:bg-gray-100"
+                      }`}
+                      onClick={() => handleTagClick(null)}
+                      chevronDown={false}
+                    >
+                      Tất cả
+                    </AccordionTrigger>
+                  </AccordionItem>
                   {tags?.map((tag) => (
                     <AccordionItem
-                      key={tag._id}
-                      value={`${tag._id}`}
+                      key={tag.slug}
+                      value={`${tag.slug}`}
                       className="py-2"
                     >
                       <AccordionTrigger
                         className={`rounded-lg px-4 py-3 text-base font-medium transition ${
-                          selectedTag === tag._id
+                          selectedTagSlug === tag.slug
                             ? "bg-red-100 font-semibold text-red-500"
                             : "hover:bg-gray-100"
                         }`}
                         onClick={() => handleTagClick(tag)}
+                        chevronDown={true}
                       >
                         {tag.name}
                       </AccordionTrigger>

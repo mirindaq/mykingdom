@@ -20,6 +20,7 @@ export default function Header() {
     if (!searchTerm.trim()) {
       setDebouncedTerm("");
       setProductSearch([]);
+      setShowProductSearch(false);
       return;
     }
 
@@ -41,6 +42,7 @@ export default function Header() {
       .searchProductsByName({ name: term })
       .then((products) => {
         setProductSearch(products);
+        setShowProductSearch(true);
       })
       .catch((error) => {
         console.error("Error fetching products:", error);
@@ -56,8 +58,7 @@ export default function Header() {
 
   const handleFocus = async () => {
     if (searchTerm.trim()) {
-       fetchProducts(searchTerm);
-      setShowProductSearch(true);
+      fetchProducts(searchTerm);
     }
   };
 
@@ -84,24 +85,29 @@ export default function Header() {
                 onFocus={handleFocus}
                 onBlur={handleBlur}
               />
-              {showProductSearch &&
-                (productSearch.length > 0 ? (
-                  <div className="absolute top-10 left-0 z-10 mt-2 w-full border-2">
-                    <div className="max-h-[380px] overflow-auto">
-                      {productSearch.map((item) => (
-                        <div className="" key={item._id}>
-                          <ProductSearchInputBox product={item} />
-                        </div>
-                      ))}
-                    </div>
+              {showProductSearch && productSearch.length > 0 && (
+                <div className="absolute top-10 left-0 z-10 mt-2 w-full border-2">
+                  <div className="max-h-[380px] overflow-auto">
+                    {productSearch.map((item) => (
+                      <div className="" key={item._id}>
+                        <ProductSearchInputBox product={item} />
+                      </div>
+                    ))}
                   </div>
-                ) : (
-                  <div className="absolute top-10 left-0 z-10 mt-2 w-full border-2">
-                    <div className="max-h-[380px] overflow-auto bg-white p-20 text-center text-lg">
-                      Không có sản phẩm
-                    </div>
+                </div>
+              )}
+              {showProductSearch && productSearch.length === 0 && (
+                <div className="absolute top-10 left-0 z-10 mt-2 w-full border-2">
+                  <div className="max-h-[400px] overflow-auto bg-white p-20 text-center text-lg">
+                    Không có sản phẩm
                   </div>
-                ))}
+                  <div className="bg-white py-2 text-center">
+                    <Link to={path.collections}>
+                      <span className="text-red-600">Xem tất cả sản phẩm</span>
+                    </Link>
+                  </div>
+                </div>
+              )}
             </div>
             <div>
               <ul>
