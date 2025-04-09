@@ -17,6 +17,7 @@ export default function Brand() {
     brandApi
       .getAllBrands()
       .then((data) => {
+        console.log(data);
         const groupedBrands = data.reduce((acc, brand) => {
           const firstChar = brand.name.charAt(0).toUpperCase();
           if (!acc[firstChar]) acc[firstChar] = { key: firstChar, brands: [] };

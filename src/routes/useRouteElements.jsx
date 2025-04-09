@@ -23,6 +23,7 @@ import { useAuth } from "@/hooks/AuthContext";
 import Exclusive from "@/pages/Exclusive/Exclusive";
 import DeliveryPolicy from "@/pages/DeliveryPolicy/DeliveryPolicy";
 import PaySuccess from "@/pages/PaySuccess/PaySuccess";
+import ProductSearch from "@/pages/ProductSearch/ProductSearch";
 
 // Bảo vệ route cần đăng nhập
 function ProtectedRoute() {
@@ -52,6 +53,7 @@ const useRouteElements = () => {
         { path: path.termsAndConditions, element: <TermsAndConditions /> },
         { path: path.exclusive, element: <Exclusive /> },
         { path: path.deliveryPolicy, element: <DeliveryPolicy /> },
+        { path: path.searchPage, element: <ProductSearch /> },
 
         // Chặn truy cập Login/Register nếu đã đăng nhập
         {

@@ -23,6 +23,7 @@ import {
 import { useAuth } from "@/hooks/AuthContext";
 import { wishlistApi } from "@/services/wishlist.api";
 import { productApi } from "@/services/product.api";
+import SkeletonProductPage from "@/components/SkeletonProductPage/SkeletonProductPage";
 
 export default function Product() {
   const { slug } = useParams();
@@ -35,6 +36,7 @@ export default function Product() {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isWishlist, setIsWishlist] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingProduct, setIsLoadingProduct] = useState(false);
   const { user } = useAuth();
 
   const handleAddToCartWithQuantity = (product, quantity) => {
@@ -44,10 +46,12 @@ export default function Product() {
   };
 
   useEffect(() => {
+    setIsLoadingProduct(true);
     productApi.getProductBySlug(slug).then((data) => {
       setProduct(data);
       setImages(data.image_url);
       setSelectedImageIndex(0);
+      setIsLoadingProduct(false);
     });
   }, [slug]);
 
@@ -177,115 +181,127 @@ export default function Product() {
         <Breadcrumbs links={breadcrumbsData} />
       </div>
 
-      <div className="mx-50 mb-5 grid grid-cols-3 border-b-1">
-        <div className="col-span-2 items-center">
-          <div className="flex items-center justify-around">
-            <img src={images[selectedImageIndex]} className="w-180" />
-          </div>
+      {isLoadingProduct ? (
+        <SkeletonProductPage />
+      ) : (
+        <>
+          <div className="mx-50 mb-5 grid grid-cols-3 border-b-1">
+            <div className="col-span-2 items-center">
+              <div className="flex items-center justify-around">
+                <img src={images[selectedImageIndex]} className="w-180" />
+              </div>
 
-          <Carousel className="mx-auto w-200">
-            <CarouselContent className="px-1 py-1">
-              {images.map((img, index) => (
-                <CarouselItem key={index} className="basis-1/4">
-                  <img
-                    src={img}
-                    className={`w-30 hover:cursor-pointer ${
-                      selectedImageIndex === index
-                        ? "shadow-[0_0_30px_5px_rgba(255,0,0,0.1)]"
-                        : "opacity-50"
-                    }`}
-                    onClick={() => setSelectedImageIndex(index)}
+              <Carousel className="mx-auto w-200">
+                <CarouselContent className="px-1 py-1">
+                  {images.map((img, index) => (
+                    <CarouselItem key={index} className="basis-1/4">
+                      <img
+                        src={img}
+                        className={`w-30 hover:cursor-pointer ${
+                          selectedImageIndex === index
+                            ? "shadow-[0_0_30px_5px_rgba(255,0,0,0.1)]"
+                            : "opacity-50"
+                        }`}
+                        onClick={() => setSelectedImageIndex(index)}
+                      />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+              </Carousel>
+            </div>
+
+            <div className="mt-8">
+              <div className="flex justify-between">
+                <p className="mb-4 text-2xl font-medium">{product.name}</p>
+                <div
+                  onClick={
+                    isWishlist ? handleRemoveFromWishlist : handleAddToWishlist
+                  }
+                  className="cursor-pointer"
+                >
+                  {isWishlist ? (
+                    <Heart className="h-9 w-9 fill-red-600 text-red-600 transition-all duration-300" />
+                  ) : (
+                    <Heart className="h-9 w-9 text-red-600 transition-all duration-300" />
+                  )}
+                </div>
+              </div>
+              <div className="mb-4 flex">
+                <p className="pr-5">Thương hiệu</p>{" "}
+                <a href="#" className="font-medium text-blue-900 underline">
+                  {product?.brand?.name}
+                </a>{" "}
+              </div>
+              <PriceProduct
+                priceType="Giá thành viên"
+                price={product.price}
+                discount={product.discount}
+              />
+              <PriceProduct
+                priceType="Giá bán"
+                price={product.price}
+                discount={product.discount}
+              />
+
+              <div className="mt-12">
+                <p className="py-2">&#10003; &nbsp;&nbsp; Hàng chính hãng</p>
+                <p className="py-2">
+                  &#10003; &nbsp;&nbsp; Miễn phí giao hàng toàn quốc đơn trên
+                  500k
+                </p>
+                <p className="py-2">
+                  &#10003; &nbsp;&nbsp; Giao hàng hỏa tốc 4 tiếng
+                </p>
+              </div>
+
+              <div className="mt-7">
+                <p className="mb-4 text-xl font-bold">
+                  Số lượng{" "}
+                  {quantityFromCart === 0
+                    ? ""
+                    : "(" + quantityFromCart + " trong giỏ hàng)"}
+                </p>
+                <div className="flex items-center justify-between">
+                  <QuantityInput
+                    quantity={quantity}
+                    setQuantity={setQuantity}
                   />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-          </Carousel>
-        </div>
+                  <Button
+                    variant="addToCart"
+                    className="px-15 py-6 text-lg"
+                    onClick={() =>
+                      handleAddToCartWithQuantity(product, quantity)
+                    }
+                  >
+                    Thêm vào giỏ hàng
+                  </Button>
+                </div>
+              </div>
 
-        <div className="mt-8">
-          <div className="flex justify-between">
-            <p className="mb-4 text-2xl font-medium">{product.name}</p>
-            <div
-              onClick={
-                isWishlist ? handleRemoveFromWishlist : handleAddToWishlist
-              }
-              className="cursor-pointer"
-            >
-              {isWishlist ? (
-                <Heart className="h-9 w-9 fill-red-600 text-red-600 transition-all duration-300" />
-              ) : (
-                <Heart className="h-9 w-9 text-red-600 transition-all duration-300" />
-              )}
-            </div>
-          </div>
-          <div className="mb-4 flex">
-            <p className="pr-5">Thương hiệu</p>{" "}
-            <a href="#" className="font-medium text-blue-900 underline">
-              {product?.brand?.name}
-            </a>{" "}
-          </div>
-          <PriceProduct
-            priceType="Giá thành viên"
-            price={product.price}
-            discount={product.discount}
-          />
-          <PriceProduct
-            priceType="Giá bán"
-            price={product.price}
-            discount={product.discount}
-          />
+              <div className="mt-5 flex">
+                <img src="/images/store-icon.svg" alt="" />
+                <p className="ml-4 text-lg font-medium">
+                  Dự kiến các cửa hàng đang còn sản phẩm
+                </p>
+              </div>
+              <div className="mt-4 max-h-[400px] overflow-y-auto rounded-lg border">
+                {stores.map((store) => (
+                  <StoreInformation key={store.id} s={store} />
+                ))}
+              </div>
 
-          <div className="mt-12">
-            <p className="py-2">&#10003; &nbsp;&nbsp; Hàng chính hãng</p>
-            <p className="py-2">
-              &#10003; &nbsp;&nbsp; Miễn phí giao hàng toàn quốc đơn trên 500k
-            </p>
-            <p className="py-2">
-              &#10003; &nbsp;&nbsp; Giao hàng hỏa tốc 4 tiếng
-            </p>
-          </div>
-
-          <div className="mt-7">
-            <p className="mb-4 text-xl font-bold">
-              Số lượng{" "}
-              {quantityFromCart === 0
-                ? ""
-                : "(" + quantityFromCart + " trong giỏ hàng)"}
-            </p>
-            <div className="flex items-center justify-between">
-              <QuantityInput quantity={quantity} setQuantity={setQuantity} />
-              <Button
-                variant="addToCart"
-                className="px-15 py-6 text-lg"
-                onClick={() => handleAddToCartWithQuantity(product, quantity)}
-              >
-                Thêm vào giỏ hàng
-              </Button>
+              <div className="mt-5 w-full pb-10">
+                <p className="mb-4 text-2xl font-bold">Thông tin sản phẩm</p>
+                {product && <TableInformationProduct product={product} />}
+              </div>
             </div>
           </div>
 
-          <div className="mt-5 flex">
-            <img src="/images/store-icon.svg" alt="" />
-            <p className="ml-4 text-lg font-medium">
-              Dự kiến các cửa hàng đang còn sản phẩm
-            </p>
+          <div className="grid grid-cols-1 items-center px-50">
+            <DescriptionProduct description={product.description} />
           </div>
-          <div className="mt-4 max-h-[400px] overflow-y-auto rounded-lg border">
-            {stores.map((store) => (
-              <StoreInformation key={store.id} s={store} />
-            ))}
-          </div>
-
-          <div className="mt-5 w-full pb-10">
-            <p className="mb-4 text-2xl font-bold">Thông tin sản phẩm</p>
-            {product && <TableInformationProduct product={product} />}
-          </div>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 items-center px-50">
-        <DescriptionProduct description={product.description} />
-      </div>
+        </>
+      )}
 
       {!isLoading && (
         <div className="mt-20 mb-40 grid grid-cols-1 items-center px-50">

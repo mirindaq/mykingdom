@@ -7,9 +7,27 @@ import { useCart } from "@/hooks/CartContext";
 import { useAuth } from "@/hooks/AuthContext";
 import { orderApi } from "@/services/order.api";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { path } from "@/constants/path";
 export default function Pay() {
+  // useSearchParams 
+  // useParams
+
+  // {
+  //   search : "board",
+  //   tag : "nuoi-con-khoe"
+  // }
+  // rq.query
+
+  // :haha  123
+  // rq.params { haha : 123 }
+
+  // {
+  //   search : "board",
+  //   tag : "nuoi-con-khoe"
+  // }
+  // rq.body
+
   const [discountCode, setDiscountCode] = useState("");
   const [useDefaultAddress, setUseDefaultAddress] = useState(false);
   const [defaultAddress, setDefaultAddress] = useState(null);
