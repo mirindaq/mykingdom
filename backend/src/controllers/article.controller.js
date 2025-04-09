@@ -42,14 +42,10 @@ const searchArticles = async (req, res) => {
       query["tag"] = foundTag._id; // Gán ObjectId của Tag vào query
     }
 
-    // Xử lý tìm kiếm theo title (dùng regex để tìm chuỗi trong title)
     if (title?.trim()) {
       query.title = { $regex: new RegExp(title, "i") }; // Không phân biệt hoa thường
     }
 
-    console.log("Search Query:", query);
-
-    // Tìm bài viết theo điều kiện đã lọc
     const articles = await Article.find(query)
       .populate("author", "name")
       .populate("tag", "name slug");

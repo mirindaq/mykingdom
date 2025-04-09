@@ -3,9 +3,7 @@ import http from "@/config/axios.config";
 export const productApi = {
   getAllProducts: async (params) => {
     try {
-      const response = await http.get(
-        `/api/products?${params}`,
-      );
+      const response = await http.get(`/api/products?${params}`);
       return response.data;
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -14,10 +12,9 @@ export const productApi = {
   },
   searchProductsByName: async (params) => {
     try {
-      const response = await http.get(
-        `/api/products/searchByName`,
-        { params: params },
-      );
+      const response = await http.get(`/api/products/searchByName`, {
+        params: params,
+      });
       return response.data;
     } catch (error) {
       console.error("Error searching products:", error);
@@ -26,13 +23,23 @@ export const productApi = {
   },
   getProductBySlug: async (slug) => {
     try {
-      const response = await http.get(
-        `/api/products/${slug}`,
-      );
+      const response = await http.get(`/api/products/${slug}`);
       return response.data;
     } catch (error) {
       console.error("Error fetching product by slug:", error);
       return null;
+    }
+  },
+  getDiscountedProducts: async (params) => {
+    
+    try {
+      const response = await http.get(`/api/products/discounted`, {
+        params: params,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching discounted products:", error);
+      return [];
     }
   },
 };

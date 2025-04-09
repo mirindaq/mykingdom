@@ -9,13 +9,16 @@ import CardHoverHeader from "../CartHoverHeader/CartHoverHeader";
 import { useAuth } from "@/hooks/AuthContext";
 import { productApi } from "@/services/product.api";
 import ProductSearchInputBox from "../ProductSearchInputBox/ProductSearchInputBox";
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedTerm, setDebouncedTerm] = useState("");
   const [productSearch, setProductSearch] = useState([]);
   const [showProductSearch, setShowProductSearch] = useState(false);
-  const { isAuthenticated } = useAuth();
+
   useEffect(() => {
     if (!searchTerm.trim()) {
       setDebouncedTerm("");
@@ -38,13 +41,10 @@ export default function Header() {
   }, [debouncedTerm]);
 
   const fetchProducts = async (term) => {
-    productApi
-      .searchProductsByName({ name: term })
-      .then((products) => {
-        setProductSearch(products);
-        setShowProductSearch(true);
-      })
-      .catch((error) => {
+    productApi.searchProductsByName({ name: term, page: 1, limit: 4 }).then((data) => {
+      setProductSearch(data.products);
+      setShowProductSearch(true);
+    }).catch((error) => {
         console.error("Error fetching products:", error);
       });
   };
@@ -62,6 +62,12 @@ export default function Header() {
     }
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    navigate(path.searchPage + "?keyword=" + searchTerm);
+    setShowProductSearch(false);
+  };
+
   return (
     <>
       <header>
@@ -77,14 +83,16 @@ export default function Header() {
             </div>
             <div className="relative">
               {" "}
-              <SearchInput
-                type="text"
-                placeholder="Nhập từ khóa để tìm kiếm (ví dụ: lắp ráp, mô hình, ...)"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-              />
+              <form onSubmit={handleSearch}>
+                <SearchInput
+                  type="text"
+                  placeholder="Nhập từ khóa để tìm kiếm (ví dụ: lắp ráp, mô hình, ...)"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onFocus={handleFocus}
+                  onBlur={handleBlur}
+                />
+              </form>
               {showProductSearch && productSearch.length > 0 && (
                 <div className="absolute top-10 left-0 z-10 mt-2 w-full border-2">
                   <div className="max-h-[380px] overflow-auto">

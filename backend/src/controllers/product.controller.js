@@ -156,38 +156,70 @@ const getProduct = async (req, res) => {
 
 const getDiscountedProducts = async (req, res) => {
   try {
-    const products = await Product.find({ discount: { $gt: 0 } })
-      .populate("category", "name slug")
-      .populate("brand", "name slug")
-      .sort({ discount: -1 });
-    res.json(products);
+    const { page = 1, limit = 8 } = req.query;
+    const validatedPage = Math.max(1, parseInt(page) || 1);
+    const validatedLimit = Math.min(50, Math.max(1, parseInt(limit) || 12));
+    const skip = (validatedPage - 1) * validatedLimit;
+
+    const [products, total] = await Promise.all([
+      Product.find({ discount: { $gt: 0 } })
+        .populate("category", "name slug")
+        .populate("brand", "name slug")
+        .sort({ discount: -1 })
+        .skip(skip)
+        .limit(validatedLimit)
+        .lean(),
+      Product.countDocuments({ discount: { $gt: 0 } }),
+    ]);
+
+    return res.json({
+      success: true,
+      products,
+      pagination: {
+        total,
+        page: validatedPage,
+        limit: validatedLimit,
+        totalPages: Math.ceil(total / validatedLimit),
+      },
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
 const searchProductsByName = async (req, res) => {
-  try {
-    const { name } = req.query; 
-    if (!name) {
-      return res.status(400).json({ message: "Search query is required" });
-    }
+  const { page = 1, limit = 8, name } = req.query;
+  const validatedPage = Math.max(1, parseInt(page) || 1);
+  const validatedLimit = Math.min(50, Math.max(1, parseInt(limit) || 12));
+  const skip = (validatedPage - 1) * validatedLimit;
 
-    const regex = new RegExp(name, "i");
-    const products = await Product.find({
-      name: regex,
-    })
+  const regex = new RegExp(name, "i");
+  const [products, total] = await Promise.all([
+    Product.find({ name: regex })
       .populate("category", "name slug")
-      .populate("brand", "name slug");
+      .populate("brand", "name slug")
+      .sort({ discount: -1 })
+      .skip(skip)
+      .limit(validatedLimit)
+      .lean(),
+    Product.countDocuments({ name : regex}),
+  ]);
 
-    res.json(products);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
+  return res.json({
+    success: true,
+    products,
+    pagination: {
+      total,
+      page: validatedPage,
+      limit: validatedLimit,
+      totalPages: Math.ceil(total / validatedLimit),
+    },
+  });
 };
 
 module.exports = {
   getAllProducts,
   getProduct,
   searchProductsByName,
+  getDiscountedProducts,
 };

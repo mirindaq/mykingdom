@@ -8,6 +8,7 @@ import { productApi } from "@/services/product.api";
 import { PaginationBox } from "@/components/PaginationBox/PaginationBox";
 import { wishlistApi } from "@/services/wishlist.api";
 import { useAuth } from "@/hooks/AuthContext";
+import { useSearchParams } from "react-router-dom";
 
 export default function Exclusive() {
   const [products, setProducts] = useState([]);
@@ -15,15 +16,18 @@ export default function Exclusive() {
   const [totalPage, setTotalPage] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams({
+    page: 1,
+    limit: 8,
+  });
   const { user } = useAuth();
 
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const productResponse = await productApi.getAllProducts(
-          `limit=8&page=${currentPage}`,
-        );
+        const productResponse =
+          await productApi.getDiscountedProducts(searchParams);
 
         let wishlist = { products: [] };
 
@@ -40,8 +44,7 @@ export default function Exclusive() {
             (item) => item._id === product._id,
           ),
         }));
-        console.log(updatedProducts);
-
+        console.log(data);
         setProducts(updatedProducts);
         setTotalProducts(data.pagination.total);
         setTotalPage(data.pagination.totalPages);
@@ -54,7 +57,7 @@ export default function Exclusive() {
     };
 
     fetchProducts();
-  }, [currentPage]);
+  }, [searchParams]);
 
   const breadcrumbsData = [
     { path: path.homepage, label: "Trang chủ" },
@@ -87,7 +90,7 @@ export default function Exclusive() {
             <PaginationBox
               totalPage={totalPage}
               currentPage={currentPage}
-              onPageChange={(page) => setCurrentPage(page)}
+              onPageChange={(page) => setSearchParams({ page: page, limit: 8 })}
             />
           </div>
         )}

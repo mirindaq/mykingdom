@@ -3,6 +3,7 @@ export const path = {
     login: '/login',
     register: '/register',
     collections: '/collections',
+    searchPage: '/collections/search',
     product: '/collections/:slug',
     brands: '/brands',
     exclusive: '/exclusive-online',
