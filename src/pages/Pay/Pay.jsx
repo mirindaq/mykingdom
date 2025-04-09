@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { path } from "@/constants/path";
 export default function Pay() {
-  // useSearchParams 
+  // useSearchParams
   // useParams
 
   // {
@@ -51,6 +51,17 @@ export default function Pay() {
   );
 
   const handleSubmit = async (object) => {
+    if (
+      !object.name ||
+      !object.phone ||
+      !object.address ||
+      !object.province ||
+      !object.district ||
+      !object.ward
+    ) {
+      toast.warning("Vui lòng nhập đầy đủ thông tin thanh toán");
+      return;
+    }
     const totalDiscountCart = cart.reduce((sum, item) => {
       if (item.product.discount > 0) {
         const originalPrice = item.product.price * item.quantity;
@@ -138,33 +149,6 @@ export default function Pay() {
                 defaultAddress={defaultAddress}
               />
             </div>
-            {/* <div className="grid grid-cols-4 gap-2 text-center text-sm">
-              <div>
-                <Link className="text-green-600 underline">
-                  Chính sách hoàn tiền
-                </Link>
-              </div>
-              <div>
-                <Link to={path.deliveryPolicy} className="text-green-600 underline">
-                  Chính sách vận chuyển
-                </Link>
-              </div>
-              <div>
-                <Link className="text-green-600 underline">
-                  Chính sách quyền riêng tư
-                </Link>
-              </div>
-              <div>
-                <Link to={path.termsAndConditions} className="text-green-600 underline">
-                  Điều khoản dịch vụ
-                </Link>
-              </div>
-              <div>
-                <Link className="text-green-600 underline">
-                  Thông tin liên hệ
-                </Link>
-              </div>
-            </div> */}
           </div>
 
           <div className="col-span-5 pr-20 pl-20">
