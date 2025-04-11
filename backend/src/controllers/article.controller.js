@@ -33,17 +33,17 @@ const searchArticles = async (req, res) => {
     const { tag, title } = req.query;
     const query = {};
 
-    // Xử lý tìm kiếm theo tag (dựa trên slug)
+
     if (tag?.trim()) {
       const foundTag = await Tag.findOne({ slug: tag });
       if (!foundTag) {
         return res.status(404).json({ message: "Tag not found" });
       }
-      query["tag"] = foundTag._id; // Gán ObjectId của Tag vào query
+      query["tag"] = foundTag._id;
     }
 
     if (title?.trim()) {
-      query.title = { $regex: new RegExp(title, "i") }; // Không phân biệt hoa thường
+      query.title = { $regex: new RegExp(title, "i") }; 
     }
 
     const articles = await Article.find(query)

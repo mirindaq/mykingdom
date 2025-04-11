@@ -57,7 +57,7 @@ export default function Collection() {
               sortParam = "name_asc";
               break;
             case "Tên Z-A":
-              sortParam = "name_desc";  
+              sortParam = "name_desc";
               break;
             case "Khuyến mãi cao":
               sortParam = "discount";
@@ -72,19 +72,16 @@ export default function Collection() {
         params.set("page", currentPage);
         params.set("limit", "6");
 
-        console.log("Params:", params.toString()); // Debug để kiểm tra params
+        console.log("Params:", params.toString());
 
         setSearchParams(params, { replace: true });
 
-        // Gọi API lấy sản phẩm
         const productResponse = await productApi.getAllProducts(
           params.toString(),
         );
 
         if (!productResponse || !productResponse.products) {
-          throw new Error(
-            "Server responded with an error or no products found",
-          );
+          return;
         }
 
         let wishlist = { products: [] };

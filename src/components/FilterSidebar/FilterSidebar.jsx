@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import FilterSection from "../FilterSection/FilterSection";
+import { brandApi } from "@/services/brand.api";
+import { categoryApi } from "@/services/category.api";
 
 const FilterSidebar = ({ onProductsUpdate, searchParams, setSearchParams }) => {
   const [isCategoryOpen, setCategoryOpen] = useState(true);
@@ -41,13 +43,8 @@ const FilterSidebar = ({ onProductsUpdate, searchParams, setSearchParams }) => {
   });
 
   useEffect(() => {
-    fetch("http://localhost:5001/api/brands")
-      .then((res) => res.json())
-      .then((data) => setBrandItems(data));
-
-    fetch("http://localhost:5001/api/categories")
-      .then((res) => res.json())
-      .then((data) => setCategoryItems(data));
+    brandApi.getAllBrands().then((data) => setBrandItems(data));
+    categoryApi.getAllCategories().then((data) => setCategoryItems(data));
   }, []);
 
   useEffect(() => {
@@ -55,28 +52,24 @@ const FilterSidebar = ({ onProductsUpdate, searchParams, setSearchParams }) => {
   }, [selectedFilters]);
 
   const fetchProducts = async () => {
-    try {
-      const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams);
 
-      Object.entries(selectedFilters).forEach(([key, values]) => {
-        if (values && values.length > 0) {
-          params.set(key, values.join(","));
-        } else {
-          params.delete(key);
-        }
-      });
+    Object.entries(selectedFilters).forEach(([key, values]) => {
+      if (values && values.length > 0) {
+        params.set(key, values.join(","));
+      } else {
+        params.delete(key);
+      }
+    });
 
-      setSearchParams(params, { replace: true });
+    setSearchParams(params, { replace: true });
 
-      const response = await fetch(
-        `http://localhost:5001/api/products?${params.toString()}`,
-      );
+    const response = await fetch(
+      `http://localhost:5001/api/products?${params.toString()}`,
+    );
 
-      const data = await response.json();
-      onProductsUpdate(data);
-    } catch (error) {
-      console.error("Error fetching products:", error);
-    }
+    const data = await response.json();
+    onProductsUpdate(data);
   };
 
   const handleFilterChange = (sectionId, itemId, checked) => {

@@ -63,7 +63,6 @@ export default function Brand() {
           )}
         </div>
 
-        {/* Filter Navigation */}
         <div className="mb-4 flex gap-3">
           <button
             className={`rounded-lg border px-5 py-3 text-lg font-bold hover:cursor-pointer ${
@@ -89,8 +88,7 @@ export default function Brand() {
             </button>
           ))}
         </div>
-
-        {/* Content Section */}
+        
         <div>
           {filteredBrands.map((group, index) => (
             <div key={group.key}>

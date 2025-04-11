@@ -46,6 +46,7 @@ export const AuthProvider = ({ children }) => {
     setIsAuthenticated(false);
     localStorage.removeItem("user");
   };
+  
   const updateUserAddress = async (userId, updatedAddressList) => {
     console.log(userId, updatedAddressList);
     try {

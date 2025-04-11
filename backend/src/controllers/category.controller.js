@@ -2,6 +2,7 @@ const Category = require("../models/category.model");
 const Product = require("../models/product.model");
 
 const getCategories = async (req, res) => {
+  console.log("Chay vô đây")
   try {
     const categories = await Category.find().sort({ position: 1 });
     res.json(categories);

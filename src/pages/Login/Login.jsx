@@ -22,11 +22,9 @@ export default function Login() {
     <div>
       <Breadcrumbs links={breadcrumbsData} />
       <div className="flex h-[700px] items-center justify-center bg-gray-100">
-        {/* Điều chỉnh chiều rộng form */}
         <div className="w-[480px] rounded-lg bg-white p-10 shadow-xl">
           <h2 className="mb-6 text-center text-3xl font-bold">Đăng Nhập</h2>
           <form onSubmit={onSubmit}>
-            {/* Ô nhập email */}
             <div className="mb-5">
               <label className="mb-2 block text-lg font-semibold text-gray-700">
                 E-mail
@@ -38,7 +36,6 @@ export default function Login() {
                 onChange={(e) => setUser({ ...user, email: e.target.value })}
               />
             </div>
-            {/* Ô nhập mật khẩu */}
             <div className="mb-5">
               <label className="mb-2 block text-lg font-semibold text-gray-700">
                 Mật khẩu
@@ -50,14 +47,12 @@ export default function Login() {
                 onChange={(e) => setUser({ ...user, password: e.target.value })}
               />
             </div>
-            {/* Nút đăng nhập */}
             <button
               type="submit"
               className="w-full rounded-lg bg-red-600 py-3 text-lg font-semibold text-white transition hover:bg-red-700"
             >
               Đăng Nhập
             </button>
-            {/* Liên kết quên mật khẩu / tạo tài khoản */}
             <p className="mt-5 text-center text-base text-gray-600">
               <a href="#" className="font-medium text-red-500">
                 Quên mật khẩu?
